@@ -1,8 +1,20 @@
-# OpenProof
+# OpenProof 🔏
 
-OpenProof is an open-source proof-of-existence tool. It lets users create timestamped blockchain proofs for files without uploading or storing the files themselves.
+OpenProof is a privacy-first, open-source proof-of-existence app for files.
 
-Users drag in a file, OpenProof hashes it locally in the browser with SHA-256, and the connected wallet registers only the `bytes32` hash on Base Sepolia. Later, anyone can select the same file, hash it locally again, and verify whether that exact hash was registered.
+It lets users prove that a specific file existed at a certain time without uploading the file anywhere. Files are hashed locally in the browser using SHA-256, and only the fingerprint is registered on the Base Sepolia blockchain through a minimal Solidity smart contract.
+
+No file uploads. No storage bucket. No database required for the core proof flow.
+
+Built with:
+
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- Solidity
+- wagmi + RainbowKit
+- Base Sepolia
+- AGPLv3
 
 ## What OpenProof Is
 
