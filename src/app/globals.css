@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f7f4;
+  --foreground: #181a1f;
+  --surface: #ffffff;
+  --surface-muted: #efefeb;
+  --border: #deded7;
+  --muted: #62666f;
+  --accent: #2358d4;
+  --accent-soft: #e8efff;
+  --success: #0d7f57;
+  --danger: #b42318;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111317;
+    --foreground: #f4f4f1;
+    --surface: #181b21;
+    --surface-muted: #20242b;
+    --border: #30343d;
+    --muted: #a6abb5;
+    --accent: #8eb1ff;
+    --accent-soft: #1c2946;
+    --success: #6ee7b7;
+    --danger: #fda29b;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--foreground);
+}

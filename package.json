@@ -1,0 +1,42 @@
+{
+  "name": "openproof",
+  "version": "0.1.0",
+  "private": false,
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "compile": "hardhat compile",
+    "test:contracts": "hardhat test",
+    "deploy:base-sepolia": "hardhat run scripts/deploy.js --network baseSepolia"
+  },
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.11",
+    "@tanstack/react-query": "^5.100.14",
+    "lucide-react": "^1.16.0",
+    "next": "^15.5.18",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "viem": "^2.51.0",
+    "wagmi": "^2.19.5"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "chai": "^4.5.0",
+    "dotenv": "^17.4.2",
+    "eslint": "^9",
+    "eslint-config-next": "^15.5.18",
+    "hardhat": "^2.22.19",
+    "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}
