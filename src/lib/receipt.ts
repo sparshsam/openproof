@@ -9,8 +9,10 @@ export type ProofReceipt = {
   chainName: string;
   contractAddress: string;
   transactionHash: string;
+  transactionUrl: string;
   creatorWallet: string;
   createdTimestamp: string;
+  verificationUrl: string;
   verificationInstructions: string;
 };
 

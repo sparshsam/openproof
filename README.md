@@ -16,6 +16,19 @@ Built with:
 - Base Sepolia
 - AGPLv3
 
+## Built on Base
+
+OpenProof v0 is built on Base Sepolia, the Base testnet. Base Sepolia is used for the zero-spend MVP because users and contributors can test proof registration without spending real funds.
+
+Current network:
+
+- Chain: Base Sepolia
+- Chain ID: `84532`
+- Explorer: [BaseScan Sepolia](https://sepolia.basescan.org)
+- Registry contract: [`0x60d3DD631E6e4F6D76f761689d6FA229945a874a`](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a)
+
+Base mainnet deployment is a future roadmap item. The current public MVP should be treated as a testnet proof-of-existence tool.
+
 ## What OpenProof Is
 
 - A privacy-first proof-of-existence MVP.
@@ -104,6 +117,8 @@ Never commit private keys. `.env` and `.env.local` are ignored by git.
 
 Add Base Sepolia to your wallet, then get test ETH from a Base Sepolia faucet. The deployment wallet only needs enough test ETH to deploy `OpenProofRegistry`.
 
+View the deployed registry on [BaseScan Sepolia](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a). Proof registration receipts link to BaseScan Sepolia transaction pages.
+
 ## Vercel Deployment
 
 1. Push this repo to a public GitHub repository.
@@ -139,8 +154,26 @@ Manual validation:
 - Add imported receipt verification.
 - Add optional detached signature support.
 - Add better event indexing for large deployments.
+- Base mainnet deployment.
 - Add reproducible deployment metadata.
 - Add multilingual documentation.
+
+## Repository Topics
+
+Suggested GitHub topics:
+
+- base
+- base-sepolia
+- built-on-base
+- onchain
+- proof-of-existence
+- ethereum
+- solidity
+- viem
+- wagmi
+- rainbowkit
+- web3
+- cryptography
 
 ## License
 

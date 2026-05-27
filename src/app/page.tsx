@@ -1,4 +1,5 @@
 import { ArrowRight, FileCheck2, LockKeyhole, SearchCheck } from "lucide-react";
+import { BaseSepoliaNotice } from "@/components/base-notice";
 import { HashBlock, Panel, PrimaryLink, SecondaryLink } from "@/components/ui";
 
 export default function Home() {
@@ -6,7 +7,10 @@ export default function Home() {
     <main>
       <section className="mx-auto grid min-h-[calc(100vh-180px)] max-w-6xl items-center gap-10 px-5 py-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
-          <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          <span className="inline-flex rounded-md border border-border bg-accent-soft px-3 py-1 text-sm font-medium text-accent">
+            Built on Base Sepolia
+          </span>
+          <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             Create verifiable proof that a file existed at a certain time
             without uploading the file.
           </h1>
@@ -17,6 +21,7 @@ export default function Home() {
             <PrimaryLink href="/create">Create Proof</PrimaryLink>
             <SecondaryLink href="/verify">Verify Proof</SecondaryLink>
           </div>
+          <BaseSepoliaNotice className="mt-6 max-w-2xl" />
         </div>
 
         <Panel className="space-y-5">

@@ -11,6 +11,7 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
+import { BaseSepoliaNotice } from "@/components/base-notice";
 import { FileDrop } from "@/components/file-drop";
 import { HashBlock, PageFrame, Panel } from "@/components/ui";
 import { transactionExplorerUrl } from "@/lib/explorer";
@@ -76,8 +77,10 @@ export default function CreateProofPage() {
           chainName: openProofChain.name,
           contractAddress: openProofContractAddress || "",
           transactionHash: txHash,
+          transactionUrl: transactionExplorerUrl(txHash),
           creatorWallet: address,
           createdTimestamp: new Date(Number(block.timestamp) * 1000).toISOString(),
+          verificationUrl: `${window.location.origin}/verify`,
         }),
       );
     }
@@ -117,7 +120,7 @@ export default function CreateProofPage() {
         setPreflightMessage(
           `This exact file hash is already registered by ${proof.creator} at ${new Date(
             Number(proof.timestamp) * 1000,
-          ).toISOString()}. Use Verify Proof to inspect it.`,
+          ).toLocaleString()}. Use Verify Proof to inspect it.`,
         );
         return;
       }
@@ -152,9 +155,17 @@ export default function CreateProofPage() {
             OpenProof never uploads your file. The onchain record contains a
             SHA-256 hash, the registering wallet, and the contract timestamp.
           </p>
+          <BaseSepoliaNotice className="mt-5 max-w-2xl" />
         </section>
 
         <Panel className="space-y-5">
+          <div className="rounded-lg border border-border bg-surface-muted p-4 text-sm">
+            <p className="font-medium">Network: Base Sepolia</p>
+            <p className="mt-1 text-muted">
+              Proof registration is disabled until your connected wallet is on
+              Base Sepolia.
+            </p>
+          </div>
           <FileDrop file={file} onFile={setFile} />
 
           {file ? (
@@ -179,14 +190,22 @@ export default function CreateProofPage() {
           <div className="flex flex-wrap items-center gap-3">
             <ConnectButton />
             {isWrongChain ? (
-              <button
-                className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-surface-muted disabled:opacity-60"
-                disabled={isSwitching}
-                type="button"
-                onClick={() => switchChain({ chainId: openProofChain.id })}
-              >
-                Switch to Base Sepolia
-              </button>
+              <div className="w-full rounded-lg border border-danger/30 bg-surface-muted p-4">
+                <p className="text-sm font-medium text-danger">
+                  Wrong network selected.
+                </p>
+                <p className="mt-1 text-sm text-muted">
+                  OpenProof v0 registers proofs on Base Sepolia only.
+                </p>
+                <button
+                  className="mt-3 rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-surface disabled:opacity-60"
+                  disabled={isSwitching}
+                  type="button"
+                  onClick={() => switchChain({ chainId: openProofChain.id })}
+                >
+                  {isSwitching ? "Switching..." : "Switch to Base Sepolia"}
+                </button>
+              </div>
             ) : (
               <button
                 className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90 disabled:opacity-50"
@@ -271,7 +290,7 @@ export default function CreateProofPage() {
             rel="noreferrer"
             target="_blank"
           >
-            View transaction <ExternalLink className="size-4" />
+            View transaction on BaseScan <ExternalLink className="size-4" />
           </a>
         </Panel>
       ) : null}

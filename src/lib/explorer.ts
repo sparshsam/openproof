@@ -1,9 +1,9 @@
-import { openProofChain } from "@/lib/contracts";
+export const baseSepoliaExplorerUrl = "https://sepolia.basescan.org";
 
 export function transactionExplorerUrl(hash: string) {
-  return `${openProofChain.blockExplorers.default.url}/tx/${hash}`;
+  return `${baseSepoliaExplorerUrl}/tx/${hash}`;
 }
 
 export function addressExplorerUrl(address: string) {
-  return `${openProofChain.blockExplorers.default.url}/address/${address}`;
+  return `${baseSepoliaExplorerUrl}/address/${address}`;
 }

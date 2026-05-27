@@ -1,10 +1,14 @@
 "use client";
 
+import { parseAbiItem } from "viem";
 import { Loader2, SearchCheck } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { PublicClient } from "viem";
 import { usePublicClient } from "wagmi";
+import { BaseSepoliaNotice } from "@/components/base-notice";
 import { FileDrop } from "@/components/file-drop";
 import { HashBlock, PageFrame, Panel } from "@/components/ui";
+import { transactionExplorerUrl } from "@/lib/explorer";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
 import {
   isContractConfigured,
@@ -21,6 +25,7 @@ type VerificationResult =
       creator: string;
       timestamp: string;
       proofId: string;
+      transactionHash?: string;
     }
   | { status: "error"; message: string };
 
@@ -79,11 +84,16 @@ export default function VerifyProofPage() {
         args: [hash],
       });
 
+      const transactionHash = await findProofTransactionHash(publicClient, hash).catch(
+        () => undefined,
+      );
+
       setResult({
         status: "verified",
         creator: proof.creator,
         timestamp: new Date(Number(proof.timestamp) * 1000).toISOString(),
         proofId: hash,
+        transactionHash,
       });
     } catch (error) {
       setResult({
@@ -106,9 +116,17 @@ export default function VerifyProofPage() {
             Base Sepolia registry. Verification works only for exact file
             matches.
           </p>
+          <BaseSepoliaNotice className="mt-5 max-w-2xl" />
         </section>
 
         <Panel className="space-y-5">
+          <div className="rounded-lg border border-border bg-surface-muted p-4 text-sm">
+            <p className="font-medium">Network: Base Sepolia</p>
+            <p className="mt-1 text-muted">
+              Verification checks the deployed OpenProofRegistry contract on
+              Base Sepolia.
+            </p>
+          </div>
           <FileDrop file={file} onFile={setFile} />
           {file ? (
             <div className="grid gap-2 rounded-lg border border-border bg-surface-muted p-4 text-sm">
@@ -179,6 +197,21 @@ export default function VerifyProofPage() {
                 </dd>
               </div>
             </dl>
+            {result.transactionHash ? (
+              <a
+                className="inline-flex items-center gap-2 text-sm font-medium text-accent"
+                href={transactionExplorerUrl(result.transactionHash)}
+                rel="noreferrer"
+                target="_blank"
+              >
+                View transaction on BaseScan
+              </a>
+            ) : (
+              <p className="text-sm text-muted">
+                Transaction link unavailable from the public RPC. The proof ID
+                and contract timestamp were read directly from Base Sepolia.
+              </p>
+            )}
           </div>
         ) : (
           <div>
@@ -195,4 +228,42 @@ export default function VerifyProofPage() {
       </Panel>
     </PageFrame>
   );
+}
+
+async function findProofTransactionHash(
+  publicClient: PublicClient,
+  fileHash: `0x${string}`,
+) {
+  if (!openProofContractAddress) return undefined;
+
+  const latestBlock = await publicClient.getBlockNumber();
+  const chunkSize = 1_900n;
+  const maxLookback = 50_000n;
+  const floorBlock =
+    latestBlock > maxLookback ? latestBlock - maxLookback : 0n;
+  let toBlock = latestBlock;
+
+  while (toBlock >= floorBlock) {
+    const fromBlock =
+      toBlock > chunkSize && toBlock - chunkSize > floorBlock
+        ? toBlock - chunkSize
+        : floorBlock;
+
+    const logs = await publicClient.getLogs({
+      address: openProofContractAddress,
+      event: parseAbiItem(
+        "event ProofRegistered(bytes32 indexed fileHash, address indexed creator, uint64 timestamp)",
+      ),
+      args: { fileHash },
+      fromBlock,
+      toBlock,
+    });
+
+    const log = logs.at(-1);
+    if (log?.transactionHash) return log.transactionHash;
+    if (fromBlock === 0n || fromBlock === floorBlock) break;
+    toBlock = fromBlock - 1n;
+  }
+
+  return undefined;
 }

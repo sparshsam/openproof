@@ -34,6 +34,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         {children}
+        <footer className="border-t border-border bg-surface px-5 py-6">
+          <div className="mx-auto max-w-6xl text-sm text-muted">
+            OpenProof is an open-source proof-of-existence app built on Base.
+          </div>
+        </footer>
       </div>
     </WalletProvider>
   );
