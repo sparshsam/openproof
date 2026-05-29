@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { Dispatch, SetStateAction } from "react";
 import {
   CheckCircle2,
   CircleX,
@@ -12,6 +13,7 @@ import {
   Upload,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { PublicClient } from "viem";
 import { usePublicClient } from "wagmi";
 import { BaseSepoliaNotice } from "@/components/base-notice";
 import {
@@ -33,6 +35,7 @@ import { ProofHistory } from "@/components/proof-history";
 import { ProofTimeline } from "@/components/proof-timeline";
 import { ReceiptImport } from "@/components/receipt-import";
 import { transactionExplorerUrl } from "@/lib/explorer";
+import { normalizeClientError } from "@/lib/errors";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
 import {
   isContractConfigured,
@@ -41,7 +44,7 @@ import {
 } from "@/lib/contracts";
 import { addProofHistoryItem } from "@/lib/history";
 import { proofPath } from "@/lib/proof-url";
-import { isBytes32Hash, readOnchainProof } from "@/lib/proofs";
+import { findProofTransactionHash, isBytes32Hash, readOnchainProof } from "@/lib/proofs";
 import type { ProofReceipt } from "@/lib/receipt";
 import { formatLocalTimestamp } from "@/lib/time";
 
@@ -83,7 +86,10 @@ export default function VerifyProofPage() {
         });
       })
       .catch(() =>
-        setResult({ status: "error", message: "The browser could not hash this file." }),
+        setResult({
+          status: "error",
+          message: "The browser could not hash this file. Check the file size and try again.",
+        }),
       );
   }, [file]);
 
@@ -111,6 +117,7 @@ export default function VerifyProofPage() {
         transactionHash: proof.transactionHash,
       };
       setResult(verifiedResult);
+      hydrateTransactionHash(publicClient, hash, setResult);
       addProofHistoryItem({
         proofType: "verified",
         fileName: file?.name || "Verified file",
@@ -127,7 +134,7 @@ export default function VerifyProofPage() {
     } catch (error) {
       setResult({
         status: "error",
-        message: error instanceof Error ? error.message : "Verification failed.",
+        message: normalizeClientError(error, "Verification failed. Please try again."),
       });
     }
   }
@@ -173,6 +180,12 @@ export default function VerifyProofPage() {
         transactionHash: proof.transactionHash || receipt.transactionHash,
       };
       setReceiptResult(nextResult);
+      hydrateTransactionHash(
+        publicClient,
+        receipt.sha256Hash,
+        setReceiptResult,
+        receipt.transactionHash,
+      );
       addProofHistoryItem({
         proofType: "verified",
         fileName: receipt.fileName,
@@ -189,7 +202,10 @@ export default function VerifyProofPage() {
     } catch (error) {
       setReceiptResult({
         status: "error",
-        message: error instanceof Error ? error.message : "Receipt verification failed.",
+        message: normalizeClientError(
+          error,
+          "Receipt verification failed. Please try again.",
+        ),
       });
     }
   }
@@ -269,7 +285,11 @@ export default function VerifyProofPage() {
             />
           </div>
 
-          <FileDrop file={file} onFile={setFile} />
+          <FileDrop
+            file={file}
+            onFile={setFile}
+            onError={(message) => setResult({ status: "error", message })}
+          />
 
           {file ? (
             <div className="grid gap-3 rounded-3xl border border-border bg-surface-muted p-5 text-sm sm:grid-cols-3">
@@ -454,6 +474,25 @@ function ResultRow({ label, value }: { label: string; value: string }) {
       <dd className="mt-2 break-words font-mono text-xs">{value}</dd>
     </div>
   );
+}
+
+function hydrateTransactionHash(
+  publicClient: PublicClient,
+  proofHash: `0x${string}`,
+  setResult: Dispatch<SetStateAction<VerificationResult>>,
+  fallbackTransactionHash?: string,
+) {
+  findProofTransactionHash(publicClient, proofHash)
+    .then((transactionHash) => {
+      const nextTransactionHash = transactionHash || fallbackTransactionHash;
+      if (!nextTransactionHash) return;
+      setResult((current) =>
+        current.status === "verified" && current.proofId === proofHash
+          ? { ...current, transactionHash: nextTransactionHash }
+          : current,
+      );
+    })
+    .catch(() => undefined);
 }
 
 function ReceiptResult({ result }: { result: VerificationResult }) {

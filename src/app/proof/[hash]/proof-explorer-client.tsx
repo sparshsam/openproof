@@ -28,8 +28,14 @@ import {
   openProofChain,
   openProofContractAddress,
 } from "@/lib/contracts";
+import { normalizeClientError } from "@/lib/errors";
 import { addressExplorerUrl, transactionExplorerUrl } from "@/lib/explorer";
-import { isBytes32Hash, readOnchainProof, type OnchainProof } from "@/lib/proofs";
+import {
+  findProofTransactionHash,
+  isBytes32Hash,
+  readOnchainProof,
+  type OnchainProof,
+} from "@/lib/proofs";
 import { formatLocalTimestamp } from "@/lib/time";
 
 type LoadState =
@@ -74,10 +80,23 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
         }
 
         setState({ status: "found", proof });
+        findProofTransactionHash(publicClient, normalizedHash)
+          .then((transactionHash) => {
+            if (!transactionHash) return;
+            setState((current) =>
+              current.status === "found" && current.proof.fileHash === normalizedHash
+                ? {
+                    status: "found",
+                    proof: { ...current.proof, transactionHash },
+                  }
+                : current,
+            );
+          })
+          .catch(() => undefined);
       } catch (error) {
         setState({
           status: "error",
-          message: error instanceof Error ? error.message : "Could not load proof.",
+          message: normalizeClientError(error, "Could not load proof. Please try again."),
         });
       }
     }

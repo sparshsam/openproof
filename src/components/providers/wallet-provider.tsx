@@ -12,12 +12,14 @@ import { http, WagmiProvider } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
 import { useState } from "react";
 
-const projectId =
-  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "OPENPROOF_LOCAL_ONLY";
+export const walletConnectProjectId =
+  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "";
+
+export const isWalletConnectConfigured = Boolean(walletConnectProjectId);
 
 const config = getDefaultConfig({
   appName: "OpenProof",
-  projectId,
+  projectId: walletConnectProjectId || "openproof_missing_walletconnect_project_id",
   chains: [baseSepolia],
   ssr: true,
   transports: {

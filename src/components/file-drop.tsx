@@ -2,7 +2,7 @@
 
 import { FileUp } from "lucide-react";
 import { useRef, useState } from "react";
-import { formatBytes } from "@/lib/hash";
+import { formatBytes, maxBundleSizeBytes, maxFileSizeBytes } from "@/lib/hash";
 
 type FileDropProps = {
   file?: File | null;
@@ -14,6 +14,7 @@ type FileDropProps = {
   accept?: string;
   label?: string;
   helperText?: string;
+  onError?: (message: string) => void;
 };
 
 export function FileDrop({
@@ -26,10 +27,47 @@ export function FileDrop({
   accept,
   label,
   helperText,
+  onError,
 }: FileDropProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const selectedCount = files.length || (file ? 1 : 0);
+  const defaultHelperText = file
+    ? `${formatBytes(file.size)} - ${file.type || "unknown type"}`
+    : `The file stays in your browser. Max file: ${formatBytes(
+        maxFileSizeBytes,
+      )}. Max bundle: ${formatBytes(maxBundleSizeBytes)}.`;
+
+  function handleFiles(selectedFiles: File[]) {
+    if (!selectedFiles.length || disabled) return;
+    const totalSize = selectedFiles.reduce((sum, selectedFile) => sum + selectedFile.size, 0);
+    const oversized = selectedFiles.find((selectedFile) => selectedFile.size > maxFileSizeBytes);
+
+    if (oversized) {
+      onError?.(
+        `${oversized.name} is too large. OpenProof supports files up to ${formatBytes(
+          maxFileSizeBytes,
+        )}.`,
+      );
+      return;
+    }
+
+    if (selectedFiles.length > 1 && totalSize > maxBundleSizeBytes) {
+      onError?.(
+        `This bundle is too large. OpenProof supports bundles up to ${formatBytes(
+          maxBundleSizeBytes,
+        )}.`,
+      );
+      return;
+    }
+
+    if (multiple && selectedFiles.length) {
+      onFiles?.(selectedFiles);
+      onFile(selectedFiles[0]);
+    } else {
+      onFile(selectedFiles[0]);
+    }
+  }
 
   return (
     <div
@@ -46,8 +84,7 @@ export function FileDrop({
       onDrop={(event) => {
         event.preventDefault();
         setIsDragging(false);
-        const dropped = event.dataTransfer.files.item(0);
-        if (dropped && !disabled) onFile(dropped);
+        handleFiles(Array.from(event.dataTransfer.files || []));
       }}
     >
       <input
@@ -58,13 +95,7 @@ export function FileDrop({
         multiple={multiple}
         type="file"
         onChange={(event) => {
-          const selectedFiles = Array.from(event.target.files || []);
-          if (multiple && selectedFiles.length) {
-            onFiles?.(selectedFiles);
-            onFile(selectedFiles[0]);
-          } else if (selectedFiles[0]) {
-            onFile(selectedFiles[0]);
-          }
+          handleFiles(Array.from(event.target.files || []));
         }}
       />
       <button
@@ -88,9 +119,7 @@ export function FileDrop({
           {helperText ||
             (selectedCount > 1
               ? "The bundle is hashed locally. File contents never leave your browser."
-              : file
-            ? `${formatBytes(file.size)} - ${file.type || "unknown type"}`
-                : "The file stays in your browser. OpenProof never uploads it.")}
+              : defaultHelperText)}
         </span>
       </button>
     </div>

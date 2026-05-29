@@ -43,6 +43,7 @@ import { ProofHistory } from "@/components/proof-history";
 import { ProofTimeline } from "@/components/proof-timeline";
 import { ProofQrCode } from "@/components/qr-code";
 import { transactionExplorerUrl } from "@/lib/explorer";
+import { genericWalletErrorMessage, normalizeClientError } from "@/lib/errors";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
 import { hashBundleFiles, type BundleManifest } from "@/lib/bundle";
 import { addProofHistoryItem } from "@/lib/history";
@@ -53,6 +54,7 @@ import {
   openProofChain,
   openProofContractAddress,
 } from "@/lib/contracts";
+import { isWalletConnectConfigured } from "@/components/providers/wallet-provider";
 import { buildProofReceipt, downloadJson, type ProofReceipt } from "@/lib/receipt";
 import { formatLocalTimestamp } from "@/lib/time";
 import { proofUrl } from "@/lib/proof-url";
@@ -95,14 +97,26 @@ export default function CreateProofPage() {
           setHash(bundleHash);
           setBundleManifest(manifest);
         })
-        .catch(() => setHashError("The browser could not hash this file bundle."));
+        .catch((hashingError) =>
+          setHashError(
+            hashingError instanceof Error
+              ? hashingError.message
+              : "The browser could not hash this file bundle.",
+          ),
+        );
       return;
     }
 
     if (file) {
       hashFileSha256(file)
         .then(setHash)
-        .catch(() => setHashError("The browser could not hash this file."));
+        .catch((hashingError) =>
+          setHashError(
+            hashingError instanceof Error
+              ? hashingError.message
+              : "The browser could not hash this file.",
+          ),
+        );
     }
   }, [bundleFiles, file, isBundle]);
 
@@ -222,9 +236,10 @@ export default function CreateProofPage() {
       });
     } catch (preflightError) {
       setPreflightMessage(
-        preflightError instanceof Error
-          ? preflightError.message
-          : "Could not check whether this proof already exists.",
+        normalizeClientError(
+          preflightError,
+          "OpenProof could not check whether this proof already exists. Please try again.",
+        ),
       );
     } finally {
       setIsCheckingProof(false);
@@ -236,6 +251,7 @@ export default function CreateProofPage() {
     Boolean(hash) &&
     isConnected &&
     !isWrongChain &&
+    isWalletConnectConfigured &&
     !isCheckingProof &&
     !isPending &&
     !isConfirming;
@@ -314,13 +330,16 @@ export default function CreateProofPage() {
             files={bundleFiles}
             multiple
             onFile={(nextFile) => {
+              setHashError(null);
               setFile(nextFile);
               setBundleFiles([nextFile]);
             }}
             onFiles={(files) => {
+              setHashError(null);
               setBundleFiles(files);
               setFile(files[0] || null);
             }}
+            onError={setHashError}
           />
 
           {file ? (
@@ -386,6 +405,17 @@ export default function CreateProofPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             <ConnectButton />
+            {!isWalletConnectConfigured ? (
+              <div className="w-full rounded-3xl border border-danger/30 bg-danger/10 p-5">
+                <p className="text-sm font-semibold text-danger">
+                  WalletConnect is not configured.
+                </p>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID to enable wallet
+                  connections in this deployment.
+                </p>
+              </div>
+            ) : null}
             {isWrongChain ? (
               <div className="w-full rounded-3xl border border-danger/30 bg-danger/10 p-5">
                 <p className="text-sm font-semibold text-danger">
@@ -436,7 +466,11 @@ export default function CreateProofPage() {
               {preflightMessage}
             </p>
           ) : null}
-          {error ? <p className="text-sm text-danger">{error.message}</p> : null}
+          {error ? (
+            <p className="text-sm text-danger">
+              {normalizeClientError(error, genericWalletErrorMessage)}
+            </p>
+          ) : null}
         </Card>
 
         <Card className="space-y-5">

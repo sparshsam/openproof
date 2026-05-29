@@ -1,4 +1,4 @@
-import { hashFileSha256, type HashedFile } from "@/lib/hash";
+import { hashFileSha256, validateBundleSize, type HashedFile } from "@/lib/hash";
 
 export type BundleManifestFile = {
   name: string;
@@ -16,6 +16,8 @@ export type BundleManifest = {
 };
 
 export async function hashBundleFiles(files: File[]) {
+  validateBundleSize(files);
+
   const hashedFiles = await Promise.all(
     files.map(async (file): Promise<HashedFile> => ({
       file,
@@ -61,4 +63,3 @@ function stableStringify(value: unknown): string {
   }
   return JSON.stringify(value);
 }
-
