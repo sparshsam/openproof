@@ -1,154 +1,106 @@
-# OpenProof 🔏
+# OpenProof
 
 OpenProof is a privacy-first, open-source proof-of-existence app for files, built on Base Sepolia.
 
-It lets users timestamp a file fingerprint onchain without uploading the file anywhere. Files are hashed locally in the browser using SHA-256, and only the fingerprint is registered on Base Sepolia through a minimal Solidity smart contract.
+It lets users create timestamped blockchain proofs for file fingerprints without uploading or storing the files themselves. Files are hashed locally in the browser with SHA-256, and only the resulting `bytes32` hash is registered onchain through a minimal Solidity contract.
 
-No file uploads. No storage bucket. No database required for the core proof flow.
+[![Live app](https://img.shields.io/badge/live-openproof.vercel.app-0052FF?style=for-the-badge)](https://openproof.vercel.app)
+[![CI](https://img.shields.io/github/actions/workflow/status/sparshsam/openproof/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/sparshsam/openproof/actions/workflows/ci.yml)
+[![License: AGPL v3](https://img.shields.io/github/license/sparshsam/openproof?style=for-the-badge)](LICENSE)
+[![Built on Base Sepolia](https://img.shields.io/badge/Built%20on-Base%20Sepolia-0052FF?style=for-the-badge)](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a)
 
-Built with:
+![OpenProof landing page](assets/screenshot-main.png)
 
-- Next.js 15
-- TypeScript
-- Tailwind CSS
-- Solidity
-- wagmi + RainbowKit
-- Base Sepolia
-- AGPLv3
+## Quick Links
+
+- [Live app](https://openproof.vercel.app)
+- [BaseScan contract](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a)
+- [Architecture](docs/architecture.md)
+- [Threat model](docs/threat-model.md)
+- [Security policy](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
+
+## What OpenProof Does
+
+OpenProof creates a verifiable timestamp for a file hash:
+
+1. Select a file in the browser.
+2. OpenProof hashes the file locally using SHA-256.
+3. Connect a wallet on Base Sepolia.
+4. Register only the hash in `OpenProofRegistry`.
+5. Download a local JSON receipt or share the proof page.
+6. Verify later by hashing the exact same file again.
+
+No file uploads. No server-side storage. No database. No IPFS dependency for the MVP.
 
 ## Screenshots
 
-The live interface is available at [openproof.vercel.app](https://openproof.vercel.app).
-
-![OpenProof desktop landing](public/screenshots/home-desktop.png)
-
 | Create proof | Verify proof |
 | --- | --- |
-| ![Create proof desktop](public/screenshots/create-desktop.png) | ![Verify proof desktop](public/screenshots/verify-desktop.png) |
+| ![Create proof screen](assets/screenshot-create.png) | ![Verify proof screen](assets/screenshot-verify.png) |
 
-| Proof explorer | Mobile create flow |
-| --- | --- |
-| ![Proof explorer desktop](public/screenshots/proof-desktop.png) | ![Create proof mobile](public/screenshots/create-mobile.png) |
+Additional screenshots are available in [`public/screenshots`](public/screenshots).
 
-## Built on Base
+## Features
 
-OpenProof v0 is built on Base Sepolia, the Base testnet. Base Sepolia is used for the zero-spend MVP because users and contributors can test proof registration without spending real funds.
+| Feature | Status | Notes |
+| --- | --- | --- |
+| Local SHA-256 hashing | Available | Uses the browser Web Crypto API. File bytes stay local. |
+| Proof registration | Available | Registers `bytes32` hashes on Base Sepolia. |
+| Proof verification | Available | Re-hashes local files and checks the registry. |
+| JSON proof receipts | Available | Generated and downloaded locally; never uploaded by OpenProof. |
+| Receipt import | Available | Validates OpenProof receipt JSON and checks the hash onchain. |
+| Local proof history | Available | Stored only in browser local storage. |
+| Public proof pages | Available | `/proof/[hash]` reads public registry state. |
+| QR verification | Available | Encodes the proof page URL, not the file. |
+| Bundle proofs | Available | Deterministic combined hash for multiple local files. |
+| Base mainnet | Roadmap | Current MVP is Base Sepolia testnet only. |
 
-Current network:
+## Built on Base Sepolia
+
+OpenProof v0 uses Base Sepolia so contributors and users can test the proof flow without real funds.
 
 - Chain: Base Sepolia
 - Chain ID: `84532`
 - Explorer: [BaseScan Sepolia](https://sepolia.basescan.org)
 - Registry contract: [`0x60d3DD631E6e4F6D76f761689d6FA229945a874a`](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a)
 
-Base mainnet deployment is a future roadmap item. The current public MVP should be treated as a testnet proof-of-existence tool.
-
-## What OpenProof Is
-
-- A privacy-first proof-of-existence MVP.
-- A local file hashing app with an onchain hash registry.
-- A zero-spend starter that can run on Vercel free tier.
-- An AGPLv3 open-source project.
-
-## Why OpenProof Exists
-
-Files often need a neutral timestamp without being uploaded to a third-party service. OpenProof provides a small, inspectable way to create that timestamped fingerprint: hash locally, register only the hash, and keep the original file private.
-
-## Feature Matrix
-
-| Feature | Status | Privacy model |
-| --- | --- | --- |
-| Local SHA-256 hashing | Available | File bytes stay in the browser |
-| Register proof | Available | Only `bytes32` hash is sent onchain |
-| Verify proof | Available | Re-hashes local file and reads Base Sepolia |
-| JSON receipts | Available | Downloaded locally, never uploaded |
-| Receipt import | Available | JSON parsed locally, hash checked onchain |
-| Local proof history | Available | Browser local storage only |
-| Public proof pages | Available | Hash URL reads public registry data |
-| QR verification | Available | QR contains proof page URL only |
-| Bundle proofs | Available | Deterministic local bundle hash only |
-| Base mainnet | Roadmap | Not part of the testnet MVP |
-
-## What OpenProof Is Not
-
-- It is not file storage.
-- It is not IPFS.
-- It is not a paid database or upload service.
-- It is not a legal, financial, or regulated claims product.
-- It does not prove file ownership by itself.
+The current public app is a testnet proof-of-existence utility. Base mainnet deployment is a roadmap item, not a current production claim.
 
 ## Privacy Model
 
-Files never leave the browser. OpenProof reads the selected file through the browser File API and hashes it with the Web Crypto API. The app sends only the SHA-256 hash to the smart contract. Receipts are generated locally as JSON downloads and are not uploaded anywhere.
+OpenProof is designed around local-first proof creation:
 
-Public hashes may still leak information if the file is already known or easy to guess. Do not register hashes for sensitive, guessable, or low-entropy content without understanding that risk.
+- Files are read through the browser File API.
+- Hashing happens locally with the Web Crypto API.
+- Only the SHA-256 hash is sent to the smart contract.
+- Receipts are local JSON downloads.
+- Recent proof history stays in browser local storage.
+- There is no backend upload endpoint, database, storage bucket, or account system.
 
-Local proof history is stored only in the user's browser using local storage. Clearing browser data, using another device, or using another browser profile will remove or hide that local history.
+Important caveat: public hashes can leak information if the original file is already known, small, or easy to guess. Do not register hashes for sensitive guessable content without understanding that risk.
 
-## Architecture Diagram
+## Security Notes
 
-```mermaid
-flowchart LR
-  A["Local file(s)"] --> B["Browser File API"]
-  B --> C["Web Crypto SHA-256"]
-  C --> D["bytes32 fingerprint"]
-  D --> E["OpenProofRegistry on Base Sepolia"]
-  E --> F["Proof page / receipt / history"]
-  F --> G["Verify by hashing the same file(s) locally"]
-```
+OpenProof proves that a matching hash was registered by a wallet at a recorded chain timestamp. It does not prove authorship, ownership, lawful possession, legal validity, or the truth of a file's contents.
 
-## Utility Features
+If the original file is lost, OpenProof cannot recover it. The chain stores only the hash.
 
-### Local Proof History
+Do not use OpenProof for legal, financial, medical, compliance, or regulated claims without professional advice. See [`docs/threat-model.md`](docs/threat-model.md) and [`SECURITY.md`](SECURITY.md).
 
-OpenProof keeps recent registrations and verifications locally in the browser. History entries include the file name, hash, transaction hash when available, chain, timestamp, verification URL, BaseScan URL, and whether the entry was registered or verified. This history is never uploaded and can be cleared from the UI.
+## Install and Run
 
-### Receipt Import
+Requirements:
 
-Users can import previously downloaded OpenProof receipt JSON files. The app validates the receipt schema locally, handles corrupted or malformed JSON, then checks the receipt hash against the Base Sepolia registry. A valid receipt is useful as a portable local record, but it is not authoritative by itself; the onchain registry is the source of truth.
-
-### Proof Explorer Pages
-
-Each proof hash has a shareable page at `/proof/[hash]`. The page reads the Base Sepolia registry and displays the hash, creator wallet, contract timestamp, chain, contract address, and BaseScan link when transaction lookup is available.
-
-### QR Verification
-
-Successful registrations show a QR code for the shareable proof page. The QR code can be downloaded as a PNG or used to copy the verification link. QR codes contain only the proof page URL, not the original file.
-
-### Bundle Proofs
-
-OpenProof can register one deterministic proof for multiple files. Each file is hashed locally, then OpenProof creates a local bundle manifest sorted by file name, size, MIME type, and file hash. The manifest is hashed with SHA-256 and only that combined bundle hash is registered onchain. Verifying a bundle requires the same exact file set and the same deterministic bundle rule.
-
-## Threat Model
-
-OpenProof proves that a matching file hash was registered by a wallet at a certain time. It does not prove authorship, ownership, lawful possession, or the truth of the file contents. If the original file is lost, OpenProof cannot recover it.
-
-See [docs/threat-model.md](docs/threat-model.md) for details.
-
-## Tech Stack
-
-- Next.js 15
-- TypeScript
-- Tailwind CSS
-- wagmi
-- viem
-- RainbowKit
-- Solidity
-- Hardhat
-- Base Sepolia
-- Vercel
-
-## Zero-Spend MVP Setup
-
-1. Use a free WalletConnect project ID from Reown Cloud for RainbowKit.
-2. Use Base Sepolia testnet ETH from a faucet.
-3. Use the public Base Sepolia RPC or your own free RPC endpoint.
-4. Deploy the frontend on Vercel free tier.
-5. Do not enable paid storage, databases, domains, IPFS pinning, or mainnet deployment for v0.
-
-## Local Development
+- Node.js 22 or newer
+- npm
+- A WalletConnect project ID from Reown Cloud
+- Base Sepolia test ETH for contract deployment or proof registration
 
 ```bash
+git clone https://github.com/sparshsam/openproof.git
+cd openproof
 npm install
 cp .env.example .env.local
 npm run dev
@@ -156,53 +108,19 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## Smart Contract
-
-Compile and test:
+Fill these values in `.env.local`:
 
 ```bash
-npm run compile
-npm run test:contracts
-```
-
-Deploy to Base Sepolia:
-
-```bash
-cp .env.example .env
-# Fill BASE_SEPOLIA_RPC_URL and DEPLOYER_PRIVATE_KEY.
-npm run deploy:base-sepolia
-```
-
-After deployment, set the returned address in:
-
-```bash
-NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS=
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 NEXT_PUBLIC_CHAIN_ID=84532
+NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS=0x60d3DD631E6e4F6D76f761689d6FA229945a874a
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
+DEPLOYER_PRIVATE_KEY=
 ```
 
 Never commit private keys. `.env` and `.env.local` are ignored by git.
 
-## Base Sepolia Faucet ETH
-
-Add Base Sepolia to your wallet, then get test ETH from a Base Sepolia faucet. The deployment wallet only needs enough test ETH to deploy `OpenProofRegistry`.
-
-View the deployed registry on [BaseScan Sepolia](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a). Proof registration receipts link to BaseScan Sepolia transaction pages.
-
-The contract source is available in this repository at [`contracts/OpenProofRegistry.sol`](contracts/OpenProofRegistry.sol). BaseScan source verification requires a BaseScan API key and is not required for local development.
-
-## Vercel Deployment
-
-1. Push this repo to a public GitHub repository.
-2. Import it in Vercel.
-3. Add these environment variables:
-   - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
-   - `NEXT_PUBLIC_CHAIN_ID=84532`
-   - `NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS`
-4. Deploy with the default Next.js settings.
-
-No server uploads, database, storage bucket, paid domain, or IPFS service is required.
-
-## Validation
+## Build From Source
 
 ```bash
 npm run lint
@@ -211,66 +129,87 @@ npm run build
 npm run test:contracts
 ```
 
-Manual validation:
+## Tech Stack
 
-- Hash generation works after selecting a local file.
-- Bundle hash generation works after selecting multiple local files.
-- Proof registration works on Base Sepolia after contract deployment.
-- Proof verification succeeds for the exact same file.
-- Proof verification returns not found for changed or different files.
-- Proof receipt JSON downloads locally.
-- Receipt import validates schema and checks onchain state.
-- Local history persists across refresh and can be cleared.
-- `/proof/[hash]` pages load found and not-found states.
-- QR code generation and PNG download work.
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- wagmi, viem, RainbowKit
+- Solidity and Hardhat
+- Base Sepolia
+- Vercel
+
+Contract commands:
+
+```bash
+npm run compile
+npm run test:contracts
+npm run deploy:base-sepolia
+```
+
+Deployment requires `BASE_SEPOLIA_RPC_URL` and `DEPLOYER_PRIVATE_KEY` in `.env`.
+
+## Deploy to Vercel
+
+OpenProof deploys as a static Next.js app with no backend services required.
+
+1. Fork or clone this repository.
+2. Import it into Vercel.
+3. Add the public environment variables:
+   - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
+   - `NEXT_PUBLIC_CHAIN_ID=84532`
+   - `NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS`
+4. Deploy with the default Next.js settings.
+
+No paid domain, database, storage bucket, file uploads, or IPFS pinning service is required for the MVP.
+
+## Project Structure
+
+```text
+contracts/                  Solidity registry contract
+docs/                       Architecture, threat model, deployment notes
+public/screenshots/         App screenshots used by docs and social previews
+scripts/                    Contract deployment script
+src/app/                    Next.js App Router pages
+src/components/             Reusable UI and wallet components
+src/lib/                    Hashing, receipts, contracts, history, proof utilities
+test/                       Hardhat contract tests
+```
 
 ## Roadmap
 
-- Add optional detached signature support.
-- Add better event indexing for large deployments.
+- Optional detached signature support.
+- Better event indexing for larger deployments.
 - Base mainnet deployment.
-- Add reproducible deployment metadata.
-- Add multilingual documentation.
+- Reproducible deployment metadata.
+- Expanded documentation for self-hosting.
+- Multilingual documentation.
 
-## FAQ
+## Contributing
 
-### Does OpenProof upload my files?
+Contributions are welcome when they preserve the core architecture: local hashing, no file uploads, no mandatory backend, and no speculative token or DeFi features.
 
-No. Files are read and hashed in the browser. The app sends only the hash to Base Sepolia.
+Before opening a pull request:
 
-### Does OpenProof prove ownership?
+```bash
+npm run lint
+npm run typecheck
+npm run build
+npm run test:contracts
+```
 
-No. It proves a matching hash was registered by a wallet at a contract timestamp. It does not prove ownership, authorship, legal validity, or truth of contents.
+For UI changes, include screenshots. For security-sensitive changes, update the threat model or security policy where relevant. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-### What happens if I lose the original file?
+## Repository Metadata
 
-OpenProof cannot recover it. The chain stores only the hash, not the file.
+Recommended GitHub topics:
 
-### Are receipts private?
-
-Receipts are local JSON files. They may include file names, sizes, hashes, wallet addresses, and transaction links, so share them intentionally.
-
-### Why Base Sepolia?
-
-Base Sepolia keeps the MVP zero-spend and testable without real funds. Base mainnet is a future roadmap item.
-
-## Repository Topics
-
-Suggested GitHub topics:
-
-- base
-- base-sepolia
-- built-on-base
-- onchain
-- proof-of-existence
-- ethereum
-- solidity
-- viem
-- wagmi
-- rainbowkit
-- web3
-- cryptography
+```text
+base, base-sepolia, built-on-base, onchain, proof-of-existence, ethereum,
+solidity, viem, wagmi, rainbowkit, web3, cryptography, privacy-first,
+nextjs, typescript, tailwindcss, vercel, agplv3
+```
 
 ## License
 
-AGPL-3.0-only. See [LICENSE](LICENSE).
+OpenProof is licensed under AGPL-3.0-only. See [`LICENSE`](LICENSE).

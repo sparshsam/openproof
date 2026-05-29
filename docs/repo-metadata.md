@@ -1,9 +1,9 @@
 # Repository Metadata
 
-Suggested GitHub description:
+Current recommended GitHub description:
 
 ```text
-OpenProof is an open-source proof-of-existence app that lets users create timestamped blockchain proofs for files without uploading or storing the files themselves. Files are hashed locally in the browser and only the SHA-256 fingerprint is registered on Base Sepolia.
+Privacy-first proof-of-existence app for timestamping local SHA-256 file hashes on Base Sepolia.
 ```
 
 Website:
@@ -12,7 +12,7 @@ Website:
 https://openproof.vercel.app
 ```
 
-Suggested topics:
+Recommended topics:
 
 - base
 - base-sepolia
@@ -26,3 +26,9 @@ Suggested topics:
 - rainbowkit
 - web3
 - cryptography
+- privacy-first
+- nextjs
+- typescript
+- tailwindcss
+- vercel
+- agplv3

@@ -1,21 +1,43 @@
-# Security
+# Security Policy
 
-OpenProof is an MVP and should not be used for legal, financial, or regulated claims without professional advice.
+OpenProof is a testnet MVP and should not be used for legal, financial, medical, compliance, or regulated claims without professional advice.
 
-## Reporting
+## Reporting Vulnerabilities
 
-Please open a private security advisory on GitHub if the repository supports it. If not, contact the maintainers privately before public disclosure.
+Please report security issues privately before public disclosure.
 
-## Scope
+Preferred path:
 
-Relevant issues include:
+1. Open a private GitHub security advisory if available.
+2. If advisories are unavailable, contact the maintainers privately through GitHub.
+3. Include reproduction steps, affected versions or commits, and expected impact.
+
+Please do not publish exploit details until maintainers have had a reasonable chance to respond.
+
+## In Scope
+
+Relevant security issues include:
 
 - Smart contract bugs.
-- Incorrect verification results.
-- Accidental file upload or persistence.
+- Incorrect proof registration or verification results.
+- Accidental file upload, persistence, or metadata leakage.
 - Receipt data that misrepresents the onchain proof.
-- Secret handling problems in deployment scripts or docs.
+- Bundle hashing determinism bugs.
+- Secret handling problems in deployment scripts, docs, or workflows.
+- Wallet or network handling that could cause users to submit unintended transactions.
 
-## Non-Goals
+## Out of Scope
 
-OpenProof does not prove authorship, ownership, lawful possession, or content truth. It proves that a matching SHA-256 hash was registered by a wallet at a recorded chain timestamp.
+OpenProof intentionally does not claim to solve:
+
+- File storage or recovery.
+- Authorship, ownership, lawful possession, or content truth.
+- Legal notarization.
+- Mainnet finality or production-grade compliance workflows.
+- Protection against hash guessing for known, small, or low-entropy files.
+
+## Security Model Summary
+
+OpenProof proves that a matching SHA-256 hash was registered by a wallet at a recorded Base Sepolia contract timestamp. Files are hashed locally in the browser, and only hashes are sent onchain.
+
+The public registry, proof pages, transaction links, and receipts may expose file hashes, wallet addresses, timestamps, transaction hashes, and user-provided file metadata contained in locally generated receipts.
