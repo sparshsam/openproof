@@ -1,0 +1,99 @@
+"use client";
+
+import { FileJson } from "lucide-react";
+import { useRef, useState } from "react";
+import { EmptyState } from "@/components/design-system";
+import { validateProofReceipt, type ProofReceipt } from "@/lib/receipt";
+
+export type ReceiptImportResult =
+  | { status: "idle"; message: string }
+  | { status: "error"; message: string }
+  | { status: "valid"; receipt: ProofReceipt };
+
+export function ReceiptImport({
+  onReceipt,
+}: {
+  onReceipt: (receipt: ProofReceipt) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [result, setResult] = useState<ReceiptImportResult>({
+    status: "idle",
+    message: "Import a downloaded OpenProof receipt JSON.",
+  });
+  const [isDragging, setIsDragging] = useState(false);
+
+  async function importFile(file: File) {
+    try {
+      const parsed = JSON.parse(await file.text());
+      const validation = validateProofReceipt(parsed);
+      if (!validation.ok) {
+        setResult({ status: "error", message: validation.reason });
+        return;
+      }
+      setResult({ status: "valid", receipt: validation.receipt });
+      onReceipt(validation.receipt);
+    } catch {
+      setResult({ status: "error", message: "Receipt JSON is corrupted or unreadable." });
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <div
+        className={`rounded-[2rem] border border-dashed p-6 transition ${
+          isDragging
+            ? "border-base-blue bg-base-blue/10"
+            : "border-base-blue/25 bg-surface hover:border-base-blue/60"
+        }`}
+        onDragLeave={() => setIsDragging(false)}
+        onDragOver={(event) => {
+          event.preventDefault();
+          setIsDragging(true);
+        }}
+        onDrop={(event) => {
+          event.preventDefault();
+          setIsDragging(false);
+          const file = event.dataTransfer.files.item(0);
+          if (file) importFile(file);
+        }}
+      >
+        <input
+          ref={inputRef}
+          accept="application/json,.json"
+          className="sr-only"
+          type="file"
+          onChange={(event) => {
+            const file = event.target.files?.item(0);
+            if (file) importFile(file);
+          }}
+        />
+        <button
+          className="flex w-full flex-col items-center gap-3 text-center"
+          type="button"
+          onClick={() => inputRef.current?.click()}
+        >
+          <span className="grid size-14 place-items-center rounded-3xl bg-base-blue text-white">
+            <FileJson className="size-6" />
+          </span>
+          <span className="font-semibold">Drop receipt JSON or choose one</span>
+          <span className="max-w-md text-sm leading-6 text-muted">
+            OpenProof validates the local JSON schema first, then checks the
+            receipt hash against Base Sepolia.
+          </span>
+        </button>
+      </div>
+      {result.status === "error" ? (
+        <p className="rounded-3xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger">
+          {result.message}
+        </p>
+      ) : result.status === "valid" ? (
+        <p className="rounded-3xl border border-success/30 bg-success/10 p-4 text-sm text-success">
+          Receipt schema is valid. Checking onchain state...
+        </p>
+      ) : (
+        <EmptyState icon={FileJson} title="Receipt import" text={result.message} />
+      )}
+    </div>
+  );
+}
+

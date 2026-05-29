@@ -5,7 +5,9 @@ import {
   Download,
   FileCheck2,
   Fingerprint,
+  Link2,
   Loader2,
+  Package,
   ReceiptText,
   ShieldCheck,
   Upload,
@@ -34,8 +36,12 @@ import {
 } from "@/components/design-system";
 import { FileDrop } from "@/components/file-drop";
 import { HashDisplay } from "@/components/hash-display";
+import { ProofHistory } from "@/components/proof-history";
+import { ProofQrCode } from "@/components/qr-code";
 import { transactionExplorerUrl } from "@/lib/explorer";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
+import { hashBundleFiles, type BundleManifest } from "@/lib/bundle";
+import { addProofHistoryItem } from "@/lib/history";
 import {
   expectedChainId,
   isContractConfigured,
@@ -45,9 +51,12 @@ import {
 } from "@/lib/contracts";
 import { buildProofReceipt, downloadJson, type ProofReceipt } from "@/lib/receipt";
 import { formatLocalTimestamp } from "@/lib/time";
+import { proofUrl } from "@/lib/proof-url";
 
 export default function CreateProofPage() {
   const [file, setFile] = useState<File | null>(null);
+  const [bundleFiles, setBundleFiles] = useState<File[]>([]);
+  const [bundleManifest, setBundleManifest] = useState<BundleManifest | null>(null);
   const [hash, setHash] = useState<`0x${string}` | null>(null);
   const [hashError, setHashError] = useState<string | null>(null);
   const [receipt, setReceipt] = useState<ProofReceipt | null>(null);
@@ -65,17 +74,33 @@ export default function CreateProofPage() {
 
   const configured = isContractConfigured();
   const isWrongChain = isConnected && chainId !== expectedChainId;
+  const isBundle = bundleFiles.length > 1;
+  const totalBundleSize = bundleFiles.reduce((sum, item) => sum + item.size, 0);
 
   useEffect(() => {
-    if (!file) return;
+    if (!file && !bundleFiles.length) return;
     setHash(null);
     setHashError(null);
     setReceipt(null);
     setPreflightMessage(null);
-    hashFileSha256(file)
-      .then(setHash)
-      .catch(() => setHashError("The browser could not hash this file."));
-  }, [file]);
+    setBundleManifest(null);
+
+    if (isBundle) {
+      hashBundleFiles(bundleFiles)
+        .then(({ bundleHash, manifest }) => {
+          setHash(bundleHash);
+          setBundleManifest(manifest);
+        })
+        .catch(() => setHashError("The browser could not hash this file bundle."));
+      return;
+    }
+
+    if (file) {
+      hashFileSha256(file)
+        .then(setHash)
+        .catch(() => setHashError("The browser could not hash this file."));
+    }
+  }, [bundleFiles, file, isBundle]);
 
   useEffect(() => {
     async function loadReceipt() {
@@ -90,8 +115,12 @@ export default function CreateProofPage() {
       setReceipt(
         buildProofReceipt({
           fileName: file.name,
-          fileSize: file.size,
-          fileMimeType: file.type || "unknown",
+          fileSize: isBundle ? totalBundleSize : file.size,
+          fileMimeType: isBundle
+            ? "application/vnd.openproof.bundle+json"
+            : file.type || "unknown",
+          proofType: isBundle ? "bundle" : "single-file",
+          bundleFiles: bundleManifest?.files,
           sha256Hash: hash,
           chainId: openProofChain.id,
           chainName: openProofChain.name,
@@ -100,23 +129,57 @@ export default function CreateProofPage() {
           transactionUrl: transactionExplorerUrl(txHash),
           creatorWallet: address,
           createdTimestamp: new Date(Number(block.timestamp) * 1000).toISOString(),
-          verificationUrl: `${window.location.origin}/verify`,
+          verificationUrl: proofUrl(hash, window.location.origin),
         }),
       );
     }
 
     loadReceipt().catch(() => undefined);
-  }, [address, file, hash, publicClient, txHash, txReceipt]);
+  }, [
+    address,
+    bundleManifest?.files,
+    file,
+    hash,
+    isBundle,
+    publicClient,
+    totalBundleSize,
+    txHash,
+    txReceipt,
+  ]);
+
+  useEffect(() => {
+    if (!receipt) return;
+    addProofHistoryItem({
+      proofType: "registered",
+      fileName: receipt.fileName,
+      fileHash: receipt.sha256Hash,
+      txHash: receipt.transactionHash,
+      chainName: receipt.chainName,
+      chainId: receipt.chainId,
+      timestamp: receipt.createdTimestamp,
+      verificationUrl: receipt.verificationUrl,
+      baseScanUrl: receipt.transactionUrl,
+    });
+  }, [receipt]);
 
   const status = useMemo(() => {
     if (hashError) return hashError;
-    if (file && !hash) return "Hashing file locally...";
+    if ((file || bundleFiles.length) && !hash) return "Hashing locally...";
     if (isCheckingProof) return "Checking whether this fingerprint already exists...";
     if (isPending) return "Confirm the wallet transaction.";
     if (isConfirming) return "Transaction submitted. Waiting for confirmation.";
     if (receipt) return "Proof registered on Base Sepolia.";
     return "Select a file to begin.";
-  }, [file, hash, hashError, isCheckingProof, isConfirming, isPending, receipt]);
+  }, [
+    bundleFiles.length,
+    file,
+    hash,
+    hashError,
+    isCheckingProof,
+    isConfirming,
+    isPending,
+    receipt,
+  ]);
 
   async function registerProof() {
     if (!hash || !openProofContractAddress || !publicClient || isWrongChain) return;
@@ -190,10 +253,10 @@ export default function CreateProofPage() {
           </div>
           <Card dark className="grid content-start gap-4 sm:grid-cols-2">
             {[
-              { icon: Upload, title: "Select file", text: "Choose a file locally." },
-              { icon: Fingerprint, title: "Generate fingerprint", text: "Hash with Web Crypto." },
-              { icon: Wallet, title: "Connect wallet", text: "Use Base Sepolia." },
-              { icon: FileCheck2, title: "Register proof", text: "Write hash onchain." },
+                { icon: Upload, title: "Select file", text: "Choose one or many files locally." },
+                { icon: Fingerprint, title: "Generate fingerprint", text: "Hash with Web Crypto." },
+                { icon: Wallet, title: "Connect wallet", text: "Use Base Sepolia." },
+                { icon: FileCheck2, title: "Register proof", text: "Write hash onchain." },
               { icon: ReceiptText, title: "Download receipt", text: "Save JSON locally." },
             ].map((item, index) => (
               <StepCard
@@ -228,21 +291,75 @@ export default function CreateProofPage() {
             Base Sepolia.
           </NetworkNotice>
 
-          <FileDrop file={file} onFile={setFile} />
+          <FileDrop
+            file={file}
+            files={bundleFiles}
+            multiple
+            onFile={(nextFile) => {
+              setFile(nextFile);
+              setBundleFiles([nextFile]);
+            }}
+            onFiles={(files) => {
+              setBundleFiles(files);
+              setFile(files[0] || null);
+            }}
+          />
 
           {file ? (
             <div className="grid gap-3 rounded-3xl border border-border bg-surface-muted p-5 text-sm sm:grid-cols-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">Name</p>
-                <p className="mt-2 break-words font-semibold">{file.name}</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-muted">
+                  {isBundle ? "Proof type" : "Name"}
+                </p>
+                <p className="mt-2 break-words font-semibold">
+                  {isBundle ? "Bundle proof" : file.name}
+                </p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.16em] text-muted">Size</p>
-                <p className="mt-2 font-semibold">{formatBytes(file.size)}</p>
+                <p className="mt-2 font-semibold">
+                  {formatBytes(isBundle ? totalBundleSize : file.size)}
+                </p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">Type</p>
-                <p className="mt-2 break-words font-semibold">{file.type || "unknown"}</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-muted">
+                  Files
+                </p>
+                <p className="mt-2 break-words font-semibold">
+                  {isBundle ? bundleFiles.length : file.type || "unknown"}
+                </p>
+              </div>
+            </div>
+          ) : null}
+
+          {isBundle && bundleManifest ? (
+            <div className="rounded-3xl border border-base-blue/25 bg-base-blue/10 p-5">
+              <div className="flex items-start gap-3">
+                <Package className="mt-1 size-5 text-base-blue" />
+                <div>
+                  <p className="font-semibold">Deterministic bundle manifest</p>
+                  <p className="mt-1 text-sm leading-6 text-muted">
+                    Verification requires the same exact file set. OpenProof
+                    sorts by name, size, type, and hash before hashing the
+                    local manifest.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 grid gap-2">
+                {bundleManifest.files.map((item) => (
+                  <div
+                    className="rounded-2xl bg-surface p-3 text-sm"
+                    key={`${item.name}:${item.sha256}`}
+                  >
+                    <p className="break-words font-semibold">{item.name}</p>
+                    <p className="mt-1 text-xs text-muted">
+                      {formatBytes(item.size)} - {item.type}
+                    </p>
+                    <p className="mt-1 break-all font-mono text-xs text-muted">
+                      {item.sha256}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           ) : null}
@@ -274,7 +391,11 @@ export default function CreateProofPage() {
                 ) : (
                   <ShieldCheck className="size-4" />
                 )}
-                {isCheckingProof ? "Checking proof" : "Register on Base Sepolia"}
+                {isCheckingProof
+                  ? "Checking proof"
+                  : isBundle
+                    ? "Register bundle on Base Sepolia"
+                    : "Register on Base Sepolia"}
               </ActionButton>
             )}
           </div>
@@ -314,6 +435,7 @@ export default function CreateProofPage() {
               <ExplorerLink href={transactionExplorerUrl(receipt.transactionHash)}>
                 View transaction on BaseScan
               </ExplorerLink>
+              <ProofQrCode url={receipt.verificationUrl} />
               <ActionButton
                 variant="secondary"
                 onClick={() =>
@@ -322,6 +444,13 @@ export default function CreateProofPage() {
               >
                 <Download className="size-4" />
                 Download proof receipt JSON
+              </ActionButton>
+              <ActionButton
+                variant="secondary"
+                onClick={() => navigator.clipboard.writeText(receipt.verificationUrl)}
+              >
+                <Link2 className="size-4" />
+                Copy verification link
               </ActionButton>
               <dl className="grid gap-3 text-sm">
                 {Object.entries(receipt).map(([key, value]) => (
@@ -345,6 +474,12 @@ export default function CreateProofPage() {
               text="Register a proof to see the downloadable receipt and BaseScan transaction link."
             />
           )}
+        </Card>
+      </Section>
+
+      <Section>
+        <Card>
+          <ProofHistory title="Recent Proofs" type="registered" />
         </Card>
       </Section>
     </main>

@@ -6,13 +6,30 @@ import { formatBytes } from "@/lib/hash";
 
 type FileDropProps = {
   file?: File | null;
+  files?: File[];
   onFile: (file: File) => void;
+  onFiles?: (files: File[]) => void;
   disabled?: boolean;
+  multiple?: boolean;
+  accept?: string;
+  label?: string;
+  helperText?: string;
 };
 
-export function FileDrop({ file, onFile, disabled }: FileDropProps) {
+export function FileDrop({
+  file,
+  files = [],
+  onFile,
+  onFiles,
+  disabled,
+  multiple,
+  accept,
+  label,
+  helperText,
+}: FileDropProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const selectedCount = files.length || (file ? 1 : 0);
 
   return (
     <div
@@ -35,12 +52,19 @@ export function FileDrop({ file, onFile, disabled }: FileDropProps) {
     >
       <input
         ref={inputRef}
+        accept={accept}
         className="sr-only"
         disabled={disabled}
+        multiple={multiple}
         type="file"
         onChange={(event) => {
-          const selected = event.target.files?.item(0);
-          if (selected) onFile(selected);
+          const selectedFiles = Array.from(event.target.files || []);
+          if (multiple && selectedFiles.length) {
+            onFiles?.(selectedFiles);
+            onFile(selectedFiles[0]);
+          } else if (selectedFiles[0]) {
+            onFile(selectedFiles[0]);
+          }
         }}
       />
       <button
@@ -53,12 +77,20 @@ export function FileDrop({ file, onFile, disabled }: FileDropProps) {
           <FileUp className="size-7" />
         </span>
         <span className="text-base font-semibold">
-          {file ? file.name : "Drop a file here or choose one"}
+          {label ||
+            (selectedCount > 1
+              ? `${selectedCount} files selected`
+              : file
+                ? file.name
+                : "Drop a file here or choose one")}
         </span>
         <span className="max-w-sm text-sm leading-6 text-muted">
-          {file
+          {helperText ||
+            (selectedCount > 1
+              ? "The bundle is hashed locally. File contents never leave your browser."
+              : file
             ? `${formatBytes(file.size)} - ${file.type || "unknown type"}`
-            : "The file stays in your browser. OpenProof never uploads it."}
+                : "The file stays in your browser. OpenProof never uploads it.")}
         </span>
       </button>
     </div>

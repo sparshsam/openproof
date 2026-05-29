@@ -1,7 +1,6 @@
 "use client";
 
-import { parseAbiItem } from "viem";
-import type { PublicClient } from "viem";
+import Link from "next/link";
 import {
   CheckCircle2,
   FileSearch,
@@ -27,14 +26,19 @@ import {
 } from "@/components/design-system";
 import { FileDrop } from "@/components/file-drop";
 import { HashDisplay } from "@/components/hash-display";
+import { ProofHistory } from "@/components/proof-history";
+import { ReceiptImport } from "@/components/receipt-import";
 import { transactionExplorerUrl } from "@/lib/explorer";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
 import {
   isContractConfigured,
-  openProofAbi,
   openProofChain,
   openProofContractAddress,
 } from "@/lib/contracts";
+import { addProofHistoryItem } from "@/lib/history";
+import { proofPath } from "@/lib/proof-url";
+import { isBytes32Hash, readOnchainProof } from "@/lib/proofs";
+import type { ProofReceipt } from "@/lib/receipt";
 import { formatLocalTimestamp } from "@/lib/time";
 
 type VerificationResult =
@@ -54,6 +58,10 @@ export default function VerifyProofPage() {
   const [result, setResult] = useState<VerificationResult>({
     status: "idle",
     message: "Select a file to verify an exact hash match.",
+  });
+  const [receiptResult, setReceiptResult] = useState<VerificationResult>({
+    status: "idle",
+    message: "Import a receipt JSON to validate it against Base Sepolia.",
   });
   const publicClient = usePublicClient({ chainId: openProofChain.id });
   const configured = isContractConfigured();
@@ -80,14 +88,9 @@ export default function VerifyProofPage() {
     setResult({ status: "loading", message: "Checking the Base Sepolia registry..." });
 
     try {
-      const exists = await publicClient.readContract({
-        abi: openProofAbi,
-        address: openProofContractAddress,
-        functionName: "proofExists",
-        args: [hash],
-      });
+      const proof = await readOnchainProof(publicClient, hash);
 
-      if (!exists) {
+      if (!proof) {
         setResult({
           status: "not-found",
           message:
@@ -96,27 +99,93 @@ export default function VerifyProofPage() {
         return;
       }
 
-      const proof = await publicClient.readContract({
-        abi: openProofAbi,
-        address: openProofContractAddress,
-        functionName: "getProof",
-        args: [hash],
-      });
-      const transactionHash = await findProofTransactionHash(publicClient, hash).catch(
-        () => undefined,
-      );
-
-      setResult({
+      const verifiedResult: VerificationResult = {
         status: "verified",
         creator: proof.creator,
-        timestamp: new Date(Number(proof.timestamp) * 1000).toISOString(),
+        timestamp: proof.timestamp,
         proofId: hash,
-        transactionHash,
+        transactionHash: proof.transactionHash,
+      };
+      setResult(verifiedResult);
+      addProofHistoryItem({
+        proofType: "verified",
+        fileName: file?.name || "Verified file",
+        fileHash: hash,
+        txHash: proof.transactionHash,
+        chainName: openProofChain.name,
+        chainId: openProofChain.id,
+        timestamp: proof.timestamp,
+        verificationUrl: `${window.location.origin}${proofPath(hash)}`,
+        baseScanUrl: proof.transactionHash
+          ? transactionExplorerUrl(proof.transactionHash)
+          : undefined,
       });
     } catch (error) {
       setResult({
         status: "error",
         message: error instanceof Error ? error.message : "Verification failed.",
+      });
+    }
+  }
+
+  async function verifyReceipt(receipt: ProofReceipt) {
+    if (!publicClient) return;
+    setReceiptResult({
+      status: "loading",
+      message: "Checking receipt hash against Base Sepolia...",
+    });
+
+    if (!isBytes32Hash(receipt.sha256Hash)) {
+      setReceiptResult({
+        status: "error",
+        message: "Receipt hash is malformed.",
+      });
+      return;
+    }
+
+    if (receipt.chainId !== openProofChain.id) {
+      setReceiptResult({
+        status: "error",
+        message: `Receipt is for chain ${receipt.chainId}, not ${openProofChain.name}.`,
+      });
+      return;
+    }
+
+    try {
+      const proof = await readOnchainProof(publicClient, receipt.sha256Hash);
+      if (!proof) {
+        setReceiptResult({
+          status: "not-found",
+          message: "Receipt schema is valid, but no matching onchain proof was found.",
+        });
+        return;
+      }
+
+      const nextResult: VerificationResult = {
+        status: "verified",
+        creator: proof.creator,
+        timestamp: proof.timestamp,
+        proofId: receipt.sha256Hash,
+        transactionHash: proof.transactionHash || receipt.transactionHash,
+      };
+      setReceiptResult(nextResult);
+      addProofHistoryItem({
+        proofType: "verified",
+        fileName: receipt.fileName,
+        fileHash: receipt.sha256Hash,
+        txHash: nextResult.transactionHash,
+        chainName: receipt.chainName,
+        chainId: receipt.chainId,
+        timestamp: proof.timestamp,
+        verificationUrl: receipt.verificationUrl,
+        baseScanUrl: nextResult.transactionHash
+          ? transactionExplorerUrl(nextResult.transactionHash)
+          : receipt.transactionUrl,
+      });
+    } catch (error) {
+      setReceiptResult({
+        status: "error",
+        message: error instanceof Error ? error.message : "Receipt verification failed.",
       });
     }
   }
@@ -288,6 +357,31 @@ export default function VerifyProofPage() {
           )}
         </Card>
       </Section>
+
+      <Section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+        <Card className="space-y-5">
+          <Badge>Receipt import</Badge>
+          <h2 className="text-3xl font-black tracking-tight">
+            Validate a downloaded receipt
+          </h2>
+          <p className="text-sm leading-6 text-muted">
+            Import an OpenProof receipt JSON from your device. The schema is
+            checked locally, then the receipt hash is checked against Base
+            Sepolia.
+          </p>
+          <ReceiptImport onReceipt={verifyReceipt} />
+        </Card>
+
+        <Card className="space-y-5">
+          <ReceiptResult result={receiptResult} />
+        </Card>
+      </Section>
+
+      <Section>
+        <Card>
+          <ProofHistory title="Recent Verifications" type="verified" />
+        </Card>
+      </Section>
     </main>
   );
 }
@@ -301,40 +395,51 @@ function ResultRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-async function findProofTransactionHash(
-  publicClient: PublicClient,
-  fileHash: `0x${string}`,
-) {
-  if (!openProofContractAddress) return undefined;
-
-  const latestBlock = await publicClient.getBlockNumber();
-  const chunkSize = 1_900n;
-  const maxLookback = 50_000n;
-  const floorBlock =
-    latestBlock > maxLookback ? latestBlock - maxLookback : 0n;
-  let toBlock = latestBlock;
-
-  while (toBlock >= floorBlock) {
-    const fromBlock =
-      toBlock > chunkSize && toBlock - chunkSize > floorBlock
-        ? toBlock - chunkSize
-        : floorBlock;
-
-    const logs = await publicClient.getLogs({
-      address: openProofContractAddress,
-      event: parseAbiItem(
-        "event ProofRegistered(bytes32 indexed fileHash, address indexed creator, uint64 timestamp)",
-      ),
-      args: { fileHash },
-      fromBlock,
-      toBlock,
-    });
-
-    const log = logs.at(-1);
-    if (log?.transactionHash) return log.transactionHash;
-    if (fromBlock === 0n || fromBlock === floorBlock) break;
-    toBlock = fromBlock - 1n;
+function ReceiptResult({ result }: { result: VerificationResult }) {
+  if (result.status === "verified") {
+    return (
+      <>
+        <Badge tone="green">Valid receipt</Badge>
+        <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
+          <CheckCircle2 className="size-8" />
+          Proof exists
+        </h2>
+        <dl className="grid gap-3 text-sm">
+          <ResultRow label="Creator wallet" value={result.creator} />
+          <ResultRow label="Timestamp" value={formatLocalTimestamp(result.timestamp)} />
+          <ResultRow label="Proof hash" value={result.proofId} />
+          <ResultRow label="Chain" value={openProofChain.name} />
+        </dl>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            className="inline-flex items-center justify-center rounded-full bg-base-blue px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
+            href={proofPath(result.proofId)}
+          >
+            Open proof page
+          </Link>
+          {result.transactionHash ? (
+            <ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>
+              View transaction on BaseScan
+            </ExplorerLink>
+          ) : null}
+        </div>
+      </>
+    );
   }
 
-  return undefined;
+  return (
+    <EmptyState
+      icon={ShieldQuestion}
+      title={
+        result.status === "not-found"
+          ? "Receipt not found onchain"
+          : result.status === "error"
+            ? "Receipt invalid"
+            : result.status === "loading"
+              ? "Checking receipt"
+              : "Receipt status"
+      }
+      text={result.message}
+    />
+  );
 }

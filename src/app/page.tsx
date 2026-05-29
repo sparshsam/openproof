@@ -2,6 +2,10 @@ import {
   CheckCircle2,
   FileCheck2,
   Fingerprint,
+  History,
+  Package,
+  QrCode,
+  ReceiptText,
   SearchCheck,
   ShieldAlert,
   ShieldCheck,
@@ -99,6 +103,38 @@ export default function Home() {
             { icon: ShieldCheck, title: "Connect wallet", text: "Use a wallet on Base Sepolia." },
             { icon: FileCheck2, title: "Register proof", text: "Write the fingerprint onchain." },
             { icon: SearchCheck, title: "Verify later", text: "Match the exact file again." },
+          ].map((item, index) => (
+            <StepCard
+              active={index === 0}
+              icon={item.icon}
+              key={item.title}
+              step={index + 1}
+              text={item.text}
+              title={item.title}
+            />
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <div className="mb-8 max-w-3xl">
+          <Badge>Utility layer</Badge>
+          <h2 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl">
+            Built for repeated proof workflows.
+          </h2>
+          <p className="mt-4 text-sm leading-6 text-muted">
+            OpenProof v0.x adds local history, receipt validation, shareable
+            proof pages, QR verification, and deterministic bundle proofs
+            without adding accounts, storage, or a backend.
+          </p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-5">
+          {[
+            { icon: History, title: "Local history", text: "Recent proofs stay in this browser only." },
+            { icon: ReceiptText, title: "Receipt import", text: "Validate downloaded JSON against Base Sepolia." },
+            { icon: SearchCheck, title: "Proof pages", text: "Open a shareable /proof/[hash] URL." },
+            { icon: QrCode, title: "QR verify", text: "Download a QR code for proof pages." },
+            { icon: Package, title: "Bundles", text: "Register one deterministic hash for many files." },
           ].map((item, index) => (
             <StepCard
               active={index === 0}
