@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://openproof.vercel.app/sitemap.xml

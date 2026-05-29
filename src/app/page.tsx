@@ -17,6 +17,7 @@ import {
   ButtonLink,
   Card,
   ExplorerLink,
+  HelperTooltip,
   Section,
   StatusPill,
   StepCard,
@@ -86,7 +87,7 @@ export default function Home() {
       <Section>
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <Badge>How it works</Badge>
+            <Badge>How OpenProof Works</Badge>
             <h2 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl">
               Five steps. No file upload.
             </h2>
@@ -148,17 +149,27 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section className="grid gap-5 lg:grid-cols-2">
+      <Section className="grid gap-5 lg:grid-cols-2" id="privacy-model">
         <Card>
           <Badge>Privacy-first by design</Badge>
           <h2 className="mt-5 text-3xl font-black tracking-tight">
-            The file stays with the user.
+            Why files never leave your browser.
           </h2>
           <p className="mt-4 leading-7 text-muted">
             OpenProof uses the browser File API and Web Crypto API. The app does
             not need a backend, storage bucket, database, or IPFS service for
             the core proof flow.
           </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <HelperTooltip
+              label="SHA-256 hash"
+              text="A fixed-length fingerprint of file bytes. The same exact file produces the same hash; a changed file produces a different hash."
+            />
+            <HelperTooltip
+              label="Proof receipts"
+              text="A local JSON record of the proof. It is useful for portability, but the onchain registry remains the source of truth."
+            />
+          </div>
           <div className="mt-6 grid gap-3">
             {["No uploads", "No storage bucket", "No database required"].map((item) => (
               <div className="flex items-center gap-3" key={item}>
@@ -170,7 +181,7 @@ export default function Home() {
         </Card>
 
         <Card>
-          <Badge>What OpenProof proves</Badge>
+          <Badge>What OpenProof Proves</Badge>
           <h2 className="mt-5 text-3xl font-black tracking-tight">
             A matching hash was registered on Base Sepolia.
           </h2>
@@ -187,12 +198,18 @@ export default function Home() {
               </div>
             ))}
           </div>
+          <div className="mt-5">
+            <HelperTooltip
+              label="Base Sepolia"
+              text="The Base testnet used by this MVP. It lets users test registration without real funds."
+            />
+          </div>
         </Card>
       </Section>
 
       <Section className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
         <Card>
-          <Badge tone="red">What it does not claim</Badge>
+          <Badge tone="red">What OpenProof Does NOT Prove</Badge>
           <div className="mt-5 flex gap-4">
             <ShieldAlert className="size-7 shrink-0 text-danger" />
             <p className="leading-7 text-muted">
@@ -218,6 +235,16 @@ export default function Home() {
             <ExplorerLink href={addressExplorerUrl(registryAddress)}>
               View on BaseScan
             </ExplorerLink>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <HelperTooltip
+              label="BaseScan"
+              text="The block explorer for Base networks. OpenProof links to BaseScan so users can inspect the public contract and transactions."
+            />
+            <HelperTooltip
+              label="Bundle proofs"
+              text="A bundle proof registers one deterministic hash for a set of files. Verification requires the same exact file set and bundle rule."
+            />
           </div>
           <div className="mt-6 rounded-3xl border border-border bg-surface-muted p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">

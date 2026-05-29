@@ -61,6 +61,20 @@ input {
   font: inherit;
 }
 
+a,
+button,
+[tabindex="0"] {
+  outline-color: var(--base-blue);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 2px solid var(--base-blue);
+  outline-offset: 3px;
+}
+
 ::selection {
   background: var(--accent-soft);
   color: var(--foreground);
@@ -80,4 +94,45 @@ input {
     0 0 0 1px rgba(45, 125, 255, 0.45),
     0 24px 80px rgba(0, 82, 255, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.success-pop {
+  animation: success-pop 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.soft-fade-in {
+  animation: soft-fade-in 420ms ease-out both;
+}
+
+@keyframes success-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes soft-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
 }

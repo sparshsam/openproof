@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Info } from "lucide-react";
 
 type Tone = "blue" | "green" | "red" | "dark" | "muted";
 
@@ -24,6 +24,30 @@ export function Badge({
       className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${toneClass[tone]}`}
     >
       {children}
+    </span>
+  );
+}
+
+export function HelperTooltip({
+  label,
+  text,
+}: {
+  label: string;
+  text: string;
+}) {
+  return (
+    <span className="group relative inline-flex items-center gap-1.5 align-middle">
+      <span className="text-xs font-semibold text-muted">{label}</span>
+      <span
+        aria-label={`${label}: ${text}`}
+        className="grid size-5 place-items-center rounded-full border border-border bg-surface text-muted transition group-hover:border-base-blue group-hover:text-base-blue group-focus-within:border-base-blue group-focus-within:text-base-blue"
+        tabIndex={0}
+      >
+        <Info className="size-3.5" />
+      </span>
+      <span className="pointer-events-none absolute bottom-full left-0 z-20 mb-2 hidden w-64 rounded-2xl border border-border bg-surface p-3 text-xs leading-5 text-foreground shadow-xl group-hover:block group-focus-within:block">
+        {text}
+      </span>
     </span>
   );
 }
@@ -127,12 +151,14 @@ export function Card({
 export function Section({
   children,
   className = "",
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }) {
   return (
-    <section className={`mx-auto w-full max-w-6xl px-5 py-16 ${className}`}>
+    <section className={`mx-auto w-full max-w-6xl px-5 py-16 ${className}`} id={id}>
       {children}
     </section>
   );

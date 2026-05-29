@@ -16,10 +16,13 @@ import {
   Card,
   EmptyState,
   ExplorerLink,
+  HelperTooltip,
   Section,
   StatusPill,
 } from "@/components/design-system";
+import { CopyButton } from "@/components/copy-button";
 import { HashDisplay } from "@/components/hash-display";
+import { ProofTimeline } from "@/components/proof-timeline";
 import { ProofQrCode } from "@/components/qr-code";
 import {
   openProofChain,
@@ -133,12 +136,31 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
               Loading proof from Base Sepolia...
             </div>
           ) : state.status === "found" ? (
-            <>
+            <div className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5">
               <Badge tone="green">Verified onchain</Badge>
               <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
                 <CheckCircle2 className="size-8" />
                 Proof found
               </h2>
+              <ProofTimeline
+                steps={[
+                  {
+                    title: "Proof URL opened",
+                    text: "The page contains a SHA-256 hash to check.",
+                    complete: true,
+                  },
+                  {
+                    title: "Registry read completed",
+                    text: "OpenProof read the Base Sepolia contract.",
+                    complete: true,
+                  },
+                  {
+                    title: "Timestamp confirmed",
+                    text: formatLocalTimestamp(state.proof.timestamp),
+                    complete: true,
+                  },
+                ]}
+              />
               <dl className="grid gap-3 text-sm">
                 <ResultRow label="Creator wallet" value={state.proof.creator} />
                 <ResultRow
@@ -152,12 +174,17 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
                 />
               </dl>
               <div className="flex flex-wrap gap-3">
+                <CopyButton label="Copy hash" value={state.proof.fileHash} />
+                <CopyButton label="Copy creator" value={state.proof.creator} />
                 {state.proof.transactionHash ? (
-                  <ExplorerLink
-                    href={transactionExplorerUrl(state.proof.transactionHash)}
-                  >
-                    View transaction on BaseScan
-                  </ExplorerLink>
+                  <>
+                    <ExplorerLink
+                      href={transactionExplorerUrl(state.proof.transactionHash)}
+                    >
+                      View transaction on BaseScan
+                    </ExplorerLink>
+                    <CopyButton label="Copy tx hash" value={state.proof.transactionHash} />
+                  </>
                 ) : null}
                 {openProofContractAddress ? (
                   <a
@@ -171,7 +198,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
                   </a>
                 ) : null}
               </div>
-            </>
+            </div>
           ) : (
             <EmptyState
               icon={ShieldQuestion}
@@ -192,6 +219,16 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
             Base Sepolia. It does not contain the original file and cannot prove
             ownership, authorship, or legal validity.
           </p>
+          <div className="flex flex-wrap gap-3">
+            <HelperTooltip
+              label="BaseScan"
+              text="BaseScan is used for public transaction and contract inspection on Base Sepolia."
+            />
+            <HelperTooltip
+              label="Public hashes"
+              text="A proof page shares the hash and onchain metadata. It never contains the original file."
+            />
+          </div>
           <Link
             className="inline-flex items-center justify-center rounded-full bg-base-blue px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-600"
             href="/create"
@@ -212,4 +249,3 @@ function ResultRow({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-

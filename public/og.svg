@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="OpenProof social preview">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#030712"/>
+      <stop offset="0.55" stop-color="#061a4d"/>
+      <stop offset="1" stop-color="#0052ff"/>
+    </linearGradient>
+    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M72 0H0V72" fill="none" stroke="#2d7dff" stroke-opacity=".22" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="1020" cy="110" r="180" fill="#0052ff" opacity=".22"/>
+  <rect x="720" y="150" width="330" height="330" rx="44" fill="#07111f" stroke="#2d7dff" stroke-opacity=".7"/>
+  <rect x="760" y="205" width="250" height="86" rx="24" fill="#0d1b33" stroke="#2d7dff" stroke-opacity=".5"/>
+  <rect x="760" y="320" width="250" height="104" rx="24" fill="#0d1b33" stroke="#2d7dff" stroke-opacity=".5"/>
+  <circle cx="810" cy="248" r="24" fill="#0052ff"/>
+  <path d="M803 249l6 6 12-15" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="150" y="160" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">OpenProof</text>
+  <text x="150" y="285" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="900">Cryptographic proof</text>
+  <text x="150" y="370" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="900">for files, built on Base.</text>
+  <text x="150" y="455" fill="#dbeafe" font-family="Arial, Helvetica, sans-serif" font-size="30">Timestamp file fingerprints on Base Sepolia</text>
+  <text x="150" y="500" fill="#dbeafe" font-family="Arial, Helvetica, sans-serif" font-size="30">without uploading files anywhere.</text>
+</svg>

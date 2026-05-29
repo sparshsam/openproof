@@ -18,7 +18,17 @@ Built with:
 
 ## Screenshots
 
-Screenshots are not committed yet. The live interface is available at [openproof.vercel.app](https://openproof.vercel.app).
+The live interface is available at [openproof.vercel.app](https://openproof.vercel.app).
+
+![OpenProof desktop landing](public/screenshots/home-desktop.png)
+
+| Create proof | Verify proof |
+| --- | --- |
+| ![Create proof desktop](public/screenshots/create-desktop.png) | ![Verify proof desktop](public/screenshots/verify-desktop.png) |
+
+| Proof explorer | Mobile create flow |
+| --- | --- |
+| ![Proof explorer desktop](public/screenshots/proof-desktop.png) | ![Create proof mobile](public/screenshots/create-mobile.png) |
 
 ## Built on Base
 
@@ -40,6 +50,25 @@ Base mainnet deployment is a future roadmap item. The current public MVP should 
 - A zero-spend starter that can run on Vercel free tier.
 - An AGPLv3 open-source project.
 
+## Why OpenProof Exists
+
+Files often need a neutral timestamp without being uploaded to a third-party service. OpenProof provides a small, inspectable way to create that timestamped fingerprint: hash locally, register only the hash, and keep the original file private.
+
+## Feature Matrix
+
+| Feature | Status | Privacy model |
+| --- | --- | --- |
+| Local SHA-256 hashing | Available | File bytes stay in the browser |
+| Register proof | Available | Only `bytes32` hash is sent onchain |
+| Verify proof | Available | Re-hashes local file and reads Base Sepolia |
+| JSON receipts | Available | Downloaded locally, never uploaded |
+| Receipt import | Available | JSON parsed locally, hash checked onchain |
+| Local proof history | Available | Browser local storage only |
+| Public proof pages | Available | Hash URL reads public registry data |
+| QR verification | Available | QR contains proof page URL only |
+| Bundle proofs | Available | Deterministic local bundle hash only |
+| Base mainnet | Roadmap | Not part of the testnet MVP |
+
 ## What OpenProof Is Not
 
 - It is not file storage.
@@ -55,6 +84,18 @@ Files never leave the browser. OpenProof reads the selected file through the bro
 Public hashes may still leak information if the file is already known or easy to guess. Do not register hashes for sensitive, guessable, or low-entropy content without understanding that risk.
 
 Local proof history is stored only in the user's browser using local storage. Clearing browser data, using another device, or using another browser profile will remove or hide that local history.
+
+## Architecture Diagram
+
+```mermaid
+flowchart LR
+  A["Local file(s)"] --> B["Browser File API"]
+  B --> C["Web Crypto SHA-256"]
+  C --> D["bytes32 fingerprint"]
+  D --> E["OpenProofRegistry on Base Sepolia"]
+  E --> F["Proof page / receipt / history"]
+  F --> G["Verify by hashing the same file(s) locally"]
+```
 
 ## Utility Features
 
@@ -147,6 +188,8 @@ Add Base Sepolia to your wallet, then get test ETH from a Base Sepolia faucet. T
 
 View the deployed registry on [BaseScan Sepolia](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a). Proof registration receipts link to BaseScan Sepolia transaction pages.
 
+The contract source is available in this repository at [`contracts/OpenProofRegistry.sol`](contracts/OpenProofRegistry.sol). BaseScan source verification requires a BaseScan API key and is not required for local development.
+
 ## Vercel Deployment
 
 1. Push this repo to a public GitHub repository.
@@ -183,12 +226,33 @@ Manual validation:
 
 ## Roadmap
 
-- Publish a public demo deployment.
 - Add optional detached signature support.
 - Add better event indexing for large deployments.
 - Base mainnet deployment.
 - Add reproducible deployment metadata.
 - Add multilingual documentation.
+
+## FAQ
+
+### Does OpenProof upload my files?
+
+No. Files are read and hashed in the browser. The app sends only the hash to Base Sepolia.
+
+### Does OpenProof prove ownership?
+
+No. It proves a matching hash was registered by a wallet at a contract timestamp. It does not prove ownership, authorship, legal validity, or truth of contents.
+
+### What happens if I lose the original file?
+
+OpenProof cannot recover it. The chain stores only the hash, not the file.
+
+### Are receipts private?
+
+Receipts are local JSON files. They may include file names, sizes, hashes, wallet addresses, and transaction links, so share them intentionally.
+
+### Why Base Sepolia?
+
+Base Sepolia keeps the MVP zero-spend and testable without real funds. Base mainnet is a future roadmap item.
 
 ## Repository Topics
 

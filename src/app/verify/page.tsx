@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   CheckCircle2,
+  CircleX,
   FileSearch,
   Fingerprint,
   Loader2,
@@ -19,14 +20,17 @@ import {
   Card,
   EmptyState,
   ExplorerLink,
+  HelperTooltip,
   NetworkNotice,
   Section,
   StatusPill,
   StepCard,
 } from "@/components/design-system";
+import { CopyButton } from "@/components/copy-button";
 import { FileDrop } from "@/components/file-drop";
 import { HashDisplay } from "@/components/hash-display";
 import { ProofHistory } from "@/components/proof-history";
+import { ProofTimeline } from "@/components/proof-timeline";
 import { ReceiptImport } from "@/components/receipt-import";
 import { transactionExplorerUrl } from "@/lib/explorer";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
@@ -254,6 +258,16 @@ export default function VerifyProofPage() {
             Verification checks the deployed OpenProofRegistry contract on Base
             Sepolia. The selected file never leaves your browser.
           </NetworkNotice>
+          <div className="flex flex-wrap gap-3">
+            <HelperTooltip
+              label="Direct file verification"
+              text="OpenProof hashes the selected file locally and checks whether that exact SHA-256 fingerprint exists onchain."
+            />
+            <HelperTooltip
+              label="Bundle verification"
+              text="Bundle proofs require selecting the same exact set of files that produced the registered bundle hash."
+            />
+          </div>
 
           <FileDrop file={file} onFile={setFile} />
 
@@ -298,7 +312,7 @@ export default function VerifyProofPage() {
 
         <Card className="space-y-5">
           {result.status === "verified" ? (
-            <>
+            <div className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5">
               <div>
                 <Badge tone="green">Verified</Badge>
                 <h2 className="mt-4 flex items-center gap-3 text-3xl font-black tracking-tight text-success">
@@ -310,6 +324,25 @@ export default function VerifyProofPage() {
                   this wallet at the shown timestamp.
                 </p>
               </div>
+              <ProofTimeline
+                steps={[
+                  {
+                    title: "Local fingerprint matched",
+                    text: "The selected file produced the displayed SHA-256 hash.",
+                    complete: true,
+                  },
+                  {
+                    title: "Registry entry found",
+                    text: "The hash exists in OpenProofRegistry on Base Sepolia.",
+                    complete: true,
+                  },
+                  {
+                    title: "Timestamp read",
+                    text: formatLocalTimestamp(result.timestamp),
+                    complete: true,
+                  },
+                ]}
+              />
               <dl className="grid gap-3 text-sm">
                 <ResultRow label="Creator wallet" value={result.creator} />
                 <ResultRow
@@ -318,17 +351,31 @@ export default function VerifyProofPage() {
                 />
                 <ResultRow label="Proof ID" value={result.proofId} />
               </dl>
-              {result.transactionHash ? (
-                <ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>
-                  View transaction on BaseScan
-                </ExplorerLink>
-              ) : (
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  className="inline-flex min-h-10 items-center justify-center rounded-full bg-base-blue px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
+                  href={proofPath(result.proofId)}
+                >
+                  Open proof page
+                </Link>
+                <CopyButton label="Copy proof hash" value={result.proofId} />
+                <CopyButton label="Copy creator" value={result.creator} />
+                {result.transactionHash ? (
+                  <>
+                    <ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>
+                      View transaction on BaseScan
+                    </ExplorerLink>
+                    <CopyButton label="Copy tx hash" value={result.transactionHash} />
+                  </>
+                ) : null}
+              </div>
+              {!result.transactionHash ? (
                 <p className="rounded-3xl border border-border bg-surface-muted p-4 text-sm leading-6 text-muted">
                   Transaction link unavailable from the public RPC. The proof ID
                   and contract timestamp were read directly from Base Sepolia.
                 </p>
-              )}
-            </>
+              ) : null}
+            </div>
           ) : (
             <>
               <div>
@@ -340,7 +387,11 @@ export default function VerifyProofPage() {
                     result.status === "not-found" ? "text-danger" : ""
                   }`}
                 >
-                  <ShieldQuestion className="size-8" />
+                  {result.status === "not-found" ? (
+                    <CircleX className="size-8" />
+                  ) : (
+                    <ShieldQuestion className="size-8" />
+                  )}
                   {result.status === "not-found" ? "Not found" : "Ready to check"}
                 </h2>
               </div>
@@ -370,6 +421,16 @@ export default function VerifyProofPage() {
             Sepolia.
           </p>
           <ReceiptImport onReceipt={verifyReceipt} />
+          <div className="flex flex-wrap gap-3">
+            <HelperTooltip
+              label="Imported receipt verification"
+              text="The receipt schema is checked locally, then its hash is checked against the onchain registry."
+            />
+            <HelperTooltip
+              label="Proof receipts"
+              text="Receipts help carry proof metadata, but they are not authoritative unless the hash exists onchain."
+            />
+          </div>
         </Card>
 
         <Card className="space-y-5">
@@ -398,12 +459,31 @@ function ResultRow({ label, value }: { label: string; value: string }) {
 function ReceiptResult({ result }: { result: VerificationResult }) {
   if (result.status === "verified") {
     return (
-      <>
+      <div className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5">
         <Badge tone="green">Valid receipt</Badge>
         <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
           <CheckCircle2 className="size-8" />
           Proof exists
         </h2>
+        <ProofTimeline
+          steps={[
+            {
+              title: "Receipt schema valid",
+              text: "The imported JSON matches the OpenProof receipt shape.",
+              complete: true,
+            },
+            {
+              title: "Onchain proof found",
+              text: "The receipt hash exists in OpenProofRegistry.",
+              complete: true,
+            },
+            {
+              title: "Timestamp confirmed",
+              text: formatLocalTimestamp(result.timestamp),
+              complete: true,
+            },
+          ]}
+        />
         <dl className="grid gap-3 text-sm">
           <ResultRow label="Creator wallet" value={result.creator} />
           <ResultRow label="Timestamp" value={formatLocalTimestamp(result.timestamp)} />
@@ -412,18 +492,23 @@ function ReceiptResult({ result }: { result: VerificationResult }) {
         </dl>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="inline-flex items-center justify-center rounded-full bg-base-blue px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
+            className="inline-flex min-h-10 items-center justify-center rounded-full bg-base-blue px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
             href={proofPath(result.proofId)}
           >
             Open proof page
           </Link>
+          <CopyButton label="Copy proof hash" value={result.proofId} />
+          <CopyButton label="Copy creator" value={result.creator} />
           {result.transactionHash ? (
-            <ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>
-              View transaction on BaseScan
-            </ExplorerLink>
+            <>
+              <ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>
+                View transaction on BaseScan
+              </ExplorerLink>
+              <CopyButton label="Copy tx hash" value={result.transactionHash} />
+            </>
           ) : null}
         </div>
-      </>
+      </div>
     );
   }
 

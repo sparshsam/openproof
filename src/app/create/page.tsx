@@ -5,11 +5,11 @@ import {
   Download,
   FileCheck2,
   Fingerprint,
-  Link2,
   Loader2,
   Package,
   ReceiptText,
   ShieldCheck,
+  Sparkles,
   Upload,
   Wallet,
 } from "lucide-react";
@@ -26,17 +26,21 @@ import { BaseSepoliaNotice } from "@/components/base-notice";
 import {
   ActionButton,
   Badge,
+  ButtonLink,
   Card,
   EmptyState,
   ExplorerLink,
+  HelperTooltip,
   NetworkNotice,
   Section,
   StatusPill,
   StepCard,
 } from "@/components/design-system";
+import { CopyButton } from "@/components/copy-button";
 import { FileDrop } from "@/components/file-drop";
 import { HashDisplay } from "@/components/hash-display";
 import { ProofHistory } from "@/components/proof-history";
+import { ProofTimeline } from "@/components/proof-timeline";
 import { ProofQrCode } from "@/components/qr-code";
 import { transactionExplorerUrl } from "@/lib/explorer";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
@@ -290,6 +294,20 @@ export default function CreateProofPage() {
             Proof registration is disabled until your connected wallet is on
             Base Sepolia.
           </NetworkNotice>
+          <div className="flex flex-wrap gap-3">
+            <HelperTooltip
+              label="SHA-256 hash"
+              text="A local fingerprint of the selected file bytes. OpenProof sends the hash to the contract, not the file."
+            />
+            <HelperTooltip
+              label="Bundle proofs"
+              text="Select multiple files to register one deterministic combined hash. Verification requires the same exact file set."
+            />
+            <HelperTooltip
+              label="Base Sepolia"
+              text="The Base testnet used by OpenProof v0.x. Testnet registration does not require real funds."
+            />
+          </div>
 
           <FileDrop
             file={file}
@@ -422,36 +440,82 @@ export default function CreateProofPage() {
         </Card>
 
         <Card className="space-y-5">
-          <Badge>Receipt preview</Badge>
+          <Badge tone={receipt ? "green" : "blue"}>
+            {receipt ? "Proof registered" : "Receipt preview"}
+          </Badge>
           <h2 className="text-2xl font-black tracking-tight">
-            Local JSON, no upload.
+            {receipt ? "Your proof is ready." : "Local JSON, no upload."}
           </h2>
           <p className="text-sm leading-6 text-muted">
             After registration, OpenProof generates a receipt with chain,
             contract, wallet, timestamp, BaseScan, and verification details.
           </p>
           {receipt ? (
-            <>
-              <ExplorerLink href={transactionExplorerUrl(receipt.transactionHash)}>
-                View transaction on BaseScan
-              </ExplorerLink>
+            <div className="success-pop space-y-5">
+              <div className="rounded-3xl border border-success/30 bg-success/10 p-5">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-12 place-items-center rounded-3xl bg-success text-base-dark">
+                    <Sparkles className="size-5" />
+                  </span>
+                  <div>
+                    <p className="font-semibold text-success">Registered on Base Sepolia</p>
+                    <p className="mt-1 text-sm leading-6 text-muted">
+                      Save the receipt, copy the proof URL, or open the public
+                      verification page.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <ProofTimeline
+                steps={[
+                  {
+                    title: "Fingerprint created locally",
+                    text: "The file content stayed in this browser.",
+                    complete: true,
+                  },
+                  {
+                    title: "Hash registered onchain",
+                    text: "Only the SHA-256 fingerprint was written to Base Sepolia.",
+                    complete: true,
+                  },
+                  {
+                    title: "Receipt generated locally",
+                    text: "The JSON receipt was not uploaded or stored by OpenProof.",
+                    complete: true,
+                  },
+                ]}
+              />
+              <div className="grid gap-2 sm:grid-cols-2">
+                <ExplorerLink href={transactionExplorerUrl(receipt.transactionHash)}>
+                  View transaction on BaseScan
+                </ExplorerLink>
+                <ButtonLink href={`/proof/${receipt.sha256Hash}`} variant="secondary">
+                  Verify this proof
+                </ButtonLink>
+                <CopyButton label="Copy hash" value={receipt.sha256Hash} />
+                <CopyButton label="Copy tx hash" value={receipt.transactionHash} />
+                <CopyButton label="Copy proof URL" value={receipt.verificationUrl} />
+                <ActionButton
+                  variant="secondary"
+                  onClick={() =>
+                    downloadJson(`openproof-${receipt.sha256Hash.slice(2, 10)}.json`, receipt)
+                  }
+                >
+                  <Download className="size-4" />
+                  Download receipt JSON
+                </ActionButton>
+              </div>
               <ProofQrCode url={receipt.verificationUrl} />
-              <ActionButton
-                variant="secondary"
-                onClick={() =>
-                  downloadJson(`openproof-${receipt.sha256Hash.slice(2, 10)}.json`, receipt)
-                }
-              >
-                <Download className="size-4" />
-                Download proof receipt JSON
-              </ActionButton>
-              <ActionButton
-                variant="secondary"
-                onClick={() => navigator.clipboard.writeText(receipt.verificationUrl)}
-              >
-                <Link2 className="size-4" />
-                Copy verification link
-              </ActionButton>
+              <div className="flex flex-wrap gap-3">
+                <HelperTooltip
+                  label="Proof receipts"
+                  text="Receipts are local records for portability. Re-check the hash onchain when you need to rely on a proof."
+                />
+                <HelperTooltip
+                  label="BaseScan"
+                  text="BaseScan is the public block explorer used to inspect the registration transaction."
+                />
+              </div>
               <dl className="grid gap-3 text-sm">
                 {Object.entries(receipt).map(([key, value]) => (
                   <div className="rounded-3xl bg-surface-muted p-4" key={key}>
@@ -466,7 +530,7 @@ export default function CreateProofPage() {
                   </div>
                 ))}
               </dl>
-            </>
+            </div>
           ) : (
             <EmptyState
               icon={ReceiptText}
