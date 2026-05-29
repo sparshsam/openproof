@@ -2,7 +2,11 @@
 
 import "@rainbow-me/rainbowkit/styles.css";
 
-import { RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
+import {
+  RainbowKitProvider,
+  getDefaultConfig,
+  lightTheme,
+} from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http, WagmiProvider } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
@@ -27,7 +31,15 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+        <RainbowKitProvider
+          theme={lightTheme({
+            accentColor: "#0052ff",
+            accentColorForeground: "white",
+            borderRadius: "large",
+          })}
+        >
+          {children}
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

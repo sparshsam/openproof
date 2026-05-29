@@ -1,8 +1,8 @@
 # OpenProof 🔏
 
-OpenProof is a privacy-first, open-source proof-of-existence app for files.
+OpenProof is a privacy-first, open-source proof-of-existence app for files, built on Base Sepolia.
 
-It lets users prove that a specific file existed at a certain time without uploading the file anywhere. Files are hashed locally in the browser using SHA-256, and only the fingerprint is registered on the Base Sepolia blockchain through a minimal Solidity smart contract.
+It lets users timestamp a file fingerprint onchain without uploading the file anywhere. Files are hashed locally in the browser using SHA-256, and only the fingerprint is registered on Base Sepolia through a minimal Solidity smart contract.
 
 No file uploads. No storage bucket. No database required for the core proof flow.
 
@@ -15,6 +15,10 @@ Built with:
 - wagmi + RainbowKit
 - Base Sepolia
 - AGPLv3
+
+## Screenshots
+
+Screenshots are not committed yet. The live interface is available at [openproof.vercel.app](https://openproof.vercel.app).
 
 ## Built on Base
 

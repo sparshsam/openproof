@@ -16,10 +16,10 @@ export function FileDrop({ file, onFile, disabled }: FileDropProps) {
 
   return (
     <div
-      className={`rounded-lg border border-dashed p-6 transition ${
+      className={`rounded-[2rem] border border-dashed p-8 transition ${
         isDragging
-          ? "border-accent bg-accent-soft"
-          : "border-border bg-surface"
+          ? "border-base-blue bg-base-blue/10 shadow-[0_0_0_6px_rgba(0,82,255,0.08)]"
+          : "border-base-blue/25 bg-surface hover:border-base-blue/60 hover:bg-surface-muted"
       } ${disabled ? "opacity-60" : ""}`}
       onDragOver={(event) => {
         event.preventDefault();
@@ -44,20 +44,20 @@ export function FileDrop({ file, onFile, disabled }: FileDropProps) {
         }}
       />
       <button
-        className="flex w-full flex-col items-center gap-3 text-center"
+        className="flex w-full flex-col items-center gap-4 text-center"
         disabled={disabled}
         type="button"
         onClick={() => inputRef.current?.click()}
       >
-        <span className="grid size-12 place-items-center rounded-md bg-surface-muted">
-          <FileUp className="size-5 text-accent" />
+        <span className="grid size-16 place-items-center rounded-3xl bg-base-blue text-white shadow-[0_18px_45px_rgba(0,82,255,0.25)]">
+          <FileUp className="size-7" />
         </span>
-        <span className="text-sm font-medium">
+        <span className="text-base font-semibold">
           {file ? file.name : "Drop a file here or choose one"}
         </span>
-        <span className="text-xs text-muted">
+        <span className="max-w-sm text-sm leading-6 text-muted">
           {file
-            ? `${formatBytes(file.size)} · ${file.type || "unknown type"}`
+            ? `${formatBytes(file.size)} - ${file.type || "unknown type"}`
             : "The file stays in your browser. OpenProof never uploads it."}
         </span>
       </button>

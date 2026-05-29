@@ -16,7 +16,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "OpenProof",
   description:
-    "Create timestamped blockchain proofs for files without uploading or storing the files themselves.",
+    "Cryptographic proof for files, built on Base Sepolia. Timestamp file fingerprints onchain without uploading the file anywhere.",
+  openGraph: {
+    title: "OpenProof",
+    description:
+      "Cryptographic proof for files, built on Base Sepolia. Timestamp file fingerprints onchain without uploading the file anywhere.",
+    url: "https://openproof.vercel.app",
+    siteName: "OpenProof",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OpenProof",
+    description:
+      "Cryptographic proof for files, built on Base Sepolia. Timestamp file fingerprints onchain without uploading the file anywhere.",
+  },
 };
 
 export default function RootLayout({

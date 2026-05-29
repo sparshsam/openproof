@@ -1,18 +1,19 @@
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { WalletProvider } from "@/components/providers/wallet-provider";
+import { ButtonLink } from "@/components/design-system";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <WalletProvider>
-      <div className="min-h-screen">
-        <header className="border-b border-border bg-surface/80 backdrop-blur">
+      <div className="min-h-screen bg-background">
+        <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-xl">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
             <Link className="flex items-center gap-2" href="/">
-              <span className="grid size-8 place-items-center rounded-md border border-border bg-surface-muted">
-                <ShieldCheck className="size-4 text-accent" />
+              <span className="grid size-9 place-items-center rounded-2xl bg-base-blue text-white shadow-[0_12px_30px_rgba(0,82,255,0.28)]">
+                <ShieldCheck className="size-5" />
               </span>
-              <span className="font-semibold tracking-tight">OpenProof</span>
+              <span className="text-lg font-black tracking-tight">OpenProof</span>
             </Link>
             <nav className="hidden items-center gap-6 text-sm text-muted md:flex">
               <Link className="hover:text-foreground" href="/create">
@@ -25,18 +26,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 Docs
               </Link>
             </nav>
-            <Link
-              className="rounded-md border border-border bg-surface px-3 py-2 text-sm font-medium hover:bg-surface-muted"
-              href="/create"
-            >
-              Start
-            </Link>
+            <div className="hidden sm:block">
+              <ButtonLink href="/create">Start</ButtonLink>
+            </div>
           </div>
         </header>
         {children}
-        <footer className="border-t border-border bg-surface px-5 py-6">
-          <div className="mx-auto max-w-6xl text-sm text-muted">
-            OpenProof is an open-source proof-of-existence app built on Base.
+        <footer className="border-t border-border bg-base-dark px-5 py-10 text-white">
+          <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-blue-100">
+              OpenProof is an open-source proof-of-existence app built on Base.
+            </p>
+            <p className="text-xs text-blue-200/75">Base Sepolia testnet - AGPLv3</p>
           </div>
         </footer>
       </div>

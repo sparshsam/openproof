@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f7f4;
-  --foreground: #181a1f;
+  --background: #f7f9ff;
+  --foreground: #050b18;
   --surface: #ffffff;
-  --surface-muted: #efefeb;
-  --border: #deded7;
-  --muted: #62666f;
-  --accent: #2358d4;
-  --accent-soft: #e8efff;
-  --success: #0d7f57;
-  --danger: #b42318;
+  --surface-muted: #eef4ff;
+  --border: #d8e4ff;
+  --muted: #53627c;
+  --accent: #0052ff;
+  --accent-soft: #eaf1ff;
+  --success: #15a46f;
+  --danger: #e5484d;
+  --base-dark: #030712;
+  --base-blue: #0052ff;
+  --base-blue-2: #2d7dff;
 }
 
 @theme inline {
@@ -24,22 +27,25 @@
   --color-accent-soft: var(--accent-soft);
   --color-success: var(--success);
   --color-danger: var(--danger);
+  --color-base-dark: var(--base-dark);
+  --color-base-blue: var(--base-blue);
+  --color-base-blue-2: var(--base-blue-2);
   --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111317;
+    --background: #030712;
     --foreground: #f4f4f1;
-    --surface: #181b21;
-    --surface-muted: #20242b;
-    --border: #30343d;
-    --muted: #a6abb5;
-    --accent: #8eb1ff;
-    --accent-soft: #1c2946;
+    --surface: #07111f;
+    --surface-muted: #0d1b33;
+    --border: #19345e;
+    --muted: #b5c4df;
+    --accent: #6aa2ff;
+    --accent-soft: #09265d;
     --success: #6ee7b7;
-    --danger: #fda29b;
+    --danger: #ff8a8f;
   }
 }
 
@@ -47,6 +53,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
 }
 
 button,
@@ -57,4 +64,20 @@ input {
 ::selection {
   background: var(--accent-soft);
   color: var(--foreground);
+}
+
+.base-grid {
+  background-image:
+    linear-gradient(rgba(0, 82, 255, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 82, 255, 0.13) 1px, transparent 1px),
+    radial-gradient(circle at 20% 0%, rgba(0, 82, 255, 0.35), transparent 34rem),
+    radial-gradient(circle at 82% 18%, rgba(45, 125, 255, 0.28), transparent 28rem);
+  background-size: 72px 72px, 72px 72px, auto, auto;
+}
+
+.blue-glow {
+  box-shadow:
+    0 0 0 1px rgba(45, 125, 255, 0.45),
+    0 24px 80px rgba(0, 82, 255, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
