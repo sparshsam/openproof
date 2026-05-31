@@ -178,12 +178,59 @@ test/                       Hardhat contract tests
 
 ## Roadmap
 
-- Optional detached signature support.
-- Better event indexing for larger deployments.
-- Base mainnet deployment.
-- Reproducible deployment metadata.
-- Expanded documentation for self-hosting.
-- Multilingual documentation.
+OpenProof should remain a small, trustworthy proof utility first. The roadmap expands the proof layer without turning the app into a storage product, marketplace, token system, or legal-tech overclaim.
+
+### Near-Term
+
+- **Detached signature support** — let users sign a file hash or receipt with a wallet without necessarily registering a new proof onchain.
+- **Stronger receipt format** — versioned JSON receipts with chain ID, contract address, hash algorithm, transaction hash, block number, timestamp, and app version.
+- **Receipt verification polish** — clearer success, mismatch, unsupported-chain, and malformed-receipt states.
+- **Better bundle proofs** — improved multi-file receipts with deterministic ordering, per-file hashes, combined bundle hash, and plain-language explanations.
+- **Self-hosting documentation** — clearer deployment notes for Vercel, static hosting, custom RPCs, and self-deployed contracts.
+- **Threat-model expansion** — document hash-guessing risks, known-file attacks, metadata leakage, wallet privacy, and timestamp limitations in more accessible language.
+
+### Mid-Term
+
+- **Base mainnet deployment** — production registry deployment on Base mainnet after testnet UX and contract assumptions are stable.
+- **Reproducible deployment metadata** — publish compiler version, source verification notes, deployment scripts, and deterministic contract metadata.
+- **Event indexing options** — provide lightweight indexing paths for larger deployments without making a backend mandatory for the core app.
+- **Proof collections** — allow users to group related proofs locally, such as a project folder, evidence bundle, release archive, or creative work package.
+- **Portable proof pages** — static, shareable proof pages that can be saved or mirrored without depending on OpenProof hosting forever.
+- **Multilingual documentation** — translate core usage, privacy, and risk explanations for broader accessibility.
+
+### Long-Term Vision
+
+- **Open proof standard** — define a simple, interoperable receipt schema that other apps can generate, import, and verify.
+- **Cross-app verification layer** — let tools like local PDF readers, research notebooks, archives, and creator tools anchor proofs through the same receipt model.
+- **Organization and project attestations** — optional signing flows for teams, open-source maintainers, journalists, researchers, and creators to prove who anchored a file hash.
+- **Proof timelines** — build local timelines showing how a document, folder, release, or bundle changed over time through successive hashes.
+- **Public-interest archives** — support verifiable public datasets, civic documents, open research artifacts, and community records without requiring OpenProof to host the underlying files.
+- **Offline-first verifier** — a downloadable verifier that can validate receipts and re-hash files without using the hosted web app.
+
+### What OpenProof Will Not Become
+
+- No file hosting platform.
+- No NFT marketplace.
+- No token, rewards, staking, or DeFi layer.
+- No claim that a hash proves authorship, ownership, truth, legality, or copyright.
+- No mandatory backend, account system, analytics, or file upload pipeline.
+
+OpenProof uses Base as calm verification infrastructure: public enough to be durable, minimal enough to stay out of the user's way.
+
+## Future Philosophy
+
+OpenProof is part of a broader direction: software that helps people prove things without surrendering the thing itself.
+
+The long-term ecosystem idea is:
+
+- **Proof before platform** — let users verify existence and integrity without depending on a company database.
+- **Privacy before convenience theatre** — never upload files just to make verification feel magical.
+- **Local-first by default** — hash, inspect, and verify as much as possible on the user's own device.
+- **Permanence without exposure** — use public infrastructure for small fingerprints, not private contents.
+- **Interoperable calm tools** — receipts, hashes, and verification flows should work across projects instead of becoming another silo.
+- **Base as infrastructure, not speculation** — low-cost public settlement for proofs, not a reason to invent a token.
+
+The immediate goal is simple: create and verify trustworthy file fingerprints. The ambitious goal is an open proof layer that other quiet, privacy-minded tools can rely on.
 
 ## Contributing
 
