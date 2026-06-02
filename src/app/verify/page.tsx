@@ -332,7 +332,10 @@ export default function VerifyProofPage() {
 
         <Card className="space-y-5">
           {result.status === "verified" ? (
-            <div className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5">
+            <div
+              aria-live="polite"
+              className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5"
+            >
               <div>
                 <Badge tone="green">Verified</Badge>
                 <h2 className="mt-4 flex items-center gap-3 text-3xl font-black tracking-tight text-success">
@@ -469,9 +472,9 @@ export default function VerifyProofPage() {
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-3xl bg-surface-muted p-4">
+    <div className="rounded-3xl bg-surface-muted p-3 sm:p-4">
       <dt className="text-xs uppercase tracking-[0.16em] text-muted">{label}</dt>
-      <dd className="mt-2 break-words font-mono text-xs">{value}</dd>
+      <dd className="mt-2 break-words font-mono text-xs sm:text-sm">{value}</dd>
     </div>
   );
 }

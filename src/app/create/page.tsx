@@ -455,19 +455,39 @@ export default function CreateProofPage() {
             </p>
           ) : null}
 
-          <p className="text-sm text-muted">{status}</p>
+          <p
+            aria-live="polite"
+            className={`text-sm ${
+              hashError
+                ? "text-danger"
+                : receipt
+                  ? "text-success"
+                  : isPending || isConfirming || isCheckingProof
+                    ? "text-accent"
+                    : "text-muted"
+            }`}
+          >
+            {status}
+          </p>
           {txHash && !receipt ? (
             <p className="break-words rounded-3xl border border-border bg-surface-muted p-4 font-mono text-xs text-muted">
               Submitted transaction: {txHash}
             </p>
           ) : null}
           {preflightMessage ? (
-            <p className="rounded-3xl border border-border bg-surface-muted p-4 text-sm text-muted">
+            <p
+              aria-live="polite"
+              className={`rounded-3xl border p-4 text-sm ${
+                preflightMessage.startsWith("This exact file fingerprint is already registered")
+                  ? "border-accent/30 bg-accent-soft text-accent"
+                  : "border-border bg-surface-muted text-muted"
+              }`}
+            >
               {preflightMessage}
             </p>
           ) : null}
           {error ? (
-            <p className="text-sm text-danger">
+            <p aria-live="assertive" className="rounded-3xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger">
               {normalizeClientError(error, genericWalletErrorMessage)}
             </p>
           ) : null}
@@ -550,9 +570,9 @@ export default function CreateProofPage() {
                   text="BaseScan is the public block explorer used to inspect the registration transaction."
                 />
               </div>
-              <dl className="grid gap-3 text-sm">
+              <dl className="grid gap-3 text-xs sm:text-sm">
                 {Object.entries(receipt).map(([key, value]) => (
-                  <div className="rounded-3xl bg-surface-muted p-4" key={key}>
+                  <div className="rounded-3xl bg-surface-muted p-3 sm:p-4" key={key}>
                     <dt className="text-xs uppercase tracking-[0.16em] text-muted">
                       {key}
                     </dt>

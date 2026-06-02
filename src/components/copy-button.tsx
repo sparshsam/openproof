@@ -8,11 +8,13 @@ export function CopyButton({
   label,
   copiedLabel = "Copied",
   className = "",
+  dark = false,
 }: {
   value: string;
   label: string;
   copiedLabel?: string;
   className?: string;
+  dark?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -25,12 +27,18 @@ export function CopyButton({
   return (
     <button
       aria-label={label}
-      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold transition hover:border-base-blue hover:text-base-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-blue ${className}`}
+      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+        dark
+          ? "border-white/15 bg-white/10 text-white hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          : "border-border bg-surface text-foreground hover:border-base-blue hover:text-base-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-blue"
+      } ${className}`}
       type="button"
       onClick={copyValue}
     >
-      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-      {copied ? copiedLabel : label}
+      <span aria-live="polite" className="inline-flex items-center gap-2">
+        {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+        {copied ? copiedLabel : label}
+      </span>
     </button>
   );
 }

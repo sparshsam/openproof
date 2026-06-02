@@ -21,18 +21,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </span>
               <span className="text-lg font-black tracking-tight">OpenProof</span>
             </Link>
-            <nav className="hidden items-center gap-6 text-sm text-muted md:flex">
-              <Link className="rounded-full px-2 py-1 hover:text-foreground focus-visible:outline-base-blue" href="/create">
+            <nav className="flex items-center gap-3 text-sm text-muted md:gap-6" aria-label="Main navigation">
+              <Link className="whitespace-nowrap rounded-full px-2 py-1 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-blue" href="/create">
                 Create Proof
               </Link>
-              <Link className="rounded-full px-2 py-1 hover:text-foreground focus-visible:outline-base-blue" href="/verify">
+              <Link className="whitespace-nowrap rounded-full px-2 py-1 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-blue" href="/verify">
                 Verify Proof
               </Link>
-              <Link className="rounded-full px-2 py-1 hover:text-foreground focus-visible:outline-base-blue" href="/#privacy-model">
+              <Link className="whitespace-nowrap rounded-full px-2 py-1 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-blue" href="/#privacy-model">
                 Docs
               </Link>
             </nav>
-            <div className="hidden sm:block">
+            <div className="hidden md:block">
               <ButtonLink href="/create">Start</ButtonLink>
             </div>
           </div>

@@ -83,11 +83,11 @@ export function ReceiptImport({
         </button>
       </div>
       {result.status === "error" ? (
-        <p className="rounded-3xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger">
+        <p aria-live="assertive" className="rounded-3xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger">
           {result.message}
         </p>
       ) : result.status === "valid" ? (
-        <p className="rounded-3xl border border-success/30 bg-success/10 p-4 text-sm text-success">
+        <p aria-live="polite" className="rounded-3xl border border-success/30 bg-success/10 p-4 text-sm text-success">
           Receipt schema is valid. Checking onchain state...
         </p>
       ) : (

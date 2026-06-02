@@ -19,7 +19,8 @@ export function HashDisplay({ value }: { value: string }) {
           SHA-256 fingerprint
         </p>
         <button
-          className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold transition hover:border-base-blue hover:text-base-blue"
+          aria-label="Copy SHA-256 fingerprint"
+          className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold transition hover:border-base-blue hover:text-base-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-blue"
           type="button"
           onClick={copyHash}
         >
@@ -27,7 +28,10 @@ export function HashDisplay({ value }: { value: string }) {
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="max-w-full whitespace-pre-wrap break-all font-mono text-xs leading-6 text-foreground [overflow-wrap:anywhere]">
+      <pre
+        className="max-w-full whitespace-pre-wrap break-all font-mono text-xs leading-6 text-foreground [overflow-wrap:anywhere]"
+        aria-label="SHA-256 hash value"
+      >
         {value}
       </pre>
     </div>

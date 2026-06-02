@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   CheckCircle2,
-  Copy,
   ExternalLink,
   Loader2,
   ShieldQuestion,
@@ -49,7 +48,6 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
   const normalizedHash = hash.toLowerCase();
   const publicClient = usePublicClient({ chainId: openProofChain.id });
   const [state, setState] = useState<LoadState>({ status: "loading" });
-  const [copied, setCopied] = useState(false);
 
   const verificationUrl = useMemo(() => {
     if (typeof window === "undefined") return "";
@@ -104,12 +102,6 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
     loadProof();
   }, [normalizedHash, publicClient]);
 
-  async function copyUrl() {
-    await navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1400);
-  }
-
   return (
     <main>
       <section className="base-grid bg-base-dark text-white">
@@ -127,14 +119,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
               <ButtonLink href="/verify" variant="secondary">
                 Verify a file
               </ButtonLink>
-              <button
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold transition hover:bg-white/15"
-                type="button"
-                onClick={copyUrl}
-              >
-                <Copy className="size-4" />
-                {copied ? "Copied" : "Copy page URL"}
-              </button>
+              <CopyButton dark label="Copy page URL" value={verificationUrl} />
             </div>
           </div>
           <Card dark className="space-y-4">
@@ -150,12 +135,18 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
       <Section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <Card className="space-y-5">
           {state.status === "loading" ? (
-            <div className="flex items-center gap-3 text-muted">
-              <Loader2 className="size-5 animate-spin" />
-              Loading proof from Base Sepolia...
+            <div
+              aria-live="polite"
+              className="flex items-center gap-3 rounded-3xl border border-border bg-surface-muted p-5 text-sm text-muted"
+            >
+              <Loader2 className="size-5 animate-spin shrink-0" />
+              Checking the Base Sepolia registry for this fingerprint...
             </div>
           ) : state.status === "found" ? (
-            <div className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5">
+            <div
+              aria-live="polite"
+              className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5"
+            >
               <Badge tone="green">Verified onchain</Badge>
               <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
                 <CheckCircle2 className="size-8" />
@@ -262,9 +253,9 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-3xl bg-surface-muted p-4">
+    <div className="rounded-3xl bg-surface-muted p-3 sm:p-4">
       <dt className="text-xs uppercase tracking-[0.16em] text-muted">{label}</dt>
-      <dd className="mt-2 break-words font-mono text-xs">{value}</dd>
+      <dd className="mt-2 break-words font-mono text-xs sm:text-sm">{value}</dd>
     </div>
   );
 }

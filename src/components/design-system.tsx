@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { ExternalLink, Info } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { HelperTooltip } from "@/components/helper-tooltip";
 
 type Tone = "blue" | "green" | "red" | "dark" | "muted";
 
@@ -28,29 +29,7 @@ export function Badge({
   );
 }
 
-export function HelperTooltip({
-  label,
-  text,
-}: {
-  label: string;
-  text: string;
-}) {
-  return (
-    <span className="group relative inline-flex items-center gap-1.5 align-middle">
-      <span className="text-xs font-semibold text-muted">{label}</span>
-      <span
-        aria-label={`${label}: ${text}`}
-        className="grid size-5 place-items-center rounded-full border border-border bg-surface text-muted transition group-hover:border-base-blue group-hover:text-base-blue group-focus-within:border-base-blue group-focus-within:text-base-blue"
-        tabIndex={0}
-      >
-        <Info className="size-3.5" />
-      </span>
-      <span className="pointer-events-none absolute bottom-full left-0 z-20 mb-2 hidden w-64 rounded-2xl border border-border bg-surface p-3 text-xs leading-5 text-foreground shadow-xl group-hover:block group-focus-within:block">
-        {text}
-      </span>
-    </span>
-  );
-}
+export { HelperTooltip };
 
 export function StatusPill({
   children,
@@ -75,14 +54,13 @@ export function ButtonLink({
 }: {
   href: string;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary";
 }) {
   const variants = {
     primary:
       "bg-base-blue text-white shadow-[0_18px_45px_rgba(0,82,255,0.28)] hover:bg-blue-600",
     secondary:
       "border border-base-blue/30 bg-white/90 text-base-dark hover:border-base-blue hover:bg-white dark:bg-white/10 dark:text-white",
-    ghost: "text-muted hover:text-foreground",
   };
 
   return (
@@ -137,7 +115,7 @@ export function Card({
 }) {
   return (
     <section
-      className={`min-w-0 overflow-hidden rounded-[2rem] border p-6 shadow-sm transition ${
+      className={`min-w-0 overflow-hidden rounded-[2rem] border p-5 shadow-sm transition sm:p-6 ${
         dark
           ? "border-white/15 bg-white/[0.055] text-white blue-glow"
           : "border-border bg-surface text-foreground"
@@ -158,7 +136,7 @@ export function Section({
   id?: string;
 }) {
   return (
-    <section className={`mx-auto w-full max-w-6xl px-5 py-16 ${className}`} id={id}>
+    <section className={`mx-auto w-full max-w-6xl px-5 py-12 sm:py-16 ${className}`} id={id}>
       {children}
     </section>
   );
@@ -179,20 +157,20 @@ export function StepCard({
 }) {
   return (
     <div
-      className={`rounded-3xl border p-5 transition ${
+      className={`rounded-3xl border p-4 transition sm:p-5 ${
         active
           ? "border-base-blue bg-base-blue/10"
           : "border-border bg-surface"
       }`}
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3 sm:gap-4">
         <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-base-blue text-sm font-bold text-white">
           {step}
         </span>
         <div>
-          <Icon className="mb-3 size-5 text-base-blue" />
-          <h3 className="font-semibold">{title}</h3>
-          <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
+          <Icon className="mb-2 size-4 text-base-blue sm:mb-3 sm:size-5" />
+          <h3 className="text-sm font-semibold sm:text-base">{title}</h3>
+          <p className="mt-1 text-xs leading-5 text-muted sm:mt-2 sm:text-sm sm:leading-6">{text}</p>
         </div>
       </div>
     </div>
@@ -226,7 +204,10 @@ export function EmptyState({
   text: string;
 }) {
   return (
-    <div className="rounded-3xl border border-dashed border-base-blue/30 bg-base-blue/10 p-6 text-sm leading-6 text-muted">
+    <div
+      aria-live="polite"
+      className="rounded-3xl border border-dashed border-base-blue/30 bg-base-blue/10 p-6 text-sm leading-6 text-muted"
+    >
       <Icon className="mb-4 size-6 text-base-blue" />
       <p className="font-semibold text-foreground">{title}</p>
       <p className="mt-2">{text}</p>

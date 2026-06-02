@@ -69,6 +69,18 @@ export function FileDrop({
     }
   }
 
+  const dropZoneLabel = label ||
+    (selectedCount > 1
+      ? `${selectedCount} files selected`
+      : file
+        ? file.name
+        : "Drop a file here or choose one");
+
+  const dropZoneHelper = helperText ||
+    (selectedCount > 1
+      ? "The bundle is hashed locally. File contents never leave your browser."
+      : defaultHelperText);
+
   return (
     <div
       className={`rounded-[2rem] border border-dashed p-8 transition ${
@@ -90,6 +102,7 @@ export function FileDrop({
       <input
         ref={inputRef}
         accept={accept}
+        aria-label={dropZoneLabel}
         className="sr-only"
         disabled={disabled}
         multiple={multiple}
@@ -99,6 +112,8 @@ export function FileDrop({
         }}
       />
       <button
+        aria-describedby={file ? undefined : "file-drop-helper"}
+        aria-label={dropZoneLabel}
         className="flex w-full flex-col items-center gap-4 text-center"
         disabled={disabled}
         type="button"
@@ -108,18 +123,13 @@ export function FileDrop({
           <FileUp className="size-7" />
         </span>
         <span className="text-base font-semibold">
-          {label ||
-            (selectedCount > 1
-              ? `${selectedCount} files selected`
-              : file
-                ? file.name
-                : "Drop a file here or choose one")}
+          {dropZoneLabel}
         </span>
-        <span className="max-w-sm text-sm leading-6 text-muted">
-          {helperText ||
-            (selectedCount > 1
-              ? "The bundle is hashed locally. File contents never leave your browser."
-              : defaultHelperText)}
+        <span
+          id="file-drop-helper"
+          className="max-w-sm text-sm leading-6 text-muted"
+        >
+          {dropZoneHelper}
         </span>
       </button>
     </div>
