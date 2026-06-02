@@ -162,6 +162,17 @@ export default function VerifyProofPage() {
       return;
     }
 
+    if (
+      openProofContractAddress &&
+      receipt.contractAddress.toLowerCase() !== openProofContractAddress.toLowerCase()
+    ) {
+      setReceiptResult({
+        status: "error",
+        message: `Receipt contract address does not match the configured OpenProof registry. Expected ${openProofContractAddress}, got ${receipt.contractAddress}.`,
+      });
+      return;
+    }
+
     try {
       const proof = await readOnchainProof(publicClient, receipt.sha256Hash);
       if (!proof) {

@@ -1,7 +1,7 @@
 # OpenProof Agent Source of Truth
 
 Last updated: 2026-06-02
-Update signed by: GPT-5.5 Thinking
+Update signed by: final-integration-reviewer
 
 ## 1. Project Identity
 
@@ -204,14 +204,18 @@ Application routes:
 
 Components:
 
-- `src/components/design-system.*` — shared UI primitives.
-- `src/components/file-drop.*` — local file selection surface.
-- `src/components/hash-display.*` — hash display and copy surface.
-- `src/components/proof-history.*` — local proof history UI.
-- `src/components/proof-timeline.*` — proof lifecycle display.
-- `src/components/receipt-import.*` — receipt import and validation UI.
-- `src/components/qr-code.*` — QR proof URL display.
-- `src/components/providers/wallet-provider.*` — wallet provider isolation.
+- `src/components/app-shell.tsx` — global layout with header, nav, footer, and skip link.
+- `src/components/base-notice.tsx` — Base Sepolia testnet info banner.
+- `src/components/copy-button.tsx` — accessible copy-to-clipboard button with dark variant.
+- `src/components/design-system.tsx` — shared UI primitives (Badge, Card, Section, ButtonLink, etc.).
+- `src/components/file-drop.tsx` — local file selection surface with drag-and-drop.
+- `src/components/hash-display.tsx` — hash display with copy surface.
+- `src/components/helper-tooltip.tsx` — accessible tooltip with keyboard support.
+- `src/components/proof-history.tsx` — local proof history UI.
+- `src/components/proof-timeline.tsx` — proof lifecycle display.
+- `src/components/qr-code.tsx` — QR proof URL display and download.
+- `src/components/receipt-import.tsx` — receipt import and validation UI.
+- `src/components/providers/wallet-provider.tsx` — RainbowKit and wagmi provider isolation.
 
 Libraries:
 
@@ -231,6 +235,8 @@ Documentation:
 - `README.md` — public project overview.
 - `docs/architecture.md` — technical architecture.
 - `docs/threat-model.md` — security and privacy boundaries.
+- `docs/deployment-notes.md` — operator wallet and deployment configuration notes.
+- `docs/repo-metadata.md` — GitHub description, website, and topic recommendations.
 - `SECURITY.md` — vulnerability reporting and security posture.
 - `CONTRIBUTING.md` — contribution rules and validation.
 - `CHANGELOG.md` — release/change history where maintained.
@@ -276,17 +282,19 @@ Known risks to keep documented:
 - RPC providers can rate-limit or fail.
 - Testnet proofs are not production legal/compliance instruments.
 
-## 12. Documentation Gaps to Watch
+## 12. Documentation Gaps Still Open
 
-The repository already has strong baseline documentation. During freeze, prioritize:
+The repository has strong baseline documentation but the following gaps identified at freeze start remain open as of the v1.0 final review. Future agents should consider these priorities:
 
-- A formal receipt schema section with versioning expectations.
-- A bundle proof rule section that explains deterministic ordering and future compatibility.
-- Clearer self-hosting notes for custom contract deployments.
-- Clearer testnet vs future mainnet language.
-- More explicit guidance on what receipt sharing reveals.
-- More explicit frontend integrity guidance for users who need high assurance.
-- A release checklist for v1.0.
+- **Receipt schema documentation** — a formal `docs/receipt-schema.md` with field descriptions, versioning expectations, and example JSON.
+- **Bundle proof rule documentation** — a standalone explanation of deterministic ordering, stable-stringify, and future compatibility.
+- **Frontend integrity guidance** — explicit instructions for users who need high assurance that the served frontend hashes correctly.
+- **Release checklist** — a v1.0 release checklist covering build validation, docs review, security review, screenshots, and deploy.
+- **Receipt sharing guidance** — more accessible language about what a receipt reveals to recipients.
+- **Self-hosting notes** — a standalone `docs/self-hosting.md` for custom contract deployments, custom RPCs, and static hosting.
+- **Testnet vs mainnet language** — ensure all references to Base mainnet are consistently marked as roadmap items, not promises.
+
+These gaps do not block v1.0 freeze. They are documentation improvements to pursue after real user validation.
 
 ## 13. UX Surfaces Needing Polish
 
