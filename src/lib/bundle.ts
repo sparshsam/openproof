@@ -1,4 +1,4 @@
-import { hashFileSha256, validateBundleSize, type HashedFile } from "@/lib/hash";
+import { hashFileSha256, type HashedFile } from "@/lib/hash";
 
 export type BundleManifestFile = {
   name: string;
@@ -10,14 +10,13 @@ export type BundleManifestFile = {
 export type BundleManifest = {
   appName: "OpenProof";
   bundleVersion: 1;
+  bundleRuleVersion: 1;
   hashAlgorithm: "SHA-256";
   rule: "sort-by-name-size-type-hash";
   files: BundleManifestFile[];
 };
 
 export async function hashBundleFiles(files: File[]) {
-  validateBundleSize(files);
-
   const hashedFiles = await Promise.all(
     files.map(async (file): Promise<HashedFile> => ({
       file,
@@ -28,6 +27,7 @@ export async function hashBundleFiles(files: File[]) {
   const manifest: BundleManifest = {
     appName: "OpenProof",
     bundleVersion: 1,
+    bundleRuleVersion: 1,
     hashAlgorithm: "SHA-256",
     rule: "sort-by-name-size-type-hash",
     files: hashedFiles

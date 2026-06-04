@@ -122,7 +122,15 @@ export default function CreateProofPage() {
 
   useEffect(() => {
     async function loadReceipt() {
-      if (!file || !hash || !address || !txHash || !txReceipt || !publicClient) {
+      if (
+        !file ||
+        !hash ||
+        !address ||
+        !txHash ||
+        !txReceipt ||
+        !publicClient ||
+        !openProofContractAddress
+      ) {
         return;
       }
 
@@ -132,6 +140,9 @@ export default function CreateProofPage() {
 
       setReceipt(
         buildProofReceipt({
+          schemaVersion: 2,
+          receiptVersion: 2,
+          hashAlgorithm: "SHA-256",
           fileName: file.name,
           fileSize: isBundle ? totalBundleSize : file.size,
           fileMimeType: isBundle
@@ -139,10 +150,11 @@ export default function CreateProofPage() {
             : file.type || "unknown",
           proofType: isBundle ? "bundle" : "single-file",
           bundleFiles: bundleManifest?.files,
+          bundleRuleVersion: isBundle ? 1 : undefined,
           sha256Hash: hash,
           chainId: openProofChain.id,
           chainName: openProofChain.name,
-          contractAddress: openProofContractAddress || "",
+          contractAddress: openProofContractAddress,
           transactionHash: txHash,
           transactionUrl: transactionExplorerUrl(txHash),
           creatorWallet: address,
