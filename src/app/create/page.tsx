@@ -282,7 +282,7 @@ export default function CreateProofPage() {
             </p>
             <BaseSepoliaNotice className="mt-7 border-border-default bg-bg-surface-muted text-text-secondary" />
           </div>
-          <Card dark className="grid content-start gap-4 sm:grid-cols-2">
+          <Card className="grid content-start gap-4 sm:grid-cols-2">
             {[
                 { icon: Upload, title: "Select file", text: "Choose one or many files locally." },
                 { icon: Fingerprint, title: "Generate fingerprint", text: "Hash with Web Crypto." },

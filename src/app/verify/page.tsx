@@ -236,7 +236,7 @@ export default function VerifyProofPage() {
             </p>
             <BaseSepoliaNotice className="mt-7 border-border-default bg-bg-surface-muted text-text-secondary" />
           </div>
-          <Card dark className="grid content-start gap-4 sm:grid-cols-3">
+          <Card className="grid content-start gap-4 sm:grid-cols-3">
             {[
               { icon: Upload, title: "Select file", text: "Choose the file to check." },
               { icon: Fingerprint, title: "Hash locally", text: "Generate the same SHA-256 fingerprint." },

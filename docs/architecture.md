@@ -1,7 +1,3 @@
-> [!NOTE]
-> **Canonical reference:** This file is a case-variant duplicate of [](ARCHITECTURE.md). The canonical architecture document uses the uppercase path `docs/ARCHITECTURE.md`. This lowercase variant is retained for backward compatibility with existing cross-references. For new cross-references, use the canonical `docs/ARCHITECTURE.md`.
-> 
-
 # OpenProof Architecture
 
 **Classification:** Permanent architectural documentation

@@ -122,7 +122,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
               <CopyButton dark label="Copy page URL" value={verificationUrl} />
             </div>
           </div>
-          <Card dark className="space-y-4">
+          <Card className="space-y-4">
             <StatusPill tone={state.status === "found" ? "green" : "blue"}>
               {state.status === "found" ? "proof found" : "Base Sepolia"}
             </StatusPill>
