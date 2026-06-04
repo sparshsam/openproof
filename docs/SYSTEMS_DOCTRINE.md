@@ -74,7 +74,7 @@ Freeze classification definitions:
 | **Controlled** | Stable but may evolve. | Governance review required. |
 | **Mutable** | May be updated through normal development. | Standard PR review. |
 
-Frozen sections currently exist only in SYSTEMS_DOCTRINE.md and ARCHITECTURAL_INVARIANTS.md. Lower-level doctrines (NON_GOALS.md, DESIGN_RESTRAINTS.md, TRUST_BOUNDARIES.md) are controlled.
+Frozen sections exist in SYSTEMS_DOCTRINE.md (sections 1–11), TRUST_BOUNDARIES.md (sections 1, 8, 9), DESIGN_RESTRAINTS.md (sections 2, 5, 7), and ARCHITECTURAL_INVARIANTS.md (severity definitions). NON_GOALS.md has no frozen sections; individual exclusion entries are permanent but the format is controlled.
 
 A frozen section becoming controlled requires ecosystem governance review and a version bump (e.g., SD-001 to SD-002) that records what changed and why.
 

@@ -75,7 +75,7 @@ Adding a new Critical-severity invariant requires escalation equivalent to amend
 
 ### 0.6 Relationship to Violation Protocol
 
-The violation protocol defined in §IX (formerly "Invariant Violation Protocol") operationalizes this governance section for runtime violations. A code change that violates an invariant should first follow the violation protocol for immediate correction, then follow §0.4 for permanent amendment if needed.
+The violation protocol defined in §IX operationalizes this governance section for runtime violations. A code change that violates an invariant should first follow the violation protocol for immediate correction, then follow §0.4 for permanent amendment if needed.
 
 ### 0.7 Cross-Document Map
 
