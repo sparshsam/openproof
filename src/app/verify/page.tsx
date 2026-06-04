@@ -223,18 +223,18 @@ export default function VerifyProofPage() {
 
   return (
     <main>
-      <section className="base-grid bg-base-dark text-white">
+      <section className="bg-bg-base text-white">
         <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <Badge tone="dark">Verify Proof</Badge>
             <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-6xl">
               Verify a file fingerprint on Base Sepolia.
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-100">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
               Verification is a public read. No wallet is required to check
               whether an exact file hash was registered.
             </p>
-            <BaseSepoliaNotice className="mt-7 border-white/15 bg-white/10 text-blue-100" />
+            <BaseSepoliaNotice className="mt-7 border-border-default bg-bg-surface-muted text-text-secondary" />
           </div>
           <Card dark className="grid content-start gap-4 sm:grid-cols-3">
             {[
@@ -303,17 +303,17 @@ export default function VerifyProofPage() {
           />
 
           {file ? (
-            <div className="grid gap-3 rounded-3xl border border-border bg-surface-muted p-5 text-sm sm:grid-cols-3">
+            <div className="grid gap-3 rounded-lg border border-border-default bg-bg-surface-muted p-5 text-sm sm:grid-cols-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">Name</p>
+                <p className="text-xs uppercase text-text-muted">Name</p>
                 <p className="mt-2 break-words font-semibold">{file.name}</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">Size</p>
+                <p className="text-xs uppercase text-text-muted">Size</p>
                 <p className="mt-2 font-semibold">{formatBytes(file.size)}</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">Type</p>
+                <p className="text-xs uppercase text-text-muted">Type</p>
                 <p className="mt-2 break-words font-semibold">{file.type || "unknown"}</p>
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function VerifyProofPage() {
           </ActionButton>
 
           {!configured ? (
-            <p className="rounded-3xl border border-border bg-surface-muted p-4 text-sm text-muted">
+            <p className="rounded-lg border border-border-default bg-bg-surface-muted p-4 text-sm text-text-muted">
               Set NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS after deploying the
               registry contract.
             </p>
@@ -345,7 +345,7 @@ export default function VerifyProofPage() {
           {result.status === "verified" ? (
             <div
               aria-live="polite"
-              className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5"
+              className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5"
             >
               <div>
                 <Badge tone="green">Verified</Badge>
@@ -353,7 +353,7 @@ export default function VerifyProofPage() {
                   <CheckCircle2 className="size-8" />
                   Proof found
                 </h2>
-                <p className="mt-3 text-sm leading-6 text-muted">
+                <p className="mt-3 text-sm leading-6 text-text-muted">
                   A matching file fingerprint was registered on Base Sepolia by
                   this wallet at the shown timestamp.
                 </p>
@@ -387,7 +387,7 @@ export default function VerifyProofPage() {
               </dl>
               <div className="flex flex-wrap gap-2">
                 <Link
-                  className="inline-flex min-h-10 items-center justify-center rounded-full bg-base-blue px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
+                  className="inline-flex min-h-10 items-center justify-center rounded-[6px] bg-accent px-4 py-2 text-sm font-semibold text-[#0a0a0a] transition hover:brightness-110"
                   href={proofPath(result.proofId)}
                 >
                   Open proof page
@@ -404,7 +404,7 @@ export default function VerifyProofPage() {
                 ) : null}
               </div>
               {!result.transactionHash ? (
-                <p className="rounded-3xl border border-border bg-surface-muted p-4 text-sm leading-6 text-muted">
+                <p className="rounded-lg border border-border-default bg-bg-surface-muted p-4 text-sm leading-6 text-text-muted">
                   Transaction link unavailable from the public RPC. The proof ID
                   and contract timestamp were read directly from Base Sepolia.
                 </p>
@@ -418,7 +418,7 @@ export default function VerifyProofPage() {
                 </Badge>
                 <h2
                   className={`mt-4 flex items-center gap-3 text-3xl font-black tracking-tight ${
-                    result.status === "not-found" ? "text-danger" : ""
+                    result.status === "not-found" ? "text-error" : ""
                   }`}
                 >
                   {result.status === "not-found" ? (
@@ -449,7 +449,7 @@ export default function VerifyProofPage() {
           <h2 className="text-3xl font-black tracking-tight">
             Validate a downloaded receipt
           </h2>
-          <p className="text-sm leading-6 text-muted">
+          <p className="text-sm leading-6 text-text-muted">
             Import an OpenProof receipt JSON from your device. The schema is
             checked locally, then the receipt hash is checked against Base
             Sepolia.
@@ -483,8 +483,8 @@ export default function VerifyProofPage() {
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-3xl bg-surface-muted p-3 sm:p-4">
-      <dt className="text-xs uppercase tracking-[0.16em] text-muted">{label}</dt>
+    <div className="rounded-lg bg-bg-surface-muted p-3 sm:p-4">
+      <dt className="text-xs uppercase text-text-muted">{label}</dt>
       <dd className="mt-2 break-words font-mono text-xs sm:text-sm">{value}</dd>
     </div>
   );
@@ -512,7 +512,7 @@ function hydrateTransactionHash(
 function ReceiptResult({ result }: { result: VerificationResult }) {
   if (result.status === "verified") {
     return (
-      <div className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5">
+      <div className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5">
         <Badge tone="green">Valid receipt</Badge>
         <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
           <CheckCircle2 className="size-8" />
@@ -545,7 +545,7 @@ function ReceiptResult({ result }: { result: VerificationResult }) {
         </dl>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="inline-flex min-h-10 items-center justify-center rounded-full bg-base-blue px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
+            className="inline-flex min-h-10 items-center justify-center rounded-[6px] bg-accent px-4 py-2 text-sm font-semibold text-[#0a0a0a] transition hover:brightness-110"
             href={proofPath(result.proofId)}
           >
             Open proof page

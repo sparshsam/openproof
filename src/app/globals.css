@@ -1,59 +1,93 @@
 @import "tailwindcss";
 
+/* ─── OpenProof Design Tokens ───────────────────────────────
+   Dark mode default. Light mode is secondary.
+   Per UI_DOCTRINE §7.1, VISUAL_RESTRAINTS §1.2, §2
+   ─────────────────────────────────────────────────────── */
+
 :root {
-  --background: #f7f9ff;
-  --foreground: #050b18;
-  --surface: #ffffff;
-  --surface-muted: #eef4ff;
-  --border: #d8e4ff;
-  --muted: #53627c;
-  --accent: #0052ff;
-  --accent-soft: #eaf1ff;
-  --success: #15a46f;
-  --danger: #e5484d;
-  --base-dark: #030712;
-  --base-blue: #0052ff;
-  --base-blue-2: #2d7dff;
-  --focus-ring: var(--base-blue);
+  /* Backgrounds */
+  --bg-base: #0a0a0a;
+  --bg-surface: #1a1a1a;
+  --bg-surface-muted: #222222;
+
+  /* Text */
+  --text-primary: #f4f4f1;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  /* Borders */
+  --border-default: rgba(255, 255, 255, 0.1);
+
+  /* Accent — single accent for actionable elements */
+  --accent: #6aa2ff;
+
+  /* Semantic — subdued */
+  --success: #6ee7b7;
+  --error: #ff8a8f;
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Focus ring */
+  --focus-ring: var(--accent);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-surface: var(--surface);
-  --color-surface-muted: var(--surface-muted);
-  --color-border: var(--border);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
-  --color-success: var(--success);
-  --color-danger: var(--danger);
-  --color-base-dark: var(--base-dark);
-  --color-base-blue: var(--base-blue);
-  --color-base-blue-2: var(--base-blue-2);
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
+/* Light mode — optional per UI_DOCTRINE §7.1 */
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #030712;
-    --foreground: #f4f4f1;
-    --surface: #07111f;
-    --surface-muted: #0d1b33;
-    --border: #19345e;
-    --muted: #b5c4df;
-    --accent: #6aa2ff;
-    --accent-soft: #09265d;
-    --success: #6ee7b7;
-    --danger: #ff8a8f;
+    --bg-base: #fafafa;
+    --bg-surface: #ffffff;
+    --bg-surface-muted: #f5f5f5;
+    --text-primary: #171717;
+    --text-secondary: #525252;
+    --text-muted: #a3a3a3;
+    --border-default: rgba(0, 0, 0, 0.1);
+    --accent: #2563eb;
+    --success: #16a34a;
+    --error: #dc2626;
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --focus-ring: var(--accent);
   }
 }
 
+/* ─── Tailwind Theme ─────────────────────────────────── */
+
+@theme inline {
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-muted: var(--bg-surface-muted);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border-default: var(--border-default);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+
+  /* ── Backward-compatible aliases (for existing pages) ─ */
+  --color-surface: var(--bg-surface);
+  --color-surface-muted: var(--bg-surface-muted);
+  --color-muted: var(--text-muted);
+  --color-border: var(--border-default);
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+  --color-accent-soft: var(--bg-surface-muted);
+  --color-base-blue: var(--accent);
+  --color-base-blue-2: var(--accent);
+  --color-base-dark: var(--bg-base);
+  --color-danger: var(--error);
+  --color-focus-ring: var(--focus-ring);
+}
+
+/* ─── Base Reset ──────────────────────────────────── */
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
   overflow-x: hidden;
 }
 
@@ -65,14 +99,14 @@ input {
 a,
 button,
 [tabindex="0"] {
-  outline-color: var(--base-blue);
+  outline-color: var(--focus-ring);
 }
 
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 [tabindex="0"]:focus-visible {
-  outline: 2px solid var(--base-blue);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -82,68 +116,29 @@ input:focus:not(:focus-visible) {
   outline: none;
 }
 
-/* Improve tap target sizes on touch devices */
+/* Touch targets */
 @media (pointer: coarse) {
-  button, a, [role="button"] {
+  button,
+  a,
+  [role="button"] {
     min-height: 44px;
   }
 }
 
-/* Prevent overflow on mobile */
-img, video, pre, code {
+/* Prevent overflow */
+img,
+video,
+pre,
+code {
   max-width: 100%;
 }
 
 ::selection {
-  background: var(--accent-soft);
-  color: var(--foreground);
+  background: var(--accent);
+  color: var(--bg-base);
 }
 
-.base-grid {
-  background-image:
-    linear-gradient(rgba(0, 82, 255, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 82, 255, 0.13) 1px, transparent 1px),
-    radial-gradient(circle at 20% 0%, rgba(0, 82, 255, 0.35), transparent 34rem),
-    radial-gradient(circle at 82% 18%, rgba(45, 125, 255, 0.28), transparent 28rem);
-  background-size: 72px 72px, 72px 72px, auto, auto;
-}
-
-.blue-glow {
-  box-shadow:
-    0 0 0 1px rgba(45, 125, 255, 0.45),
-    0 24px 80px rgba(0, 82, 255, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.success-pop {
-  animation: success-pop 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.soft-fade-in {
-  animation: soft-fade-in 420ms ease-out both;
-}
-
-@keyframes success-pop {
-  0% {
-    opacity: 0;
-    transform: translateY(8px) scale(0.98);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes soft-fade-in {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ─── Reduced Motion ──────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   *,

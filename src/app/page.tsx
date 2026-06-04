@@ -1,261 +1,159 @@
-import {
-  CheckCircle2,
-  FileCheck2,
-  Fingerprint,
-  History,
-  Package,
-  QrCode,
-  ReceiptText,
-  SearchCheck,
-  ShieldAlert,
-  ShieldCheck,
-  Upload,
-} from "lucide-react";
-import { BaseSepoliaNotice } from "@/components/base-notice";
-import {
-  Badge,
-  ButtonLink,
-  Card,
-  ExplorerLink,
-  HelperTooltip,
-  Section,
-  StatusPill,
-  StepCard,
-} from "@/components/design-system";
-import { HashDisplay } from "@/components/hash-display";
-import { addressExplorerUrl } from "@/lib/explorer";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const registryAddress = "0x60d3DD631E6e4F6D76f761689d6FA229945a874a";
+
+/* ─── Homepage ─────────────────────────────────────────────
+   Per HOMEPAGE_STRUCTURE.md §2:
+   1) Action Cards (primary zone)
+   2) Registry Identity (information zone)
+   3) System Overview (context zone)
+   4) Documentation Links (reference zone)
+
+   No hero section, no step-by-step, no feature grids,
+   no ecosystem badges, no wallet connection, no animations.
+   ─────────────────────────────────────────────────────── */
 
 export default function Home() {
   return (
     <main>
-      <section className="base-grid overflow-hidden bg-base-dark text-white">
-        <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl min-w-0 items-center gap-10 px-5 py-16 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="min-w-0">
-            <Badge tone="dark">Built on Base Sepolia</Badge>
-            <h1 className="mt-6 max-w-[21rem] text-3xl font-black leading-[0.95] tracking-tight sm:max-w-4xl sm:text-6xl lg:text-7xl">
-              Cryptographic proof for files, built on Base.
-            </h1>
-            <p className="mt-6 max-w-[21rem] text-base leading-8 text-blue-100 sm:max-w-2xl sm:text-xl">
-              OpenProof lets you timestamp a file fingerprint onchain without
-              uploading the file anywhere.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <ButtonLink href="/create">Create Proof</ButtonLink>
-              <ButtonLink href="/verify" variant="secondary">
-                Verify Proof
-              </ButtonLink>
-            </div>
-            <BaseSepoliaNotice className="mt-7 max-w-[21rem] border-white/15 bg-white/10 text-blue-100 sm:max-w-2xl" />
-          </div>
+      {/* ── Section 1: Action Cards ──────────────────────
+           Binary interaction model. Equal visual weight.
+           Per HOMEPAGE_STRUCTURE §2.1, §3.
+           ───────────────────────────────────────────── */}
 
-          <Card dark className="max-w-[21rem] space-y-6 sm:max-w-full">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold">OpenProofRegistry</p>
-                <p className="mt-1 text-sm text-blue-100">Base Sepolia testnet</p>
-              </div>
-              <StatusPill tone="green">hash only</StatusPill>
+      <section className="mx-auto max-w-5xl px-5 pt-24 pb-10 sm:pt-32 sm:pb-12">
+        <div className="grid gap-6 sm:grid-cols-2">
+          {/* Create Proof Card */}
+          <Link
+            className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10"
+            href="/create"
+          >
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Create Proof
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+              Register a file&apos;s cryptographic fingerprint on Base Sepolia.
+            </p>
+            <div className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] bg-accent px-4 py-2.5 text-sm font-medium text-[#0a0a0a] transition-colors group-hover:brightness-110">
+              Select File
             </div>
-            <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-5">
-              <div className="flex items-center gap-3">
-                <span className="grid size-11 place-items-center rounded-2xl bg-base-blue">
-                  <Upload className="size-5" />
-                </span>
-                <div>
-                  <p className="font-semibold">research-notes.pdf</p>
-                  <p className="text-sm text-blue-100">Local file - never uploaded</p>
-                </div>
-              </div>
+            <p className="mt-3 text-xs text-text-muted">
+              No wallet connection required until registration.
+            </p>
+          </Link>
+
+          {/* Verify Proof Card */}
+          <Link
+            className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10"
+            href="/verify"
+          >
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Verify Proof
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+              Check a file or receipt against the onchain registry.
+            </p>
+            <div className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] border border-border-default px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-surface-muted">
+              Select File
             </div>
-            <HashDisplay value="0x8b6f2b9c3b1e4f6c8897d29d39e45e4ff34b955cf9e693c8127a92f8ac7f54a1" />
-            <div className="grid gap-3 text-sm text-blue-100">
-              <div className="flex justify-between gap-4">
-                <span>Network</span>
-                <span className="font-semibold text-white">Base Sepolia</span>
-              </div>
-              <div className="flex justify-between gap-4">
-                <span>Proof output</span>
-                <span className="font-semibold text-white">JSON receipt</span>
-              </div>
-            </div>
-          </Card>
+            <p className="mt-3 text-xs text-text-muted">
+              <Link
+                className="underline underline-offset-2 transition-colors hover:text-text-secondary"
+                href="/verify"
+              >
+                Import Receipt
+              </Link>
+            </p>
+          </Link>
         </div>
       </section>
 
-      <Section>
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <Badge>How OpenProof Works</Badge>
-            <h2 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl">
-              Five steps. No file upload.
-            </h2>
-          </div>
-          <p className="max-w-xl text-sm leading-6 text-muted">
-            OpenProof keeps the file local, registers only the fingerprint, and
-            leaves verification public.
+      {/* ── Section 2: Registry Identity ─────────────────
+           Infrastructure anchor. Full contract address,
+           network, chain ID, key properties.
+           Per HOMEPAGE_STRUCTURE §8.3.
+           ───────────────────────────────────────────── */}
+
+      <section className="mx-auto max-w-5xl px-5 pb-8">
+        <div className="rounded-lg border border-border-default bg-bg-surface-muted px-5 py-4 text-sm leading-relaxed text-text-secondary">
+          <p>
+            <span className="text-text-primary">Registry:</span>{" "}
+            <code className="font-mono text-xs break-all">{registryAddress}</code>
+          </p>
+          <p>
+            Base Sepolia &middot; Chain ID 84532
+          </p>
+          <p>
+            Immutable &middot; Ownerless &middot; No fees &middot; No upgrades
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-5">
-          {[
-            { icon: Upload, title: "Select file", text: "Choose a local file in the browser." },
-            { icon: Fingerprint, title: "Hash locally", text: "Generate a SHA-256 fingerprint." },
-            { icon: ShieldCheck, title: "Connect wallet", text: "Use a wallet on Base Sepolia." },
-            { icon: FileCheck2, title: "Register proof", text: "Write the fingerprint onchain." },
-            { icon: SearchCheck, title: "Verify later", text: "Match the exact file again." },
-          ].map((item, index) => (
-            <StepCard
-              active={index === 0}
-              icon={item.icon}
-              key={item.title}
-              step={index + 1}
-              text={item.text}
-              title={item.title}
-            />
-          ))}
-        </div>
-      </Section>
+      </section>
 
-      <Section>
-        <div className="mb-8 max-w-3xl">
-          <Badge>Utility layer</Badge>
-          <h2 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl">
-            Built for repeated proof workflows.
-          </h2>
-          <p className="mt-4 text-sm leading-6 text-muted">
-            OpenProof v0.x adds local history, receipt validation, shareable
-            proof pages, QR verification, and deterministic bundle proofs
-            without adding accounts, storage, or a backend.
+      {/* ── Section 3: System Overview ──────────────────
+           Canonical text per HOMEPAGE_STRUCTURE §8.4.
+           Single compact card, no feature grid, no steps.
+           ───────────────────────────────────────────── */}
+
+      <section className="mx-auto max-w-5xl px-5 pb-8">
+        <div className="rounded-lg border border-border-default bg-bg-surface p-6 text-sm leading-relaxed text-text-secondary">
+          <p className="text-text-primary">
+            OpenProof is a proof-of-existence infrastructure tool. It registers
+            a SHA-256 fingerprint of a file on Base Sepolia. The file itself
+            never leaves your browser.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-xs">
+            <span>No backend</span>
+            <span>No database</span>
+            <span>No accounts</span>
+            <span>Files never uploaded</span>
+            <span>No tracking</span>
+            <span>No telemetry</span>
+          </div>
+          <p className="mt-4 text-xs leading-relaxed text-text-muted">
+            Verification is independent of this frontend. Anyone with the
+            contract address can verify through any block explorer or RPC
+            client.
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-5">
-          {[
-            { icon: History, title: "Local history", text: "Recent proofs stay in this browser only." },
-            { icon: ReceiptText, title: "Receipt import", text: "Validate downloaded JSON against Base Sepolia." },
-            { icon: SearchCheck, title: "Proof pages", text: "Open a shareable /proof/[hash] URL." },
-            { icon: QrCode, title: "QR verify", text: "Download a QR code for proof pages." },
-            { icon: Package, title: "Bundles", text: "Register one deterministic hash for many files." },
-          ].map((item, index) => (
-            <StepCard
-              active={index === 0}
-              icon={item.icon}
-              key={item.title}
-              step={index + 1}
-              text={item.text}
-              title={item.title}
-            />
-          ))}
-        </div>
-      </Section>
+      </section>
 
-      <Section className="grid gap-5 lg:grid-cols-2" id="privacy-model">
-        <Card>
-          <Badge>Privacy-first by design</Badge>
-          <h2 className="mt-5 text-3xl font-black tracking-tight">
-            Why files never leave your browser.
-          </h2>
-          <p className="mt-4 leading-7 text-muted">
-            OpenProof uses the browser File API and Web Crypto API. The app does
-            not need a backend, storage bucket, database, or IPFS service for
-            the core proof flow.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <HelperTooltip
-              label="SHA-256 hash"
-              text="A fixed-length fingerprint of file bytes. The same exact file produces the same hash; a changed file produces a different hash."
-            />
-            <HelperTooltip
-              label="Proof receipts"
-              text="A local JSON record of the proof. It is useful for portability, but the onchain registry remains the source of truth."
-            />
-          </div>
-          <div className="mt-6 grid gap-3">
-            {["No uploads", "No storage bucket", "No database required"].map((item) => (
-              <div className="flex items-center gap-3" key={item}>
-                <CheckCircle2 className="size-5 text-success" />
-                <span className="font-semibold">{item}</span>
-              </div>
-            ))}
-          </div>
-        </Card>
+      {/* ── Section 4: Documentation Links ──────────────
+           Reference navigation. Per HOMEPAGE_STRUCTURE §8.5.
+           Spec · Architecture · Security · Governance
+           ───────────────────────────────────────────── */}
 
-        <Card>
-          <Badge>What OpenProof Proves</Badge>
-          <h2 className="mt-5 text-3xl font-black tracking-tight">
-            A matching hash was registered on Base Sepolia.
-          </h2>
-          <p className="mt-4 leading-7 text-muted">
-            OpenProof proves that a wallet registered a matching file
-            fingerprint at a contract timestamp. Verification only works for an
-            exact file match.
-          </p>
-          <div className="mt-6 grid gap-3">
-            {["Creator wallet", "Contract timestamp", "SHA-256 proof ID"].map((item) => (
-              <div className="flex items-center gap-3" key={item}>
-                <ShieldCheck className="size-5 text-base-blue" />
-                <span className="font-semibold">{item}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-5">
-            <HelperTooltip
-              label="Base Sepolia"
-              text="The Base testnet used by this MVP. It lets users test registration without real funds."
-            />
-          </div>
-        </Card>
-      </Section>
-
-      <Section className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-        <Card>
-          <Badge tone="red">What OpenProof Does NOT Prove</Badge>
-          <div className="mt-5 flex gap-4">
-            <ShieldAlert className="size-7 shrink-0 text-danger" />
-            <p className="leading-7 text-muted">
-              OpenProof does not prove ownership, authorship, legal validity, or
-              the truth of a file&apos;s contents. It proves a matching hash was
-              registered by a wallet at a certain time.
-            </p>
-          </div>
-        </Card>
-
-        <Card>
-          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-            <div>
-              <Badge>Built on Base Sepolia</Badge>
-              <h2 className="mt-5 text-3xl font-black tracking-tight">
-                Deployed registry contract.
-              </h2>
-              <p className="mt-4 text-sm leading-6 text-muted">
-                Base Sepolia keeps the MVP testable without real funds. Base
-                mainnet deployment is a future roadmap item.
-              </p>
-            </div>
-            <ExplorerLink href={addressExplorerUrl(registryAddress)}>
-              View on BaseScan
-            </ExplorerLink>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <HelperTooltip
-              label="BaseScan"
-              text="The block explorer for Base networks. OpenProof links to BaseScan so users can inspect the public contract and transactions."
-            />
-            <HelperTooltip
-              label="Bundle proofs"
-              text="A bundle proof registers one deterministic hash for a set of files. Verification requires the same exact file set and bundle rule."
-            />
-          </div>
-          <div className="mt-6 rounded-3xl border border-border bg-surface-muted p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
-              Registry address
-            </p>
-            <p className="mt-3 break-all font-mono text-sm font-semibold">
-              {registryAddress}
-            </p>
-          </div>
-        </Card>
-      </Section>
+      <section className="mx-auto max-w-5xl px-5 pb-24 sm:pb-32">
+        <nav
+          className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium"
+          aria-label="Documentation"
+        >
+          <Link
+            className="text-text-secondary transition-colors hover:text-text-primary"
+            href="/docs/spec"
+          >
+            Spec
+          </Link>
+          <Link
+            className="text-text-secondary transition-colors hover:text-text-primary"
+            href="/docs/architecture"
+          >
+            Architecture
+          </Link>
+          <Link
+            className="text-text-secondary transition-colors hover:text-text-primary"
+            href="/docs/security"
+          >
+            Security
+          </Link>
+          <Link
+            className="text-text-secondary transition-colors hover:text-text-primary"
+            href="/docs/governance"
+          >
+            Governance
+          </Link>
+        </nav>
+      </section>
     </main>
   );
 }

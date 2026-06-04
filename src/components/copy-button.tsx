@@ -27,10 +27,10 @@ export function CopyButton({
   return (
     <button
       aria-label={label}
-      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-[6px] border px-4 py-2 text-sm font-semibold transition ${
         dark
-          ? "border-white/15 bg-white/10 text-white hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          : "border-border bg-surface text-foreground hover:border-base-blue hover:text-base-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-blue"
+          ? "border-border-default bg-bg-surface-muted text-text-primary hover:bg-bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          : "border-border-default bg-bg-surface text-text-primary hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       } ${className}`}
       type="button"
       onClick={copyValue}
@@ -42,4 +42,3 @@ export function CopyButton({
     </button>
   );
 }
-

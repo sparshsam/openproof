@@ -40,10 +40,10 @@ export function ReceiptImport({
   return (
     <div className="space-y-3">
       <div
-        className={`rounded-[2rem] border border-dashed p-6 transition ${
+        className={`rounded-lg border border-dashed p-6 transition ${
           isDragging
-            ? "border-base-blue bg-base-blue/10"
-            : "border-base-blue/25 bg-surface hover:border-base-blue/60"
+            ? "border-accent bg-accent/10"
+            : "border-accent/25 bg-bg-surface hover:border-accent/60"
         }`}
         onDragLeave={() => setIsDragging(false)}
         onDragOver={(event) => {
@@ -72,22 +72,22 @@ export function ReceiptImport({
           type="button"
           onClick={() => inputRef.current?.click()}
         >
-          <span className="grid size-14 place-items-center rounded-3xl bg-base-blue text-white">
+          <span className="grid size-14 place-items-center rounded-lg bg-accent text-[#0a0a0a]">
             <FileJson className="size-6" />
           </span>
           <span className="font-semibold">Drop receipt JSON or choose one</span>
-          <span className="max-w-md text-sm leading-6 text-muted">
+          <span className="max-w-md text-sm leading-6 text-text-muted">
             OpenProof validates the local JSON schema first, then checks the
             receipt hash against Base Sepolia.
           </span>
         </button>
       </div>
       {result.status === "error" ? (
-        <p aria-live="assertive" className="rounded-3xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger">
+        <p aria-live="assertive" className="rounded-lg border border-error/30 bg-error/10 p-4 text-sm text-error">
           {result.message}
         </p>
       ) : result.status === "valid" ? (
-        <p aria-live="polite" className="rounded-3xl border border-success/30 bg-success/10 p-4 text-sm text-success">
+        <p aria-live="polite" className="rounded-lg border border-success/30 bg-success/10 p-4 text-sm text-success">
           Receipt schema is valid. Checking onchain state...
         </p>
       ) : (
@@ -96,4 +96,3 @@ export function ReceiptImport({
     </div>
   );
 }
-

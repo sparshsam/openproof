@@ -17,21 +17,21 @@ export function ProofTimeline({ steps }: { steps: TimelineStep[] }) {
           <li className="flex gap-3" key={step.title}>
             <div className="flex flex-col items-center">
               <span
-                className={`grid size-9 place-items-center rounded-2xl ${
+                className={`grid size-9 place-items-center rounded-lg ${
                   step.complete
-                    ? "bg-success text-base-dark"
-                    : "bg-base-blue/15 text-base-blue"
+                    ? "bg-success text-[#0a0a0a]"
+                    : "bg-accent/15 text-accent"
                 }`}
               >
                 <Icon className="size-4" />
               </span>
               {index < steps.length - 1 ? (
-                <span className="mt-2 h-full min-h-6 w-px bg-border" />
+                <span className="mt-2 h-full min-h-6 w-px bg-border-default" />
               ) : null}
             </div>
             <div className="pb-4">
               <p className="font-semibold">{step.title}</p>
-              <p className="mt-1 text-sm leading-6 text-muted">{step.text}</p>
+              <p className="mt-1 text-sm leading-6 text-text-muted">{step.text}</p>
             </div>
           </li>
         );
@@ -41,4 +41,3 @@ export function ProofTimeline({ steps }: { steps: TimelineStep[] }) {
 }
 
 const defaultIcons = [Fingerprint, FileCheck2, Clock3, CheckCircle2];
-

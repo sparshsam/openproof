@@ -35,8 +35,8 @@ export function ProofQrCode({ url }: { url: string }) {
   }
 
   return (
-    <div className="space-y-4 rounded-3xl border border-border bg-surface-muted p-4 sm:p-5">
-      <div className="rounded-3xl bg-white p-4 shadow-sm">
+    <div className="space-y-4 rounded-lg border border-border-default bg-bg-surface-muted p-4 sm:p-5">
+      <div className="rounded-lg bg-white p-4 shadow-sm">
         {dataUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -45,12 +45,12 @@ export function ProofQrCode({ url }: { url: string }) {
             src={dataUrl}
           />
         ) : (
-          <div className="mx-auto grid size-44 place-items-center rounded-3xl bg-surface-muted text-sm text-muted sm:size-52">
+          <div className="mx-auto grid size-44 place-items-center rounded-lg bg-bg-surface-muted text-sm text-text-muted sm:size-52">
             Generating QR...
           </div>
         )}
       </div>
-      <p className="break-all font-mono text-xs text-muted">{url}</p>
+      <p className="break-all font-mono text-xs text-text-muted">{url}</p>
       <div className="grid gap-2 sm:grid-cols-2">
         <ActionButton variant="secondary" onClick={copyLink}>
           <Link2 className="size-4" />

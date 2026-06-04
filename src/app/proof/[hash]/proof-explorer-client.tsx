@@ -104,14 +104,14 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
 
   return (
     <main>
-      <section className="base-grid bg-base-dark text-white">
+      <section className="bg-bg-base text-white">
         <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <Badge tone="dark">Public proof explorer</Badge>
             <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-6xl">
               Shareable proof page on Base Sepolia.
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-100">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
               Anyone can open this URL to check whether the fingerprint exists
               in the OpenProofRegistry contract.
             </p>
@@ -137,7 +137,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
           {state.status === "loading" ? (
             <div
               aria-live="polite"
-              className="flex items-center gap-3 rounded-3xl border border-border bg-surface-muted p-5 text-sm text-muted"
+              className="flex items-center gap-3 rounded-lg border border-border-default bg-bg-surface-muted p-5 text-sm text-text-muted"
             >
               <Loader2 className="size-5 animate-spin shrink-0" />
               Checking the Base Sepolia registry for this fingerprint...
@@ -145,7 +145,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
           ) : state.status === "found" ? (
             <div
               aria-live="polite"
-              className="success-pop space-y-5 rounded-3xl border border-success/30 bg-success/10 p-5"
+              className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5"
             >
               <Badge tone="green">Verified onchain</Badge>
               <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
@@ -198,7 +198,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
                 ) : null}
                 {openProofContractAddress ? (
                   <a
-                    className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold transition hover:border-base-blue hover:text-base-blue"
+                    className="inline-flex items-center gap-2 rounded-[6px] border border-border-default bg-bg-surface px-4 py-2 text-sm font-semibold transition hover:border-accent hover:text-accent"
                     href={addressExplorerUrl(openProofContractAddress)}
                     rel="noreferrer"
                     target="_blank"
@@ -224,7 +224,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
 
         <Card className="space-y-4">
           <Badge>What this page means</Badge>
-          <p className="text-sm leading-6 text-muted">
+          <p className="text-sm leading-6 text-text-muted">
             This page checks a hash against the OpenProofRegistry contract on
             Base Sepolia. It does not contain the original file and cannot prove
             ownership, authorship, or legal validity.
@@ -240,7 +240,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
             />
           </div>
           <Link
-            className="inline-flex items-center justify-center rounded-full bg-base-blue px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-600"
+            className="inline-flex items-center justify-center rounded-[6px] bg-accent px-5 py-3 text-sm font-semibold text-[#0a0a0a] transition hover:brightness-110"
             href="/create"
           >
             Create another proof
@@ -253,8 +253,8 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-3xl bg-surface-muted p-3 sm:p-4">
-      <dt className="text-xs uppercase tracking-[0.16em] text-muted">{label}</dt>
+    <div className="rounded-lg bg-bg-surface-muted p-3 sm:p-4">
+      <dt className="text-xs uppercase text-text-muted">{label}</dt>
       <dd className="mt-2 break-words font-mono text-xs sm:text-sm">{value}</dd>
     </div>
   );

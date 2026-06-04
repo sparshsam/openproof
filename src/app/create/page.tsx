@@ -9,7 +9,6 @@ import {
   Package,
   ReceiptText,
   ShieldCheck,
-  Sparkles,
   Upload,
   Wallet,
 } from "lucide-react";
@@ -270,18 +269,18 @@ export default function CreateProofPage() {
 
   return (
     <main>
-      <section className="base-grid bg-base-dark text-white">
+      <section className="bg-bg-base text-white">
         <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <Badge tone="dark">Create Proof</Badge>
             <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-6xl">
               Register a local file fingerprint on Base Sepolia.
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-100">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
               A polished transaction flow for timestamping a SHA-256 fingerprint
               without sending the file anywhere.
             </p>
-            <BaseSepoliaNotice className="mt-7 border-white/15 bg-white/10 text-blue-100" />
+            <BaseSepoliaNotice className="mt-7 border-border-default bg-bg-surface-muted text-text-secondary" />
           </div>
           <Card dark className="grid content-start gap-4 sm:grid-cols-2">
             {[
@@ -355,9 +354,9 @@ export default function CreateProofPage() {
           />
 
           {file ? (
-            <div className="grid gap-3 rounded-3xl border border-border bg-surface-muted p-5 text-sm sm:grid-cols-3">
+            <div className="grid gap-3 rounded-lg border border-border-default bg-bg-surface-muted p-5 text-sm sm:grid-cols-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">
+                <p className="text-xs uppercase text-text-muted">
                   {isBundle ? "Proof type" : "Name"}
                 </p>
                 <p className="mt-2 break-words font-semibold">
@@ -365,13 +364,13 @@ export default function CreateProofPage() {
                 </p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">Size</p>
+                <p className="text-xs uppercase text-text-muted">Size</p>
                 <p className="mt-2 font-semibold">
                   {formatBytes(isBundle ? totalBundleSize : file.size)}
                 </p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">
+                <p className="text-xs uppercase text-text-muted">
                   Files
                 </p>
                 <p className="mt-2 break-words font-semibold">
@@ -382,12 +381,12 @@ export default function CreateProofPage() {
           ) : null}
 
           {isBundle && bundleManifest ? (
-            <div className="rounded-3xl border border-base-blue/25 bg-base-blue/10 p-5">
+            <div className="rounded-lg border border-accent/25 bg-accent/10 p-5">
               <div className="flex items-start gap-3">
-                <Package className="mt-1 size-5 text-base-blue" />
+                <Package className="mt-1 size-5 text-accent" />
                 <div>
                   <p className="font-semibold">Deterministic bundle manifest</p>
-                  <p className="mt-1 text-sm leading-6 text-muted">
+                  <p className="mt-1 text-sm leading-6 text-text-muted">
                     Verification requires the same exact file set. OpenProof
                     sorts by name, size, type, and hash before hashing the
                     local manifest.
@@ -397,14 +396,14 @@ export default function CreateProofPage() {
               <div className="mt-4 grid gap-2">
                 {bundleManifest.files.map((item) => (
                   <div
-                    className="rounded-2xl bg-surface p-3 text-sm"
+                    className="rounded-lg bg-bg-surface p-3 text-sm"
                     key={`${item.name}:${item.sha256}`}
                   >
                     <p className="break-words font-semibold">{item.name}</p>
-                    <p className="mt-1 text-xs text-muted">
+                    <p className="mt-1 text-xs text-text-muted">
                       {formatBytes(item.size)} - {item.type}
                     </p>
-                    <p className="mt-1 break-all font-mono text-xs text-muted">
+                    <p className="mt-1 break-all font-mono text-xs text-text-muted">
                       {item.sha256}
                     </p>
                   </div>
@@ -418,22 +417,22 @@ export default function CreateProofPage() {
           <div className="flex flex-wrap items-center gap-3">
             <ConnectButton />
             {!isWalletConnectConfigured ? (
-              <div className="w-full rounded-3xl border border-danger/30 bg-danger/10 p-5">
-                <p className="text-sm font-semibold text-danger">
+              <div className="w-full rounded-lg border border-error/30 bg-error/10 p-5">
+                <p className="text-sm font-semibold text-error">
                   WalletConnect is not configured.
                 </p>
-                <p className="mt-2 text-sm leading-6 text-muted">
+                <p className="mt-2 text-sm leading-6 text-text-muted">
                   Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID to enable wallet
                   connections in this deployment.
                 </p>
               </div>
             ) : null}
             {isWrongChain ? (
-              <div className="w-full rounded-3xl border border-danger/30 bg-danger/10 p-5">
-                <p className="text-sm font-semibold text-danger">
+              <div className="w-full rounded-lg border border-error/30 bg-error/10 p-5">
+                <p className="text-sm font-semibold text-error">
                   Wrong network selected.
                 </p>
-                <p className="mt-2 text-sm leading-6 text-muted">
+                <p className="mt-2 text-sm leading-6 text-text-muted">
                   OpenProof v0 registers proofs on Base Sepolia only.
                 </p>
                 <ActionButton
@@ -461,7 +460,7 @@ export default function CreateProofPage() {
           </div>
 
           {!configured ? (
-            <p className="rounded-3xl border border-border bg-surface-muted p-4 text-sm text-muted">
+            <p className="rounded-lg border border-border-default bg-bg-surface-muted p-4 text-sm text-text-muted">
               Set NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS after deploying the
               registry contract.
             </p>
@@ -471,35 +470,35 @@ export default function CreateProofPage() {
             aria-live="polite"
             className={`text-sm ${
               hashError
-                ? "text-danger"
+                ? "text-error"
                 : receipt
                   ? "text-success"
                   : isPending || isConfirming || isCheckingProof
                     ? "text-accent"
-                    : "text-muted"
+                    : "text-text-muted"
             }`}
           >
             {status}
           </p>
           {txHash && !receipt ? (
-            <p className="break-words rounded-3xl border border-border bg-surface-muted p-4 font-mono text-xs text-muted">
+            <p className="break-words rounded-lg border border-border-default bg-bg-surface-muted p-4 font-mono text-xs text-text-muted">
               Submitted transaction: {txHash}
             </p>
           ) : null}
           {preflightMessage ? (
             <p
               aria-live="polite"
-              className={`rounded-3xl border p-4 text-sm ${
+              className={`rounded-lg border p-4 text-sm ${
                 preflightMessage.startsWith("This exact file fingerprint is already registered")
-                  ? "border-accent/30 bg-accent-soft text-accent"
-                  : "border-border bg-surface-muted text-muted"
+                  ? "border-accent/30 bg-accent/10 text-accent"
+                  : "border-border-default bg-bg-surface-muted text-text-muted"
               }`}
             >
               {preflightMessage}
             </p>
           ) : null}
           {error ? (
-            <p aria-live="assertive" className="rounded-3xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger">
+            <p aria-live="assertive" className="rounded-lg border border-error/30 bg-error/10 p-4 text-sm text-error">
               {normalizeClientError(error, genericWalletErrorMessage)}
             </p>
           ) : null}
@@ -512,20 +511,20 @@ export default function CreateProofPage() {
           <h2 className="text-2xl font-black tracking-tight">
             {receipt ? "Your proof is ready." : "Local JSON, no upload."}
           </h2>
-          <p className="text-sm leading-6 text-muted">
+          <p className="text-sm leading-6 text-text-muted">
             After registration, OpenProof generates a receipt with chain,
             contract, wallet, timestamp, BaseScan, and verification details.
           </p>
           {receipt ? (
-            <div className="success-pop space-y-5">
-              <div className="rounded-3xl border border-success/30 bg-success/10 p-5">
+            <div className="space-y-5">
+              <div className="rounded-lg border border-success/30 bg-success/10 p-5">
                 <div className="flex items-center gap-3">
-                  <span className="grid size-12 place-items-center rounded-3xl bg-success text-base-dark">
-                    <Sparkles className="size-5" />
+                  <span className="grid size-12 place-items-center rounded-lg bg-success text-[#0a0a0a]">
+                    <ShieldCheck className="size-5" />
                   </span>
                   <div>
                     <p className="font-semibold text-success">Registered on Base Sepolia</p>
-                    <p className="mt-1 text-sm leading-6 text-muted">
+                    <p className="mt-1 text-sm leading-6 text-text-muted">
                       Save the receipt, copy the proof URL, or open the public
                       verification page.
                     </p>
@@ -584,8 +583,8 @@ export default function CreateProofPage() {
               </div>
               <dl className="grid gap-3 text-xs sm:text-sm">
                 {Object.entries(receipt).map(([key, value]) => (
-                  <div className="rounded-3xl bg-surface-muted p-3 sm:p-4" key={key}>
-                    <dt className="text-xs uppercase tracking-[0.16em] text-muted">
+                  <div className="rounded-lg bg-bg-surface-muted p-3 sm:p-4" key={key}>
+                    <dt className="text-xs uppercase text-text-muted">
                       {key}
                     </dt>
                     <dd className="mt-2 break-words font-mono text-xs">
