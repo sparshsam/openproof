@@ -6,6 +6,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: __dirname,
+  images: { unoptimized: true },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

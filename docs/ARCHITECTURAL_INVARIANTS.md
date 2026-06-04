@@ -6,7 +6,7 @@
 **Scope:** OpenProof, all deployments and forks
 **Authority:** Ecosystem governance standards — [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards)
 **Freeze level:** Mixed — severity definitions are frozen; invariant classifications may be reassessed.
-**Status:** Ratified
+**Status:** Adopted
 
 **Previous versions:** None (original)
 **Supersedes:** None

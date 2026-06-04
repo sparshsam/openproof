@@ -3,7 +3,7 @@
 **Classification:** Permanent data flow documentation
 **Scope:** OpenProof, all deployments and forks
 **Authority:** Ecosystem governance standards — [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards)
-**Status:** Ratified — do not amend without governance review
+**Status:** Adopted — see docs/SYSTEMS_DOCTRINE.md §0 for freeze classification
 
 ---
 

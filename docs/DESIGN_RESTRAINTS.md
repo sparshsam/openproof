@@ -6,7 +6,7 @@
 **Scope:** OpenProof, all deployments and forks
 **Authority:** Ecosystem governance standards — [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards)
 **Freeze level:** Controlled — restraint register is stable, individual restraint severity may be reassessed.
-**Status:** Ratified
+**Status:** Adopted
 
 **Previous versions:** None (original)
 **Supersedes:** None

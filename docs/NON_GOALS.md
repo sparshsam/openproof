@@ -6,7 +6,7 @@
 **Scope:** OpenProof, all deployments and forks
 **Authority:** Ecosystem governance standards — [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards)
 **Freeze level:** Controlled — individual exclusions are permanent, the register format and process are controlled.
-**Status:** Ratified
+**Status:** Adopted
 
 **Previous versions:** None (original)
 **Supersedes:** None

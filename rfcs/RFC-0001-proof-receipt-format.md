@@ -14,11 +14,27 @@ This RFC is governed by `RFC-LIFECYCLE.md` and constrained by
 Ecosystem governance, public/private boundary rules, and publication maturity
 remain controlled by `ecosystem-standards`.
 
-The canonical OpenProof receipt specification is
-[`../docs/receipt-schema.md`](../docs/receipt-schema.md).
+RFC-0001 is the governance-level receipt standard. It formalizes the
+canonical OpenProof receipt specification without defining an independent
+receipt format.
+
+The canonical detailed technical specification is
+[`../docs/spec/receipt-specification.md`](../docs/spec/receipt-specification.md).
+
+The canonical JSON Schema is
+[`../docs/spec/openproof-receipt-schema.json`](../docs/spec/openproof-receipt-schema.json).
+
+The canonical test-vector file is
+[`../docs/spec/openproof-test-vectors.md`](../docs/spec/openproof-test-vectors.md).
 
 The canonical schema implementation is
 [`../src/lib/receipt.ts`](../src/lib/receipt.ts).
+
+The previous receipt format specification at
+[`../docs/receipt-schema.md`](../docs/receipt-schema.md) describes the
+v0.1 implementation-level receipt format. The canonical specification in
+[`../docs/spec/receipt-specification.md`](../docs/spec/receipt-specification.md)
+supersedes it for all forward-looking normative reference.
 
 Receipt test vectors are reserved under
 [`test-vectors/`](test-vectors/). Before this RFC can enter Frozen status, that

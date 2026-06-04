@@ -6,7 +6,7 @@
 **Scope:** OpenProof, all deployments and forks
 **Authority:** Ecosystem governance standards — [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards)
 **Freeze level:** Controlled — trust model is stable, individual trust assessments may evolve.
-**Status:** Ratified
+**Status:** Adopted
 
 **Previous versions:** None (original)
 **Supersedes:** None

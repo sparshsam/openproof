@@ -2,6 +2,8 @@
 
 OpenProof is a privacy-first, open-source proof-of-existence app for files, built on Base Sepolia.
 
+**Maturity:** Prototype. Core workflows are functional but breaking changes are expected. See [docs/SYSTEMS_DOCTRINE.md](docs/SYSTEMS_DOCTRINE.md) and [rfcs/](rfcs/) for the governance and specification layer.
+
 It lets users create timestamped blockchain proofs for file fingerprints without uploading or storing the files themselves. Files are hashed locally in the browser with SHA-256, and only the resulting `bytes32` hash is registered onchain through a minimal Solidity contract.
 
 [![Live app](https://img.shields.io/badge/live-openproof.vercel.app-0052FF?style=for-the-badge)](https://openproof.vercel.app)

@@ -6,7 +6,7 @@
 **Scope:** OpenProof, all deployments and forks
 **Authority:** Ecosystem governance standards — [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards)
 **Freeze level:** Frozen — sections 1–11 are permanently frozen. Section 12 is controlled.
-**Status:** Ratified
+**Status:** Adopted (Bootstrap)
 
 **Previous versions:** None (original)
 **Supersedes:** None

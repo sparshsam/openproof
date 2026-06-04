@@ -1,9 +1,13 @@
+> [!NOTE]
+> **Canonical reference:** This file is a case-variant duplicate of [](ARCHITECTURE.md). The canonical architecture document uses the uppercase path `docs/ARCHITECTURE.md`. This lowercase variant is retained for backward compatibility with existing cross-references. For new cross-references, use the canonical `docs/ARCHITECTURE.md`.
+> 
+
 # OpenProof Architecture
 
 **Classification:** Permanent architectural documentation
 **Scope:** OpenProof, all deployments and forks
 **Authority:** Ecosystem governance standards — [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards)
-**Status:** Ratified — do not amend without governance review
+**Status:** Adopted — see docs/SYSTEMS_DOCTRINE.md §0 for freeze classification
 
 ---
 
