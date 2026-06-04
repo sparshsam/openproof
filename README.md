@@ -16,6 +16,9 @@ It lets users create timestamped blockchain proofs for file fingerprints without
 - [Live app](https://openproof.vercel.app)
 - [BaseScan contract](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a)
 - [Architecture](docs/architecture.md)
+- [Receipt specification](docs/spec/receipt-specification.md)
+- [JSON Schema](docs/spec/openproof-receipt-schema.json)
+- [Test vectors](docs/spec/openproof-test-vectors.md)
 - [Threat model](docs/threat-model.md)
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
@@ -168,6 +171,7 @@ No paid domain, database, storage bucket, file uploads, or IPFS pinning service 
 ```text
 contracts/                  Solidity registry contract
 docs/                       Architecture, threat model, deployment notes
+docs/spec/                  Canonical receipt specification, JSON Schema, test vectors
 public/screenshots/         App screenshots used by docs and social previews
 scripts/                    Contract deployment script
 src/app/                    Next.js App Router pages
@@ -183,9 +187,9 @@ OpenProof should remain a small, trustworthy proof utility first. The roadmap ex
 ### Near-Term
 
 - **Detached signature support** — let users sign a file hash or receipt with a wallet without necessarily registering a new proof onchain.
-- **Stronger receipt format** — versioned JSON receipts with chain ID, contract address, hash algorithm, transaction hash, block number, timestamp, and app version.
+- **~~Stronger receipt format~~** ✅ *Delivered in v0.2* — versioned, canonical JSON receipts with deterministic serialization, Ed25519 signatures, and portable verification. See [`docs/spec/receipt-specification.md`](docs/spec/receipt-specification.md).
 - **Receipt verification polish** — clearer success, mismatch, unsupported-chain, and malformed-receipt states.
-- **Better bundle proofs** — improved multi-file receipts with deterministic ordering, per-file hashes, combined bundle hash, and plain-language explanations.
+- **~~Better bundle proofs~~** ✅ *Delivered in v0.2* — canonical bundle receipt type with sorted commitments array, deterministically-derived subject hash, and inclusion verification. See [Bundle Proofs §7](docs/spec/receipt-specification.md#7-bundle-proofs).
 - **Self-hosting documentation** — clearer deployment notes for Vercel, static hosting, custom RPCs, and self-deployed contracts.
 - **Threat-model expansion** — document hash-guessing risks, known-file attacks, metadata leakage, wallet privacy, and timestamp limitations in more accessible language.
 
@@ -200,7 +204,7 @@ OpenProof should remain a small, trustworthy proof utility first. The roadmap ex
 
 ### Long-Term Vision
 
-- **Open proof standard** — define a simple, interoperable receipt schema that other apps can generate, import, and verify.
+- **~~Open proof standard~~** ✅ *Initial specification delivered* — the [canonical receipt specification](docs/spec/receipt-specification.md) defines the interoperable proof receipt format. Cross-app adoption and implementation guides are the next layer.
 - **Cross-app verification layer** — let tools like local PDF readers, research notebooks, archives, and creator tools anchor proofs through the same receipt model.
 - **Organization and project attestations** — optional signing flows for teams, open-source maintainers, journalists, researchers, and creators to prove who anchored a file hash.
 - **Proof timelines** — build local timelines showing how a document, folder, release, or bundle changed over time through successive hashes.

@@ -1,6 +1,29 @@
 # OpenProof Architecture
 
-OpenProof has two parts: a static Next.js frontend and a minimal Solidity registry.
+OpenProof has three layers: a canonical receipt specification, a static Next.js frontend, and a minimal Solidity registry.
+
+## Specification Layer
+
+The canonical OpenProof proof receipt specification defines a portable, self-contained cryptographic attestation format that is deterministic, offline-verifiable, and backend-independent. See [`docs/spec/receipt-specification.md`](spec/receipt-specification.md).
+
+The specification layer governs:
+
+- **Receipt structure** — canonical JSON format with sorted keys, NFC Unicode normalization, and deterministic serialization rules.
+- **Cryptographic commitments** — SHA-256 hashing of the canonical receipt body, producing a tamper-evident commitment.
+- **Digital signatures** — Ed25519 signatures over the commitment, with base64url-encoded keys and signature values.
+- **Bundle proofs** — deterministic aggregation of multiple receipt commitments into a single signed bundle receipt.
+- **QR encoding** — self-identifying `opr1:` / `opr1z:` prefix for QR-based receipt transfer.
+- **Deterministic verification** — a 13-step verification checklist that produces the same result across all implementations.
+
+The specification is implementation-neutral. Any language or platform can independently implement receipt generation and verification without relying on OpenProof's frontend or contract.
+
+Related files:
+
+| Artifact | Location |
+|----------|----------|
+| Full specification | [`docs/spec/receipt-specification.md`](spec/receipt-specification.md) |
+| JSON Schema (Draft 2020-12) | [`docs/spec/openproof-receipt-schema.json`](spec/openproof-receipt-schema.json) |
+| Deterministic test vectors (23 vectors) | [`docs/spec/openproof-test-vectors.md`](spec/openproof-test-vectors.md) |
 
 ## Frontend
 
@@ -50,11 +73,13 @@ No file bytes are intentionally transmitted by OpenProof.
 Receipt import is a local JSON workflow:
 
 1. User selects or drops an OpenProof receipt JSON file.
-2. Browser parses and validates the expected receipt schema.
+2. Browser parses and validates the expected receipt schema against the canonical proof receipt definition (see [specification](spec/receipt-specification.md)).
 3. Browser checks the receipt hash against the Base Sepolia contract.
 4. UI reports whether the receipt is valid and whether the proof exists.
 
 Receipts are portable records, not authority. A malformed receipt is rejected locally. A well-formed receipt still needs an onchain match.
+
+The canonical proof receipt (defined in `docs/spec/`) is distinct from the application-level receipt used by the UI for workflow metadata. The canonical receipt is the portable attestation format; the application receipt wraps it with UI-relevant fields. Future iterations may converge these layers.
 
 ## Bundle Proofs
 
@@ -68,6 +93,8 @@ Bundle proofs use the same `registerProof(bytes32)` contract function as single-
 6. Register only the resulting bundle hash onchain.
 
 This keeps bundle proving deterministic without uploading the files or manifest. Verification requires the same exact file set and bundle rule.
+
+The [canonical specification](spec/receipt-specification.md#7-bundle-proofs) defines a complementary bundle receipt type (`"bundle"`) that aggregates multiple receipt commitments into a single signed receipt with a deterministically-derived subject hash.
 
 ## Public Proof Pages and QR
 
