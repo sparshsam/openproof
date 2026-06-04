@@ -107,7 +107,12 @@ When sections of this document are superseded:
 | [DESIGN_RESTRAINTS.md](DESIGN_RESTRAINTS.md) | Implementation constraint details derived from §6 | §11 |
 | [ARCHITECTURAL_INVARIANTS.md](ARCHITECTURAL_INVARIANTS.md) | Enforceable invariant register | §0.6, §3 |
 | [receipt-schema.md](receipt-schema.md) | Receipt format specification | §6.4, §10 |
-| [architecture.md](architecture.md) | Implementation architecture | §10 |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture, components, data flow | §3, §6 |
+| [VERIFICATION_LIFECYCLE.md](VERIFICATION_LIFECYCLE.md) | Proof and verification lifecycle, state transitions | §2, §6 |
+| [DATA_FLOW.md](DATA_FLOW.md) | Data at rest, in motion, transformations, network audit | §3, §6 |
+| [FAILURE_MODES.md](FAILURE_MODES.md) | Failure-state analysis, error classification, mitigations | §3, §6, §7 |
+| [IMPLEMENTATION_NOTES.md](IMPLEMENTATION_NOTES.md) | Implementation details, repository structure, portability | §6, §10 |
+| [TRUST_MODEL.md](TRUST_MODEL.md) | Trust boundaries, deterministic guarantees, assumptions | §4, §5 |
 | [ecosystem-standards](https://github.com/sparshsam/ecosystem-standards) | External governance authority | §0.3 |
 
 ---
@@ -238,7 +243,7 @@ No dependency is a hard lock-in. The contract can be redeployed on any EVM chain
 - Contract is immutable per deployment. Upgrades require redeployment to a new address.
 - Receipt schema is versioned (`schemaVersion`) with documented backward-compatible defaults for v1. See [receipt-schema.md](receipt-schema.md).
 - Frontend versioning follows the repository's git tags. No automatic updates or forced upgrades.
-- Bundle rules are versioned (`bundleRuleVersion`) to prevent verification drift. See [architecture.md](architecture.md).
+- Bundle rules are versioned (`bundleRuleVersion`) to prevent verification drift. See [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## 11. Scope Boundary
 
