@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-
 const registryAddress = "0x60d3DD631E6e4F6D76f761689d6FA229945a874a";
 
 /* ─── Homepage ─────────────────────────────────────────────
