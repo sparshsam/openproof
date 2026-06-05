@@ -12,7 +12,7 @@ import {
   Upload,
   Wallet,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import {
   useAccount,
   useChainId,
@@ -84,11 +84,13 @@ export default function CreateProofPage() {
 
   useEffect(() => {
     if (!file && !bundleFiles.length) return;
-    setHash(null);
-    setHashError(null);
-    setReceipt(null);
-    setPreflightMessage(null);
-    setBundleManifest(null);
+    startTransition(() => {
+      setHash(null);
+      setHashError(null);
+      setReceipt(null);
+      setPreflightMessage(null);
+      setBundleManifest(null);
+    });
 
     if (isBundle) {
       hashBundleFiles(bundleFiles)
