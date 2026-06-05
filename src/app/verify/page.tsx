@@ -12,7 +12,7 @@ import {
   ShieldQuestion,
   Upload,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import type { PublicClient } from "viem";
 import { usePublicClient } from "wagmi";
 import { BaseSepoliaNotice } from "@/components/base-notice";
@@ -75,8 +75,10 @@ export default function VerifyProofPage() {
 
   useEffect(() => {
     if (!file) return;
-    setHash(null);
-    setResult({ status: "loading", message: "Hashing file locally..." });
+    startTransition(() => {
+      setHash(null);
+      setResult({ status: "loading", message: "Hashing file locally..." });
+    });
     hashFileSha256(file)
       .then((value) => {
         setHash(value);

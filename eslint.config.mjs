@@ -1,15 +1,10 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import { defineConfig, globalIgnores } from "eslint/config";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import { globalIgnores, defineConfig } from "eslint/config";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 
 const eslintConfig = defineConfig([
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...nextCoreWebVitals,
+  ...nextTypescript,
   {
     files: ["hardhat.config.js", "scripts/**/*.js", "test/**/*.js"],
     rules: {
