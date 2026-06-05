@@ -19,8 +19,11 @@
   /* Borders */
   --border-default: rgba(255, 255, 255, 0.1);
 
-  /* Accent — single accent for actionable elements */
-  --accent: #6aa2ff;
+  /* Accent — restrained infrastructural green.
+     Communicates verification, cryptographic integrity,
+     calm confidence. NOT finance/casino/success-state.
+     Per design token migration. */
+  --accent: #29BF12;
 
   /* Semantic — subdued */
   --success: #6ee7b7;
@@ -36,16 +39,16 @@
 /* Light mode — optional per UI_DOCTRINE §7.1 */
 @media (prefers-color-scheme: light) {
   :root {
-    --bg-base: #fafafa;
-    --bg-surface: #ffffff;
-    --bg-surface-muted: #f5f5f5;
-    --text-primary: #171717;
+    --bg-base: #f5f6f5;
+    --bg-surface: #F4F5F4;
+    --bg-surface-muted: #e8e9e8;
+    --text-primary: #1a1a1a;
     --text-secondary: #525252;
-    --text-muted: #a3a3a3;
+    --text-muted: #8a8a8a;
     --border-default: rgba(0, 0, 0, 0.1);
-    --accent: #2563eb;
-    --success: #16a34a;
-    --error: #dc2626;
+    --accent: #29BF12;
+    --success: #2d9e6e;
+    --error: #c93838;
     --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
     --focus-ring: var(--accent);
   }
@@ -64,7 +67,7 @@
   --color-accent: var(--accent);
   --color-success: var(--success);
   --color-error: var(--error);
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Stack Sans Notch Variable", "Stack Sans Notch", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 
   /* ── Backward-compatible aliases (for existing pages) ─ */

@@ -46,7 +46,7 @@ export function ProofHistory({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-xl font-black tracking-tight">{title}</h3>
+          <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
           <p className="mt-1 text-sm text-text-muted">
             Stored only in this browser. Nothing is uploaded.
           </p>

@@ -108,7 +108,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
         <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <Badge tone="dark">Public proof explorer</Badge>
-            <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-6xl">
+            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
               Shareable proof page on Base Sepolia.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
@@ -148,7 +148,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
               className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5"
             >
               <Badge tone="green">Verified onchain</Badge>
-              <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
+              <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-success">
                 <CheckCircle2 className="size-8" />
                 Proof found
               </h2>

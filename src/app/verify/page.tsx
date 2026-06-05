@@ -227,7 +227,7 @@ export default function VerifyProofPage() {
         <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <Badge tone="dark">Verify Proof</Badge>
-            <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-6xl">
+            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
               Verify a file fingerprint on Base Sepolia.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
@@ -260,7 +260,7 @@ export default function VerifyProofPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <Badge>No wallet required</Badge>
-              <h2 className="mt-3 text-3xl font-black tracking-tight">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
                 Check an exact file match
               </h2>
             </div>
@@ -349,7 +349,7 @@ export default function VerifyProofPage() {
             >
               <div>
                 <Badge tone="green">Verified</Badge>
-                <h2 className="mt-4 flex items-center gap-3 text-3xl font-black tracking-tight text-success">
+                <h2 className="mt-4 flex items-center gap-3 text-3xl font-semibold tracking-tight text-success">
                   <CheckCircle2 className="size-8" />
                   Proof found
                 </h2>
@@ -417,7 +417,7 @@ export default function VerifyProofPage() {
                   Verification status
                 </Badge>
                 <h2
-                  className={`mt-4 flex items-center gap-3 text-3xl font-black tracking-tight ${
+                  className={`mt-4 flex items-center gap-3 text-3xl font-semibold tracking-tight ${
                     result.status === "not-found" ? "text-error" : ""
                   }`}
                 >
@@ -446,7 +446,7 @@ export default function VerifyProofPage() {
       <Section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
         <Card className="space-y-5">
           <Badge>Receipt import</Badge>
-          <h2 className="text-3xl font-black tracking-tight">
+          <h2 className="text-3xl font-semibold tracking-tight">
             Validate a downloaded receipt
           </h2>
           <p className="text-sm leading-6 text-text-muted">
@@ -514,7 +514,7 @@ function ReceiptResult({ result }: { result: VerificationResult }) {
     return (
       <div className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5">
         <Badge tone="green">Valid receipt</Badge>
-        <h2 className="flex items-center gap-3 text-3xl font-black tracking-tight text-success">
+        <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-success">
           <CheckCircle2 className="size-8" />
           Proof exists
         </h2>

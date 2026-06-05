@@ -273,7 +273,7 @@ export default function CreateProofPage() {
         <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <Badge tone="dark">Create Proof</Badge>
-            <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-6xl">
+            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
               Register a local file fingerprint on Base Sepolia.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
@@ -308,7 +308,7 @@ export default function CreateProofPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <Badge>Transaction flow</Badge>
-              <h2 className="mt-3 text-3xl font-black tracking-tight">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
                 Create a proof
               </h2>
             </div>
@@ -508,7 +508,7 @@ export default function CreateProofPage() {
           <Badge tone={receipt ? "green" : "blue"}>
             {receipt ? "Proof registered" : "Receipt preview"}
           </Badge>
-          <h2 className="text-2xl font-black tracking-tight">
+          <h2 className="text-2xl font-semibold tracking-tight">
             {receipt ? "Your proof is ready." : "Local JSON, no upload."}
           </h2>
           <p className="text-sm leading-6 text-text-muted">
