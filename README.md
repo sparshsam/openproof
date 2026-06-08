@@ -532,3 +532,7 @@ nextjs, typescript, tailwindcss, vercel, agplv3
 ## License
 
 OpenProof is licensed under AGPL-3.0-only. See [`LICENSE`](LICENSE).
+
+---
+
+*Last updated: June 2026*

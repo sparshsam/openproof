@@ -1,8 +1,8 @@
 {
   "name": "openproof",
   "version": "0.1.0",
-  "private": false,
-  "license": "AGPL-3.0-only",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -41,5 +41,16 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"
-  }
+  },
+  "description": "A minimal, verifiable proof-of-existence app on Base Sepolia.",
+  "author": "Sparsh Sam",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparshsam/openproof.git"
+  },
+  "homepage": "https://github.com/sparshsam/openproof#readme",
+  "bugs": {
+    "url": "https://github.com/sparshsam/openproof/issues"
+  },
+  "keywords": []
 }
