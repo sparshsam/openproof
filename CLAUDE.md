@@ -1,7 +1,7 @@
 # OpenProof Agent Source of Truth
 
-Last updated: 2026-06-02
-Update signed by: final-integration-reviewer
+Last updated: 2026-06-21
+Update signed by: v0.1.1-release-agent
 
 ## 1. Project Identity
 
@@ -237,10 +237,29 @@ Documentation:
 - `docs/threat-model.md` — security and privacy boundaries.
 - `docs/deployment-notes.md` — operator wallet and deployment configuration notes.
 - `docs/repo-metadata.md` — GitHub description, website, and topic recommendations.
+- `docs/RELEASE_CHECKLIST.md` — release process checklist.
+- `docs/STORE_METADATA.md` — app store metadata, keywords, age ratings.
+- `docs/PRIVACY.md` — privacy policy.
+- `docs/TERMS.md` — terms of service.
+- `docs/PLATFORM_READINESS.md` — PWA, MSIX, DMG, iOS, Android readiness.
 - `SECURITY.md` — vulnerability reporting and security posture.
 - `CONTRIBUTING.md` — contribution rules and validation.
 - `CHANGELOG.md` — release/change history where maintained.
 - `CLAUDE.md` — primary agent/project source of truth.
+
+PWA and assets:
+
+- `public/manifest.json` — PWA web manifest.
+- `public/sw.js` — service worker with cache-first strategy.
+- `public/icon-192x192.png`, `public/icon-512x512.png` — PWA icons.
+- `public/apple-touch-icon.png` — iOS home screen icon.
+- `public/favicon.ico`, `public/favicon.png` — favicons.
+- `public/og.png` — Open Graph / social preview image.
+- `public/splash/` — iOS and web splash screens.
+- `assets/icon.iconset/` — macOS app icon set.
+- `assets/ios-icons/` — iOS app icon set.
+- `assets/windows/` — Windows ICO and Store assets.
+- `assets/android/` — Android adaptive icons and Play Store icon.
 
 ## 11. Security and Threat-Model Notes
 
@@ -408,8 +427,19 @@ Public client environment variables may be documented when they are intentionall
 
 Recommended next tasks:
 
-1. Define and document a versioned OpenProof receipt schema.
+1. Define and document a versioned OpenProof receipt schema. ✅ *Delivered in v0.1.0*
 2. Strengthen receipt validation states for unsupported chain, mismatched contract, malformed receipt, and missing onchain proof.
 3. Add or expand bundle determinism tests and documentation.
-4. Add a v1.0 release checklist covering docs, validation, security review, and screenshots.
+4. Add a v1.0 release checklist covering docs, validation, security review, and screenshots. ✅ *Delivered in v0.1.1 — see `docs/RELEASE_CHECKLIST.md`*
 5. Polish proof creation and proof verification copy around what hashes prove and do not prove.
+
+### Delivered in v0.1.1
+
+- PWA support: manifest, service worker, app icons, splash screens.
+- Cross-platform icon set for Web/PWA, Windows (MSIX/Icons), macOS (.iconset), iOS, Android (adaptive).
+- Release documentation: `docs/RELEASE_CHECKLIST.md`, `docs/STORE_METADATA.md`, `docs/PRIVACY.md`, `docs/TERMS.md`.
+- Platform readiness documentation: `docs/PLATFORM_READINESS.md` covering crash reporting, analytics, versioning, updates, permissions, data deletion, and accessibility.
+- Version bump to 0.1.1 in all locations (package.json, receipts, footer).
+- README tech stack corrected from Next.js 15 to Next.js 16.
+- ROADMAP.md and AGENTS.md accuracy fixes (3 incorrectly marked `[x]` items reverted to `[ ]`).
+- All four validation commands pass: `npm run lint`, `npm run typecheck`, `npm run build`, `npm run test:contracts`.

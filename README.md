@@ -24,6 +24,9 @@ It lets users create timestamped blockchain proofs for file fingerprints without
 - [Threat model](docs/threat-model.md)
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
+- [Privacy policy](docs/PRIVACY.md)
+- [Terms of service](docs/TERMS.md)
+- [Platform readiness](docs/PLATFORM_READINESS.md)
 - [Changelog](CHANGELOG.md)
 
 ## What OpenProof Does
@@ -136,7 +139,7 @@ npm run test:contracts
 
 ## Tech Stack
 
-- Next.js 15
+- Next.js 16
 - TypeScript
 - Tailwind CSS
 - wagmi, viem, RainbowKit
@@ -260,8 +263,12 @@ Recommended GitHub topics:
 ```text
 base, base-sepolia, built-on-base, onchain, proof-of-existence, ethereum,
 solidity, viem, wagmi, rainbowkit, web3, cryptography, privacy-first,
-nextjs, typescript, tailwindcss, vercel, agplv3
+nextjs, typescript, tailwindcss, vercel, agplv3, pwa
 ```
+
+## Support
+
+For bug reports, feature requests, and general support, [open a GitHub issue](https://github.com/sparshsam/openproof/issues). For security vulnerabilities, see the [security policy](SECURITY.md).
 
 ## License
 
@@ -269,4 +276,4 @@ OpenProof is licensed under AGPL-3.0-only. See [`LICENSE`](LICENSE).
 
 ---
 
-*Last updated: June 2026*
+*Last updated: 2026-06-21*

@@ -52,7 +52,7 @@ export function buildProofReceipt(
 ): ProofReceipt {
   return {
     appName: "OpenProof",
-    appVersion: "0.1.0",
+    appVersion: "0.1.1",
     verificationInstructions:
       "Open OpenProof, choose Verify Proof, select the original file, and compare the locally generated SHA-256 hash against the onchain registry entry. The file must match exactly.",
     ...input,

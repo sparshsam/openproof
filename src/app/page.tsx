@@ -18,52 +18,58 @@ export default function Home() {
       {/* ── Section 1: Action Cards ──────────────────────
            Binary interaction model. Equal visual weight.
            Per HOMEPAGE_STRUCTURE §2.1, §3.
+           Cards use <div> wrappers with nested <Link> to
+           avoid invalid <p>-inside-<a> HTML nesting.
            ───────────────────────────────────────────── */}
 
       <section className="mx-auto max-w-5xl px-5 pt-24 pb-10 sm:pt-32 sm:pb-12">
         <div className="grid gap-6 sm:grid-cols-2">
           {/* Create Proof Card */}
-          <Link
-            className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10"
-            href="/create"
-          >
-            <h2 className="text-2xl font-semibold tracking-tight">
-              Create Proof
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+          <div className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10">
+            <Link href="/create">
+              <span className="text-2xl font-semibold tracking-tight">
+                Create Proof
+              </span>
+            </Link>
+            <span className="mt-3 block text-sm leading-relaxed text-text-secondary">
               Register a file&apos;s cryptographic fingerprint on Base Sepolia.
-            </p>
-            <div className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] bg-accent px-4 py-2.5 text-sm font-medium text-[#0a0a0a] transition-colors group-hover:brightness-110">
+            </span>
+            <Link
+              className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] bg-accent px-4 py-2.5 text-sm font-medium text-[#0a0a0a] transition-colors group-hover:brightness-110"
+              href="/create"
+            >
               Select File
-            </div>
-            <p className="mt-3 text-xs text-text-muted">
+            </Link>
+            <span className="mt-3 block text-xs text-text-muted">
               No wallet connection required until registration.
-            </p>
-          </Link>
+            </span>
+          </div>
 
           {/* Verify Proof Card */}
-          <Link
-            className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10"
-            href="/verify"
-          >
-            <h2 className="text-2xl font-semibold tracking-tight">
-              Verify Proof
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+          <div className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10">
+            <Link href="/verify">
+              <span className="text-2xl font-semibold tracking-tight">
+                Verify Proof
+              </span>
+            </Link>
+            <span className="mt-3 block text-sm leading-relaxed text-text-secondary">
               Check a file or receipt against the onchain registry.
-            </p>
-            <div className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] border border-border-default px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-surface-muted">
+            </span>
+            <Link
+              className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] border border-border-default px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-surface-muted"
+              href="/verify"
+            >
               Select File
-            </div>
-            <p className="mt-3 text-xs text-text-muted">
+            </Link>
+            <span className="mt-3 block text-xs">
               <Link
-                className="underline underline-offset-2 transition-colors hover:text-text-secondary"
+                className="text-text-secondary underline underline-offset-2 transition-colors hover:text-text-primary"
                 href="/verify"
               >
                 Import Receipt
               </Link>
-            </p>
-          </Link>
+            </span>
+          </div>
         </div>
       </section>
 
@@ -126,30 +132,38 @@ export default function Home() {
           className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium"
           aria-label="Documentation"
         >
-          <Link
+          <a
             className="text-text-secondary transition-colors hover:text-text-primary"
-            href="/docs/spec"
+            href="https://github.com/sparshsam/openproof/blob/main/docs/spec/receipt-specification.md"
+            rel="noreferrer"
+            target="_blank"
           >
             Spec
-          </Link>
-          <Link
+          </a>
+          <a
             className="text-text-secondary transition-colors hover:text-text-primary"
-            href="/docs/architecture"
+            href="https://github.com/sparshsam/openproof/blob/main/docs/ARCHITECTURE.md"
+            rel="noreferrer"
+            target="_blank"
           >
             Architecture
-          </Link>
-          <Link
+          </a>
+          <a
             className="text-text-secondary transition-colors hover:text-text-primary"
-            href="/docs/security"
+            href="https://github.com/sparshsam/openproof/blob/main/docs/threat-model.md"
+            rel="noreferrer"
+            target="_blank"
           >
             Security
-          </Link>
-          <Link
+          </a>
+          <a
             className="text-text-secondary transition-colors hover:text-text-primary"
-            href="/docs/governance"
+            href="https://github.com/sparshsam/openproof/blob/main/docs/SYSTEMS_DOCTRINE.md"
+            rel="noreferrer"
+            target="_blank"
           >
             Governance
-          </Link>
+          </a>
         </nav>
       </section>
     </main>

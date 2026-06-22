@@ -72,7 +72,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* ── Footer ───────────────────────────────────────
             Per INFORMATION_ARCHITECTURE §2.3:
-            GitHub · Contract 0x60d3... · License AGPL-3.0 · v0.1.0
+            GitHub · Contract 0x60d3... · License AGPL-3.0 · v0.1.1
+            Privacy · Terms · Support via GitHub Issues
             ───────────────────────────────────────────── */}
 
         <footer className="border-t border-border-default px-5 py-8">
@@ -80,7 +81,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <p>
               OpenProof &mdash; cryptographic proof infrastructure
             </p>
-            <p>
+            <p className="flex flex-wrap items-center justify-center gap-x-2">
               <a
                 className="transition-colors hover:text-text-secondary"
                 href="https://github.com/sparshsam/openproof"
@@ -89,12 +90,30 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               >
                 GitHub
               </a>
-              <span className="mx-2">&middot;</span>
+              <span>&middot;</span>
+              <a
+                className="transition-colors hover:text-text-secondary"
+                href="https://github.com/sparshsam/openproof/blob/main/docs/PRIVACY.md"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Privacy
+              </a>
+              <span>&middot;</span>
+              <a
+                className="transition-colors hover:text-text-secondary"
+                href="https://github.com/sparshsam/openproof/blob/main/docs/TERMS.md"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Terms
+              </a>
+              <span>&middot;</span>
               <span className="font-mono">{`${registryAddress.slice(0, 10)}...${registryAddress.slice(-4)}`}</span>
-              <span className="mx-2">&middot;</span>
+              <span>&middot;</span>
               AGPL-3.0
-              <span className="mx-2">&middot;</span>
-              v0.1.0
+              <span>&middot;</span>
+              v0.1.1
             </p>
           </div>
         </footer>

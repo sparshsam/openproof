@@ -14,9 +14,9 @@ OpenProof is a minimal, verifiable proof-of-existence app on Base Sepolia. Users
 ## Tech Stack
 
 - **Contract:** Solidity (Hardhat, ethers.js)
-- **Frontend:** Next.js 16, TypeScript, Tailwind v4, wagmi, viem, @coinbase/onchainkit
+- **Frontend:** Next.js 16, TypeScript, Tailwind v4, wagmi, viem
 - **Chain:** Base Sepolia
-- **AI agenting:** Base MCP server for agent-created attestations
+- **AI agenting:** Base MCP integration (roadmap item; not yet implemented)
 
 ## Rules
 

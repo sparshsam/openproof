@@ -291,7 +291,7 @@ Output: `0x{64 hex chars}` — deterministic given same files and rules
 ```
 Inputs: hash, txHash, block timestamp, contract config, file metadata
 Step 1: Build ProofReceipt object with all 20+ fields
-Step 2: Set defaults: appVersion="0.1.0", schemaVersion=2, etc.
+Step 2: Set defaults: appVersion="0.1.1", schemaVersion=2, etc.
 Step 3: JSON.stringify(object, null, 2) → formatted JSON string
 Output: JSON string (downloaded as .json file)
 ```
@@ -595,7 +595,7 @@ Output: `0x{64 hex chars}` — deterministic given same files and rules
 ```
 Inputs: hash, txHash, block timestamp, contract config, file metadata
 Step 1: Build ProofReceipt object with all 20+ fields
-Step 2: Set defaults: appVersion="0.1.0", schemaVersion=2, etc.
+Step 2: Set defaults: appVersion="0.1.1", schemaVersion=2, etc.
 Step 3: JSON.stringify(object, null, 2) → formatted JSON string
 Output: JSON string (downloaded as .json file)
 ```

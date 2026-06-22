@@ -14,7 +14,7 @@
   /* Text */
   --text-primary: #f4f4f1;
   --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --text-muted: #8a8a8a;
 
   /* Borders */
   --border-default: rgba(255, 255, 255, 0.1);
@@ -44,7 +44,7 @@
     --bg-surface-muted: #e8e9e8;
     --text-primary: #1a1a1a;
     --text-secondary: #525252;
-    --text-muted: #8a8a8a;
+    --text-muted: #6f6f6f;
     --border-default: rgba(0, 0, 0, 0.1);
     --accent: #29BF12;
     --success: #2d9e6e;

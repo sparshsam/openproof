@@ -11,9 +11,9 @@ Core attestation flow on testnet.
 - [x] Web app: claim, verify, and browse attestations
 - [x] Wallet connection (Coinbase Smart Wallet, MetaMask)
 - [x] Receipt card and feed components
-- [x] Base Name resolution
-- [x] Prefill attestation form from URL params
-- [x] Base MCP integration for agentic attestations
+- [ ] Base Name resolution
+- [ ] Prefill attestation form from URL params
+- [ ] Base MCP integration for agentic attestations
 - [x] CI/CD pipeline
 
 ## Next — v0.2

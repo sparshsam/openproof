@@ -33,7 +33,7 @@ New receipts are always created at the latest version pair. Old receipts without
   "schemaVersion": 2,                          // number, required
   "receiptVersion": 2,                         // number, required
   "appName": "OpenProof",                      // string, must be "OpenProof"
-  "appVersion": "0.1.0",                       // string, required
+  "appVersion": "0.1.1",                       // string, required
 
   // ── Proof metadata ──
   "proofType": "single-file",                  // "single-file" | "bundle"
@@ -225,7 +225,7 @@ All newly created receipts use schema v2. The canonical `ProofReceipt` type in t
   "schemaVersion": 2,
   "receiptVersion": 2,
   "appName": "OpenProof",
-  "appVersion": "0.1.0",
+  "appVersion": "0.1.1",
   "proofType": "single-file",
   "hashAlgorithm": "SHA-256",
   "fileName": "report.pdf",
@@ -251,7 +251,7 @@ All newly created receipts use schema v2. The canonical `ProofReceipt` type in t
   "schemaVersion": 2,
   "receiptVersion": 2,
   "appName": "OpenProof",
-  "appVersion": "0.1.0",
+  "appVersion": "0.1.1",
   "proofType": "bundle",
   "hashAlgorithm": "SHA-256",
   "fileName": "photos.tar.gz",
