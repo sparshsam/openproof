@@ -119,7 +119,7 @@ export function FileDrop({
         type="button"
         onClick={() => inputRef.current?.click()}
       >
-        <span className="grid size-16 place-items-center rounded-lg bg-accent text-[#0a0a0a]">
+        <span className="grid size-16 place-items-center rounded-xl bg-accent text-white">
           <FileUp className="size-7" />
         </span>
         <span className="text-base font-semibold">

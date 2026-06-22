@@ -1,170 +1,109 @@
 import Link from "next/link";
 const registryAddress = "0x60d3DD631E6e4F6D76f761689d6FA229945a874a";
 
-/* ─── Homepage ─────────────────────────────────────────────
-   Per HOMEPAGE_STRUCTURE.md §2:
-   1) Action Cards (primary zone)
-   2) Registry Identity (information zone)
-   3) System Overview (context zone)
-   4) Documentation Links (reference zone)
-
-   No hero section, no step-by-step, no feature grids,
-   no ecosystem badges, no wallet connection, no animations.
-   ─────────────────────────────────────────────────────── */
-
 export default function Home() {
   return (
     <main>
-      {/* ── Section 1: Action Cards ──────────────────────
-           Binary interaction model. Equal visual weight.
-           Per HOMEPAGE_STRUCTURE §2.1, §3.
-           Cards use <div> wrappers with nested <Link> to
-           avoid invalid <p>-inside-<a> HTML nesting.
+      {/* ── Hero ────────────────────────────────────────────
+           Minimal. One sentence. Two actions.
            ───────────────────────────────────────────── */}
 
-      <section className="mx-auto max-w-5xl px-5 pt-24 pb-10 sm:pt-32 sm:pb-12">
-        <div className="grid gap-6 sm:grid-cols-2">
-          {/* Create Proof Card */}
-          <div className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10">
-            <Link href="/create">
-              <span className="text-2xl font-semibold tracking-tight">
-                Create Proof
-              </span>
-            </Link>
-            <span className="mt-3 block text-sm leading-relaxed text-text-secondary">
-              Register a file&apos;s cryptographic fingerprint on Base Sepolia.
-            </span>
-            <Link
-              className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] bg-accent px-4 py-2.5 text-sm font-medium text-[#0a0a0a] transition-colors group-hover:brightness-110"
-              href="/create"
+      <section className="mx-auto max-w-5xl px-6 pt-28 pb-20 sm:pt-36 sm:pb-24">
+        <h1 className="text-5xl font-bold leading-none tracking-tight sm:text-7xl">
+          Proof without
+          <span className="text-accent"> surrender.</span>
+        </h1>
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-text-secondary sm:text-xl">
+          OpenProof registers a file&apos;s SHA-256 fingerprint on Base Sepolia.
+          The file never leaves your browser. No uploads. No accounts.
+        </p>
+        <div className="mt-10 flex flex-wrap gap-4">
+          <Link
+            className="inline-flex items-center justify-center rounded-[12px] bg-accent px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#0099ee]"
+            href="/create"
+          >
+            Create a proof
+          </Link>
+          <Link
+            className="inline-flex items-center justify-center rounded-[12px] bg-bg-surface-muted px-8 py-4 text-base font-semibold text-text-primary transition-all hover:bg-[#252525]"
+            href="/verify"
+          >
+            Verify a proof
+          </Link>
+        </div>
+      </section>
+
+      {/* ── How it works ───────────────────────────────────
+           Three steps, no filler.
+           ───────────────────────────────────────────── */}
+
+      <section className="mx-auto max-w-5xl px-6 pb-24 sm:pb-32">
+        <div className="grid gap-6 sm:grid-cols-3">
+          {[
+            {
+              step: "01",
+              title: "Select a file",
+              text: "Choose any file. It stays on your device.",
+            },
+            {
+              step: "02",
+              title: "Register onchain",
+              text: "Only the SHA-256 hash is sent to Base Sepolia.",
+            },
+            {
+              step: "03",
+              title: "Verify anytime",
+              text: "Re-hash the file and check the registry.",
+            },
+          ].map((item) => (
+            <div
+              className="rounded-xl border border-border-default bg-bg-surface p-8 sm:p-10"
+              key={item.step}
             >
-              Select File
-            </Link>
-            <span className="mt-3 block text-xs text-text-muted">
-              No wallet connection required until registration.
-            </span>
-          </div>
+              <span className="text-3xl font-bold text-accent">{item.step}</span>
+              <h2 className="mt-4 text-xl font-bold leading-tight">
+                {item.title}
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-          {/* Verify Proof Card */}
-          <div className="group flex flex-col rounded-lg border border-border-default bg-bg-surface p-8 transition-colors hover:border-accent/40 sm:p-10">
-            <Link href="/verify">
-              <span className="text-2xl font-semibold tracking-tight">
-                Verify Proof
-              </span>
-            </Link>
-            <span className="mt-3 block text-sm leading-relaxed text-text-secondary">
-              Check a file or receipt against the onchain registry.
-            </span>
-            <Link
-              className="mt-6 inline-flex items-center gap-1.5 self-start rounded-[6px] border border-border-default px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-surface-muted"
-              href="/verify"
-            >
-              Select File
-            </Link>
-            <span className="mt-3 block text-xs">
-              <Link
-                className="text-text-secondary underline underline-offset-2 transition-colors hover:text-text-primary"
-                href="/verify"
-              >
-                Import Receipt
-              </Link>
-            </span>
+      {/* ── Registry identity ───────────────────────────────
+           Infrastructure anchor. Minimal.
+           ───────────────────────────────────────────── */}
+
+      <section className="mx-auto max-w-5xl px-6 pb-24 sm:pb-32">
+        <div className="rounded-xl bg-bg-surface p-8 sm:p-10">
+          <p className="text-xs font-semibold tracking-wider uppercase text-text-muted">
+            Registry
+          </p>
+          <p className="mt-4 font-mono text-sm break-all text-text-secondary">
+            {registryAddress}
+          </p>
+          <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm text-text-secondary">
+            <span>Base Sepolia</span>
+            <span>Chain ID 84532</span>
+            <span>Ownerless</span>
+            <span>No fees</span>
           </div>
         </div>
       </section>
 
-      {/* ── Section 2: Registry Identity ─────────────────
-           Infrastructure anchor. Full contract address,
-           network, chain ID, key properties.
-           Per HOMEPAGE_STRUCTURE §8.3.
+      {/* ── System note ────────────────────────────────────
+           Single sentence about what OpenProof is.
            ───────────────────────────────────────────── */}
 
-      <section className="mx-auto max-w-5xl px-5 pb-8">
-        <div className="rounded-lg border border-border-default bg-bg-surface-muted px-5 py-4 text-sm leading-relaxed text-text-secondary">
-          <p>
-            <span className="text-text-primary">Registry:</span>{" "}
-            <code className="font-mono text-xs break-all">{registryAddress}</code>
-          </p>
-          <p>
-            Base Sepolia &middot; Chain ID 84532
-          </p>
-          <p>
-            Immutable &middot; Ownerless &middot; No fees &middot; No upgrades
-          </p>
-        </div>
-      </section>
-
-      {/* ── Section 3: System Overview ──────────────────
-           Canonical text per HOMEPAGE_STRUCTURE §8.4.
-           Single compact card, no feature grid, no steps.
-           ───────────────────────────────────────────── */}
-
-      <section className="mx-auto max-w-5xl px-5 pb-8">
-        <div className="rounded-lg border border-border-default bg-bg-surface p-6 text-sm leading-relaxed text-text-secondary">
-          <p className="text-text-primary">
-            OpenProof is a proof-of-existence infrastructure tool. It registers
-            a SHA-256 fingerprint of a file on Base Sepolia. The file itself
-            never leaves your browser.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-xs">
-            <span>No backend</span>
-            <span>No database</span>
-            <span>No accounts</span>
-            <span>Files never uploaded</span>
-            <span>No tracking</span>
-            <span>No telemetry</span>
-          </div>
-          <p className="mt-4 text-xs leading-relaxed text-text-muted">
-            Verification is independent of this frontend. Anyone with the
-            contract address can verify through any block explorer or RPC
-            client.
-          </p>
-        </div>
-      </section>
-
-      {/* ── Section 4: Documentation Links ──────────────
-           Reference navigation. Per HOMEPAGE_STRUCTURE §8.5.
-           Spec · Architecture · Security · Governance
-           ───────────────────────────────────────────── */}
-
-      <section className="mx-auto max-w-5xl px-5 pb-24 sm:pb-32">
-        <nav
-          className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium"
-          aria-label="Documentation"
-        >
-          <a
-            className="text-text-secondary transition-colors hover:text-text-primary"
-            href="https://github.com/sparshsam/openproof/blob/main/docs/spec/receipt-specification.md"
-            rel="noreferrer"
-            target="_blank"
-          >
-            Spec
-          </a>
-          <a
-            className="text-text-secondary transition-colors hover:text-text-primary"
-            href="https://github.com/sparshsam/openproof/blob/main/docs/ARCHITECTURE.md"
-            rel="noreferrer"
-            target="_blank"
-          >
-            Architecture
-          </a>
-          <a
-            className="text-text-secondary transition-colors hover:text-text-primary"
-            href="https://github.com/sparshsam/openproof/blob/main/docs/threat-model.md"
-            rel="noreferrer"
-            target="_blank"
-          >
-            Security
-          </a>
-          <a
-            className="text-text-secondary transition-colors hover:text-text-primary"
-            href="https://github.com/sparshsam/openproof/blob/main/docs/SYSTEMS_DOCTRINE.md"
-            rel="noreferrer"
-            target="_blank"
-          >
-            Governance
-          </a>
-        </nav>
+      <section className="mx-auto max-w-5xl px-6 pb-24 sm:pb-32">
+        <p className="text-base leading-relaxed text-text-secondary sm:text-lg">
+          OpenProof is a proof-of-existence infrastructure tool. It registers
+          a SHA-256 fingerprint of a file on Base Sepolia. The file itself
+          never leaves your browser. No backend, no database, no accounts,
+          no tracking, no telemetry.
+        </p>
       </section>
     </main>
   );

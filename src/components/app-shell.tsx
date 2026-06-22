@@ -10,51 +10,44 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen bg-bg-base text-text-primary">
         {/* Skip link */}
         <a
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-[6px] focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#0a0a0a]"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-[10px] focus:bg-accent focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
           href="#main-content"
         >
           Skip to content
         </a>
 
         {/* ── Header ───────────────────────────────────────
-            Per INFORMATION_ARCHITECTURE §2.1:
-            OpenProof  Create Proof  Verify Proof  Docs  GitHub
-            No logo image, no icons, no "Start" CTA.
+            Clean, bold, minimal. Black bg, white text.
+            No icons, no logos, no clutter.
             ───────────────────────────────────────────── */}
 
-        <header className="sticky top-0 z-50 border-b border-border-default bg-bg-base">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+        <header className="sticky top-0 z-50 bg-bg-base/95 backdrop-blur-sm">
+          <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
             <Link
-              className="text-base font-semibold tracking-tight text-text-primary"
+              className="text-lg font-bold tracking-tight text-text-primary"
               href="/"
             >
               OpenProof
             </Link>
 
             <nav
-              className="flex items-center gap-5 text-sm text-text-secondary"
+              className="flex items-center gap-6 text-sm font-medium text-text-secondary"
               aria-label="Main navigation"
             >
               <Link
                 className="transition-colors hover:text-text-primary"
                 href="/create"
               >
-                Create Proof
+                Create
               </Link>
               <Link
                 className="transition-colors hover:text-text-primary"
                 href="/verify"
               >
-                Verify Proof
-              </Link>
-              <Link
-                className="transition-colors hover:text-text-primary"
-                href="/docs"
-              >
-                Docs
+                Verify
               </Link>
               <a
-                className="inline-flex items-center gap-1 transition-colors hover:text-text-primary"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-text-primary"
                 href="https://github.com/sparshsam/openproof"
                 rel="noreferrer"
                 target="_blank"
@@ -71,49 +64,42 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div id="main-content">{children}</div>
 
         {/* ── Footer ───────────────────────────────────────
-            Per INFORMATION_ARCHITECTURE §2.3:
-            GitHub · Contract 0x60d3... · License AGPL-3.0 · v0.1.1
-            Privacy · Terms · Support via GitHub Issues
+            Minimal. Just the essentials.
             ───────────────────────────────────────────── */}
 
-        <footer className="border-t border-border-default px-5 py-8">
-          <div className="mx-auto flex max-w-5xl flex-col gap-2 text-center text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between sm:text-left">
+        <footer className="border-t border-border-default px-6 py-10">
+          <div className="mx-auto flex max-w-5xl flex-col gap-3 text-center text-xs text-text-secondary sm:flex-row sm:items-center sm:justify-between sm:text-left">
             <p>
               OpenProof &mdash; cryptographic proof infrastructure
             </p>
-            <p className="flex flex-wrap items-center justify-center gap-x-2">
+            <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               <a
-                className="transition-colors hover:text-text-secondary"
+                className="transition-colors hover:text-text-primary"
                 href="https://github.com/sparshsam/openproof"
                 rel="noreferrer"
                 target="_blank"
               >
                 GitHub
               </a>
-              <span>&middot;</span>
               <a
-                className="transition-colors hover:text-text-secondary"
+                className="transition-colors hover:text-text-primary"
                 href="https://github.com/sparshsam/openproof/blob/main/docs/PRIVACY.md"
                 rel="noreferrer"
                 target="_blank"
               >
                 Privacy
               </a>
-              <span>&middot;</span>
               <a
-                className="transition-colors hover:text-text-secondary"
+                className="transition-colors hover:text-text-primary"
                 href="https://github.com/sparshsam/openproof/blob/main/docs/TERMS.md"
                 rel="noreferrer"
                 target="_blank"
               >
                 Terms
               </a>
-              <span>&middot;</span>
-              <span className="font-mono">{`${registryAddress.slice(0, 10)}...${registryAddress.slice(-4)}`}</span>
-              <span>&middot;</span>
-              AGPL-3.0
-              <span>&middot;</span>
-              v0.1.1
+              <span className="font-mono text-text-muted">{`${registryAddress.slice(0, 10)}...${registryAddress.slice(-4)}`}</span>
+              <span className="text-text-muted">AGPL-3.0</span>
+              <span className="text-text-muted">v0.1.1</span>
             </p>
           </div>
         </footer>

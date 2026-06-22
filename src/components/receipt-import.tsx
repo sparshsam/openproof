@@ -72,7 +72,7 @@ export function ReceiptImport({
           type="button"
           onClick={() => inputRef.current?.click()}
         >
-          <span className="grid size-14 place-items-center rounded-lg bg-accent text-[#0a0a0a]">
+          <span className="grid size-14 place-items-center rounded-xl bg-accent text-white">
             <FileJson className="size-6" />
           </span>
           <span className="font-semibold">Drop receipt JSON or choose one</span>

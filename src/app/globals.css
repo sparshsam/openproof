@@ -1,55 +1,52 @@
 @import "tailwindcss";
 
 /* ─── OpenProof Design Tokens ───────────────────────────────
-   Dark mode default. Light mode is secondary.
-   Per UI_DOCTRINE §7.1, VISUAL_RESTRAINTS §1.2, §2
+   Cash App / Block inspired: black base, #0081CC accent,
+   bold typography, premium dark aesthetic.
    ─────────────────────────────────────────────────────── */
 
 :root {
-  /* Backgrounds */
-  --bg-base: #0a0a0a;
-  --bg-surface: #1a1a1a;
-  --bg-surface-muted: #222222;
+  /* Backgrounds — deep black base */
+  --bg-base: #000000;
+  --bg-surface: #111111;
+  --bg-surface-muted: #1a1a1a;
 
   /* Text */
-  --text-primary: #f4f4f1;
-  --text-secondary: #9ca3af;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
   --text-muted: #8a8a8a;
 
   /* Borders */
-  --border-default: rgba(255, 255, 255, 0.1);
+  --border-default: rgba(255, 255, 255, 0.08);
 
-  /* Accent — restrained infrastructural green.
-     Communicates verification, cryptographic integrity,
-     calm confidence. NOT finance/casino/success-state.
-     Per design token migration. */
-  --accent: #29BF12;
+  /* Accent — bold blue. Confident, infrastructural, calm. */
+  --accent: #0081CC;
 
-  /* Semantic — subdued */
-  --success: #6ee7b7;
-  --error: #ff8a8f;
+  /* Semantic */
+  --success: #0081CC;
+  --error: #ff4d4d;
 
   /* Shadows */
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
 
   /* Focus ring */
   --focus-ring: var(--accent);
 }
 
-/* Light mode — optional per UI_DOCTRINE §7.1 */
+/* Light mode — minimal, rarely used */
 @media (prefers-color-scheme: light) {
   :root {
-    --bg-base: #f5f6f5;
-    --bg-surface: #F4F5F4;
-    --bg-surface-muted: #e8e9e8;
-    --text-primary: #1a1a1a;
-    --text-secondary: #525252;
+    --bg-base: #ffffff;
+    --bg-surface: #f5f5f5;
+    --bg-surface-muted: #ebebeb;
+    --text-primary: #000000;
+    --text-secondary: #4a4a4a;
     --text-muted: #6f6f6f;
-    --border-default: rgba(0, 0, 0, 0.1);
-    --accent: #29BF12;
-    --success: #2d9e6e;
-    --error: #c93838;
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --border-default: rgba(0, 0, 0, 0.08);
+    --accent: #0081CC;
+    --success: #0081CC;
+    --error: #d32f2f;
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
     --focus-ring: var(--accent);
   }
 }

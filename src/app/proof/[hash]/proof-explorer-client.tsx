@@ -13,11 +13,9 @@ import {
   Badge,
   ButtonLink,
   Card,
-  EmptyState,
   ExplorerLink,
   HelperTooltip,
   Section,
-  StatusPill,
 } from "@/components/design-system";
 import { CopyButton } from "@/components/copy-button";
 import { HashDisplay } from "@/components/hash-display";
@@ -104,54 +102,44 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
 
   return (
     <main>
-      <section className="bg-bg-base text-white">
-        <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <Badge tone="dark">Public proof explorer</Badge>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-              Shareable proof page on Base Sepolia.
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
-              Anyone can open this URL to check whether the fingerprint exists
-              in the OpenProofRegistry contract.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <ButtonLink href="/verify" variant="secondary">
-                Verify a file
-              </ButtonLink>
-              <CopyButton dark label="Copy page URL" value={verificationUrl} />
-            </div>
-          </div>
-          <Card className="space-y-4">
-            <StatusPill tone={state.status === "found" ? "green" : "blue"}>
-              {state.status === "found" ? "proof found" : "Base Sepolia"}
-            </StatusPill>
-            <HashDisplay value={normalizedHash} />
-            {verificationUrl ? <ProofQrCode url={verificationUrl} /> : null}
-          </Card>
-        </Section>
+      <section className="mx-auto max-w-5xl px-6 pt-20 pb-12 sm:pt-28 sm:pb-16">
+        <Badge tone="blue">Public proof explorer</Badge>
+        <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          Shareable proof page
+          <br />
+          <span className="text-text-secondary">on Base Sepolia.</span>
+        </h1>
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-text-secondary">
+          Anyone can open this URL to check whether the fingerprint exists
+          in the OpenProofRegistry contract.
+        </p>
+        <div className="mt-7 flex flex-wrap gap-3">
+          <ButtonLink href="/verify" variant="secondary">
+            Verify a file
+          </ButtonLink>
+          <CopyButton label="Copy page URL" value={verificationUrl} />
+        </div>
       </section>
 
-      <Section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <Card className="space-y-5">
+      <Section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] !pt-0">
+        <Card>
           {state.status === "loading" ? (
             <div
               aria-live="polite"
-              className="flex items-center gap-3 rounded-lg border border-border-default bg-bg-surface-muted p-5 text-sm text-text-muted"
+              className="flex items-center gap-3 rounded-xl bg-bg-surface-muted p-6 text-sm text-text-secondary"
             >
               <Loader2 className="size-5 animate-spin shrink-0" />
               Checking the Base Sepolia registry for this fingerprint...
             </div>
           ) : state.status === "found" ? (
-            <div
-              aria-live="polite"
-              className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5"
-            >
+            <div aria-live="polite" className="space-y-6">
               <Badge tone="green">Verified onchain</Badge>
-              <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-success">
-                <CheckCircle2 className="size-8" />
-                Proof found
-              </h2>
+              <div className="flex items-center gap-4">
+                <CheckCircle2 className="size-10 text-accent shrink-0" />
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight text-accent">Proof found</h2>
+                </div>
+              </div>
               <ProofTimeline
                 steps={[
                   {
@@ -191,14 +179,14 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
                     <ExplorerLink
                       href={transactionExplorerUrl(state.proof.transactionHash)}
                     >
-                      View transaction on BaseScan
+                      View on BaseScan
                     </ExplorerLink>
                     <CopyButton label="Copy tx hash" value={state.proof.transactionHash} />
                   </>
                 ) : null}
                 {openProofContractAddress ? (
                   <a
-                    className="inline-flex items-center gap-2 rounded-[6px] border border-border-default bg-bg-surface px-4 py-2 text-sm font-semibold transition hover:border-accent hover:text-accent"
+                    className="inline-flex items-center gap-2 rounded-[10px] bg-bg-surface-muted px-4 py-3 text-sm font-semibold text-text-primary transition-all hover:bg-[#252525]"
                     href={addressExplorerUrl(openProofContractAddress)}
                     rel="noreferrer"
                     target="_blank"
@@ -210,41 +198,45 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
               </div>
             </div>
           ) : (
-            <EmptyState
-              icon={ShieldQuestion}
-              title={
-                state.status === "not-found"
-                  ? "Proof not found"
-                  : "Could not load proof"
-              }
-              text={state.message}
-            />
+            <div className="rounded-xl bg-bg-surface-muted p-8 text-center">
+              <ShieldQuestion className="mx-auto mb-4 size-6 text-text-muted" />
+              <p className="text-lg font-semibold text-text-primary">
+                {state.status === "not-found" ? "Proof not found" : "Could not load proof"}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-text-secondary max-w-md mx-auto">
+                {state.message}
+              </p>
+            </div>
           )}
         </Card>
 
-        <Card className="space-y-4">
-          <Badge>What this page means</Badge>
-          <p className="text-sm leading-6 text-text-muted">
-            This page checks a hash against the OpenProofRegistry contract on
-            Base Sepolia. It does not contain the original file and cannot prove
-            ownership, authorship, or legal validity.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <HelperTooltip
-              label="BaseScan"
-              text="BaseScan is used for public transaction and contract inspection on Base Sepolia."
-            />
-            <HelperTooltip
-              label="Public hashes"
-              text="A proof page shares the hash and onchain metadata. It never contains the original file."
-            />
+        <Card>
+          <div className="space-y-6">
+            <Badge>What this page means</Badge>
+            <p className="text-sm leading-relaxed text-text-secondary">
+              This page checks a hash against the OpenProofRegistry contract on
+              Base Sepolia. It does not contain the original file and cannot prove
+              ownership, authorship, or legal validity.
+            </p>
+            <HashDisplay value={normalizedHash} />
+            {verificationUrl ? <ProofQrCode url={verificationUrl} /> : null}
+            <div className="flex flex-wrap gap-3">
+              <HelperTooltip
+                label="BaseScan"
+                text="BaseScan is used for public transaction and contract inspection on Base Sepolia."
+              />
+              <HelperTooltip
+                label="Public hashes"
+                text="A proof page shares the hash and onchain metadata. It never contains the original file."
+              />
+            </div>
+            <Link
+              className="inline-flex items-center justify-center rounded-[10px] bg-accent px-6 py-4 text-sm font-semibold text-white transition-all hover:bg-[#0099ee] w-full sm:w-auto"
+              href="/create"
+            >
+              Create another proof
+            </Link>
           </div>
-          <Link
-            className="inline-flex items-center justify-center rounded-[6px] bg-accent px-5 py-3 text-sm font-semibold text-[#0a0a0a] transition hover:brightness-110"
-            href="/create"
-          >
-            Create another proof
-          </Link>
         </Card>
       </Section>
     </main>
@@ -253,9 +245,9 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-bg-surface-muted p-3 sm:p-4">
-      <dt className="text-xs uppercase text-text-muted">{label}</dt>
-      <dd className="mt-2 break-words font-mono text-xs sm:text-sm">{value}</dd>
+    <div className="rounded-xl bg-bg-surface-muted p-4">
+      <dt className="text-xs font-semibold tracking-wider uppercase text-text-muted">{label}</dt>
+      <dd className="mt-2 break-words font-mono text-sm">{value}</dd>
     </div>
   );
 }

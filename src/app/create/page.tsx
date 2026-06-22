@@ -3,14 +3,8 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   Download,
-  FileCheck2,
-  Fingerprint,
   Loader2,
-  Package,
-  ReceiptText,
   ShieldCheck,
-  Upload,
-  Wallet,
 } from "lucide-react";
 import { startTransition, useEffect, useMemo, useState } from "react";
 import {
@@ -25,15 +19,12 @@ import { BaseSepoliaNotice } from "@/components/base-notice";
 import {
   ActionButton,
   Badge,
-  ButtonLink,
   Card,
-  EmptyState,
   ExplorerLink,
   HelperTooltip,
   NetworkNotice,
   Section,
   StatusPill,
-  StepCard,
 } from "@/components/design-system";
 import { CopyButton } from "@/components/copy-button";
 import { FileDrop } from "@/components/file-drop";
@@ -135,9 +126,15 @@ export default function CreateProofPage() {
         return;
       }
 
-      const block = await publicClient.getBlock({
-        blockHash: txReceipt.blockHash,
-      });
+      let timestamp: string;
+      try {
+        const block = await publicClient.getBlock({
+          blockHash: txReceipt.blockHash,
+        });
+        timestamp = new Date(Number(block.timestamp) * 1000).toISOString();
+      } catch {
+        timestamp = new Date().toISOString();
+      }
 
       setReceipt(
         buildProofReceipt({
@@ -159,13 +156,13 @@ export default function CreateProofPage() {
           transactionHash: txHash,
           transactionUrl: transactionExplorerUrl(txHash),
           creatorWallet: address,
-          createdTimestamp: new Date(Number(block.timestamp) * 1000).toISOString(),
+          createdTimestamp: timestamp,
           verificationUrl: proofUrl(hash, window.location.origin),
         }),
       );
     }
 
-    loadReceipt().catch(() => undefined);
+    loadReceipt().catch(() => {});
   }, [
     address,
     bundleManifest?.files,
@@ -193,7 +190,7 @@ export default function CreateProofPage() {
     });
   }, [receipt]);
 
-  const status = useMemo(() => {
+  const statusText = useMemo(() => {
     if (hashError) return hashError;
     if ((file || bundleFiles.length) && !hash) return "Hashing locally...";
     if (isCheckingProof) return "Checking whether this fingerprint already exists...";
@@ -271,46 +268,31 @@ export default function CreateProofPage() {
 
   return (
     <main>
-      <section className="bg-bg-base text-white">
-        <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <Badge tone="dark">Create Proof</Badge>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-              Register a local file fingerprint on Base Sepolia.
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
-              A polished transaction flow for timestamping a SHA-256 fingerprint
-              without sending the file anywhere.
-            </p>
-            <BaseSepoliaNotice className="mt-7 border-border-default bg-bg-surface-muted text-text-secondary" />
-          </div>
-          <Card className="grid content-start gap-4 sm:grid-cols-2">
-            {[
-                { icon: Upload, title: "Select file", text: "Choose one or many files locally." },
-                { icon: Fingerprint, title: "Generate fingerprint", text: "Hash with Web Crypto." },
-                { icon: Wallet, title: "Connect wallet", text: "Use Base Sepolia." },
-                { icon: FileCheck2, title: "Register proof", text: "Write hash onchain." },
-              { icon: ReceiptText, title: "Download receipt", text: "Save JSON locally." },
-            ].map((item, index) => (
-              <StepCard
-                active={index === 0 || (index === 1 && Boolean(hash))}
-                icon={item.icon}
-                key={item.title}
-                step={index + 1}
-                text={item.text}
-                title={item.title}
-              />
-            ))}
-          </Card>
-        </Section>
+      {/* ── Header section ─────────────────────────────── */}
+      <section className="mx-auto max-w-5xl px-6 pt-20 pb-12 sm:pt-28 sm:pb-16">
+        <Badge tone="blue">Create Proof</Badge>
+        <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          Register a file fingerprint
+          <br />
+          <span className="text-text-secondary">on Base Sepolia.</span>
+        </h1>
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-text-secondary">
+          A polished transaction flow for timestamping a SHA-256 fingerprint
+          without sending the file anywhere.
+        </p>
+        <div className="mt-6">
+          <BaseSepoliaNotice />
+        </div>
       </section>
 
-      <Section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <Card className="space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+      {/* ── Two-column content ─────────────────────────── */}
+      <Section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] !pt-0">
+        {/* Left: Transaction flow */}
+        <Card>
+          <div className="flex items-start justify-between gap-4">
             <div>
               <Badge>Transaction flow</Badge>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+              <h2 className="mt-4 text-2xl font-bold tracking-tight">
                 Create a proof
               </h2>
             </div>
@@ -319,124 +301,76 @@ export default function CreateProofPage() {
             </StatusPill>
           </div>
 
-          <NetworkNotice title="Network: Base Sepolia" tone="muted">
-            Proof registration is disabled until your connected wallet is on
-            Base Sepolia.
-          </NetworkNotice>
-          <div className="flex flex-wrap gap-3">
-            <HelperTooltip
-              label="SHA-256 hash"
-              text="A local fingerprint of the selected file bytes. OpenProof sends the hash to the contract, not the file."
-            />
-            <HelperTooltip
-              label="Bundle proofs"
-              text="Select multiple files to register one deterministic combined hash. Verification requires the same exact file set."
-            />
-            <HelperTooltip
-              label="Base Sepolia"
-              text="The Base testnet used by OpenProof v0.x. Testnet registration does not require real funds."
-            />
-          </div>
+          <div className="mt-6 space-y-6">
+            <NetworkNotice title="Network: Base Sepolia" tone="muted">
+              Proof registration is disabled until your connected wallet is on
+              Base Sepolia.
+            </NetworkNotice>
 
-          <FileDrop
-            file={file}
-            files={bundleFiles}
-            multiple
-            onFile={(nextFile) => {
-              setHashError(null);
-              setFile(nextFile);
-              setBundleFiles([nextFile]);
-            }}
-            onFiles={(files) => {
-              setHashError(null);
-              setBundleFiles(files);
-              setFile(files[0] || null);
-            }}
-            onError={setHashError}
-          />
-
-          {file ? (
-            <div className="grid gap-3 rounded-lg border border-border-default bg-bg-surface-muted p-5 text-sm sm:grid-cols-3">
-              <div>
-                <p className="text-xs uppercase text-text-muted">
-                  {isBundle ? "Proof type" : "Name"}
-                </p>
-                <p className="mt-2 break-words font-semibold">
-                  {isBundle ? "Bundle proof" : file.name}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-text-muted">Size</p>
-                <p className="mt-2 font-semibold">
-                  {formatBytes(isBundle ? totalBundleSize : file.size)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-text-muted">
-                  Files
-                </p>
-                <p className="mt-2 break-words font-semibold">
-                  {isBundle ? bundleFiles.length : file.type || "unknown"}
-                </p>
-              </div>
+            <div className="flex flex-wrap gap-3">
+              <HelperTooltip
+                label="SHA-256 hash"
+                text="A local fingerprint of the selected file bytes. OpenProof sends the hash to the contract, not the file."
+              />
+              <HelperTooltip
+                label="Bundle proofs"
+                text="Select multiple files to register one deterministic combined hash."
+              />
+              <HelperTooltip
+                label="Base Sepolia"
+                text="The Base testnet used by OpenProof v0.x."
+              />
             </div>
-          ) : null}
 
-          {isBundle && bundleManifest ? (
-            <div className="rounded-lg border border-accent/25 bg-accent/10 p-5">
-              <div className="flex items-start gap-3">
-                <Package className="mt-1 size-5 text-accent" />
+            <FileDrop
+              file={file}
+              files={bundleFiles}
+              multiple
+              onFile={(nextFile) => {
+                setHashError(null);
+                setFile(nextFile);
+                setBundleFiles([nextFile]);
+              }}
+              onFiles={(files) => {
+                setHashError(null);
+                setBundleFiles(files);
+                setFile(files[0] || null);
+              }}
+              onError={setHashError}
+            />
+
+            {file ? (
+              <div className="grid gap-4 sm:grid-cols-3">
                 <div>
-                  <p className="font-semibold">Deterministic bundle manifest</p>
-                  <p className="mt-1 text-sm leading-6 text-text-muted">
-                    Verification requires the same exact file set. OpenProof
-                    sorts by name, size, type, and hash before hashing the
-                    local manifest.
+                  <p className="text-xs font-semibold tracking-wider uppercase text-text-muted">
+                    {isBundle ? "Proof type" : "Name"}
+                  </p>
+                  <p className="mt-2 font-medium break-words">
+                    {isBundle ? "Bundle proof" : file.name}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold tracking-wider uppercase text-text-muted">Size</p>
+                  <p className="mt-2 font-medium">
+                    {formatBytes(isBundle ? totalBundleSize : file.size)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold tracking-wider uppercase text-text-muted">
+                    Files
+                  </p>
+                  <p className="mt-2 font-medium break-words">
+                    {isBundle ? bundleFiles.length : file.type || "unknown"}
                   </p>
                 </div>
               </div>
-              <div className="mt-4 grid gap-2">
-                {bundleManifest.files.map((item) => (
-                  <div
-                    className="rounded-lg bg-bg-surface p-3 text-sm"
-                    key={`${item.name}:${item.sha256}`}
-                  >
-                    <p className="break-words font-semibold">{item.name}</p>
-                    <p className="mt-1 text-xs text-text-muted">
-                      {formatBytes(item.size)} - {item.type}
-                    </p>
-                    <p className="mt-1 break-all font-mono text-xs text-text-muted">
-                      {item.sha256}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          {hash ? <HashDisplay value={hash} /> : null}
-
-          <div className="flex flex-wrap items-center gap-3">
-            <ConnectButton />
-            {!isWalletConnectConfigured ? (
-              <div className="w-full rounded-lg border border-error/30 bg-error/10 p-5">
-                <p className="text-sm font-semibold text-error">
-                  WalletConnect is not configured.
-                </p>
-                <p className="mt-2 text-sm leading-6 text-text-muted">
-                  Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID to enable wallet
-                  connections in this deployment.
-                </p>
-              </div>
             ) : null}
-            {isWrongChain ? (
-              <div className="w-full rounded-lg border border-error/30 bg-error/10 p-5">
-                <p className="text-sm font-semibold text-error">
-                  Wrong network selected.
-                </p>
-                <p className="mt-2 text-sm leading-6 text-text-muted">
-                  OpenProof v0 registers proofs on Base Sepolia only.
-                </p>
+
+            {hash ? <HashDisplay value={hash} /> : null}
+
+            <div className="flex flex-wrap items-center gap-4">
+              <ConnectButton />
+              {isWrongChain ? (
                 <ActionButton
                   disabled={isSwitching}
                   variant="secondary"
@@ -444,167 +378,209 @@ export default function CreateProofPage() {
                 >
                   {isSwitching ? "Switching..." : "Switch to Base Sepolia"}
                 </ActionButton>
+              ) : (
+                <ActionButton disabled={!canRegister} onClick={registerProof}>
+                  {isCheckingProof || isPending || isConfirming ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <ShieldCheck className="size-4" />
+                  )}
+                  {isCheckingProof
+                    ? "Checking proof"
+                    : isBundle
+                      ? "Register bundle on Base Sepolia"
+                      : "Register on Base Sepolia"}
+                </ActionButton>
+              )}
+            </div>
+
+            {!isWalletConnectConfigured ? (
+              <div className="rounded-xl bg-error/5 border border-error/20 p-5">
+                <p className="text-sm font-semibold text-error">
+                  WalletConnect is not configured.
+                </p>
+                <p className="mt-2 text-sm leading-6 text-text-secondary">
+                  Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID to enable wallet
+                  connections in this deployment.
+                </p>
               </div>
-            ) : (
-              <ActionButton disabled={!canRegister} onClick={registerProof}>
-                {isCheckingProof || isPending || isConfirming ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <ShieldCheck className="size-4" />
-                )}
-                {isCheckingProof
-                  ? "Checking proof"
-                  : isBundle
-                    ? "Register bundle on Base Sepolia"
-                    : "Register on Base Sepolia"}
-              </ActionButton>
-            )}
-          </div>
+            ) : null}
 
-          {!configured ? (
-            <p className="rounded-lg border border-border-default bg-bg-surface-muted p-4 text-sm text-text-muted">
-              Set NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS after deploying the
-              registry contract.
-            </p>
-          ) : null}
+            {!configured ? (
+              <p className="text-sm text-text-muted">
+                Set NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS after deploying the
+                registry contract.
+              </p>
+            ) : null}
 
-          <p
-            aria-live="polite"
-            className={`text-sm ${
-              hashError
-                ? "text-error"
-                : receipt
-                  ? "text-success"
-                  : isPending || isConfirming || isCheckingProof
-                    ? "text-accent"
-                    : "text-text-muted"
-            }`}
-          >
-            {status}
-          </p>
-          {txHash && !receipt ? (
-            <p className="break-words rounded-lg border border-border-default bg-bg-surface-muted p-4 font-mono text-xs text-text-muted">
-              Submitted transaction: {txHash}
-            </p>
-          ) : null}
-          {preflightMessage ? (
             <p
               aria-live="polite"
-              className={`rounded-lg border p-4 text-sm ${
-                preflightMessage.startsWith("This exact file fingerprint is already registered")
-                  ? "border-accent/30 bg-accent/10 text-accent"
-                  : "border-border-default bg-bg-surface-muted text-text-muted"
+              className={`text-sm font-medium ${
+                hashError
+                  ? "text-error"
+                  : receipt
+                    ? "text-accent"
+                    : isPending || isConfirming || isCheckingProof
+                      ? "text-accent"
+                      : "text-text-muted"
               }`}
             >
-              {preflightMessage}
+              {statusText}
             </p>
-          ) : null}
-          {error ? (
-            <p aria-live="assertive" className="rounded-lg border border-error/30 bg-error/10 p-4 text-sm text-error">
-              {normalizeClientError(error, genericWalletErrorMessage)}
-            </p>
-          ) : null}
+
+            {txHash && !receipt ? (
+              <div className="space-y-3">
+                <p className="break-words rounded-xl bg-bg-surface-muted p-5 font-mono text-xs text-text-secondary">
+                  Submitted: {txHash}
+                </p>
+                {txReceipt && (
+                  <ActionButton
+                    variant="secondary"
+                    onClick={() => {
+                      if (!file || !hash || !address || !openProofContractAddress) return;
+                      setReceipt(
+                        buildProofReceipt({
+                          schemaVersion: 2,
+                          receiptVersion: 2,
+                          hashAlgorithm: "SHA-256",
+                          fileName: file.name,
+                          fileSize: isBundle ? totalBundleSize : file.size,
+                          fileMimeType: isBundle
+                            ? "application/vnd.openproof.bundle+json"
+                            : file.type || "unknown",
+                          proofType: isBundle ? "bundle" : "single-file",
+                          bundleFiles: bundleManifest?.files,
+                          bundleRuleVersion: isBundle ? 1 : undefined,
+                          sha256Hash: hash,
+                          chainId: openProofChain.id,
+                          chainName: openProofChain.name,
+                          contractAddress: openProofContractAddress,
+                          transactionHash: txHash,
+                          transactionUrl: transactionExplorerUrl(txHash),
+                          creatorWallet: address,
+                          createdTimestamp: new Date().toISOString(),
+                          verificationUrl: proofUrl(hash, window.location.origin),
+                        }),
+                      );
+                    }}
+                  >
+                    Generate receipt
+                  </ActionButton>
+                )}
+              </div>
+            ) : null}
+
+            {preflightMessage ? (
+              <p
+                aria-live="polite"
+                className={`rounded-xl border p-5 text-sm ${
+                  preflightMessage.startsWith("This exact file fingerprint is already registered")
+                    ? "bg-accent/5 border-accent/20 text-accent"
+                    : "bg-bg-surface-muted border border-border-default text-text-secondary"
+                }`}
+              >
+                {preflightMessage}
+              </p>
+            ) : null}
+
+            {error ? (
+              <p aria-live="assertive" className="rounded-xl bg-error/5 border border-error/20 p-5 text-sm text-error">
+                {normalizeClientError(error, genericWalletErrorMessage)}
+              </p>
+            ) : null}
+          </div>
         </Card>
 
-        <Card className="space-y-5">
+        {/* Right: Receipt panel */}
+        <Card>
           <Badge tone={receipt ? "green" : "blue"}>
             {receipt ? "Proof registered" : "Receipt preview"}
           </Badge>
-          <h2 className="text-2xl font-semibold tracking-tight">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight">
             {receipt ? "Your proof is ready." : "Local JSON, no upload."}
           </h2>
-          <p className="text-sm leading-6 text-text-muted">
+          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
             After registration, OpenProof generates a receipt with chain,
-            contract, wallet, timestamp, BaseScan, and verification details.
+            contract, wallet, timestamp, and verification details.
           </p>
-          {receipt ? (
-            <div className="space-y-5">
-              <div className="rounded-lg border border-success/30 bg-success/10 p-5">
-                <div className="flex items-center gap-3">
-                  <span className="grid size-12 place-items-center rounded-lg bg-success text-[#0a0a0a]">
-                    <ShieldCheck className="size-5" />
-                  </span>
-                  <div>
-                    <p className="font-semibold text-success">Registered on Base Sepolia</p>
-                    <p className="mt-1 text-sm leading-6 text-text-muted">
-                      Save the receipt, copy the proof URL, or open the public
-                      verification page.
-                    </p>
+          <div className="mt-6">
+            {receipt ? (
+              <div className="space-y-6">
+                <div className="rounded-xl bg-accent/5 border border-accent/20 p-6">
+                  <div className="flex items-center gap-4">
+                    <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-accent text-white">
+                      <ShieldCheck className="size-6" />
+                    </span>
+                    <div>
+                      <p className="font-bold text-accent">Registered on Base Sepolia</p>
+                      <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+                        Save the receipt, copy the proof URL, or open the public
+                        verification page.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <ProofTimeline
-                steps={[
-                  {
-                    title: "Fingerprint created locally",
-                    text: "The file content stayed in this browser.",
-                    complete: true,
-                  },
-                  {
-                    title: "Hash registered onchain",
-                    text: "Only the SHA-256 fingerprint was written to Base Sepolia.",
-                    complete: true,
-                  },
-                  {
-                    title: "Receipt generated locally",
-                    text: "The JSON receipt was not uploaded or stored by OpenProof.",
-                    complete: true,
-                  },
-                ]}
-              />
-              <div className="grid gap-2 sm:grid-cols-2">
-                <ExplorerLink href={transactionExplorerUrl(receipt.transactionHash)}>
-                  View transaction on BaseScan
-                </ExplorerLink>
-                <ButtonLink href={`/proof/${receipt.sha256Hash}`} variant="secondary">
-                  Verify this proof
-                </ButtonLink>
-                <CopyButton label="Copy hash" value={receipt.sha256Hash} />
-                <CopyButton label="Copy tx hash" value={receipt.transactionHash} />
-                <CopyButton label="Copy proof URL" value={receipt.verificationUrl} />
-                <ActionButton
-                  variant="secondary"
-                  onClick={() =>
-                    downloadJson(`openproof-${receipt.sha256Hash.slice(2, 10)}.json`, receipt)
-                  }
-                >
-                  <Download className="size-4" />
-                  Download receipt JSON
-                </ActionButton>
-              </div>
-              <ProofQrCode url={receipt.verificationUrl} />
-              <div className="flex flex-wrap gap-3">
-                <HelperTooltip
-                  label="Proof receipts"
-                  text="Receipts are local records for portability. Re-check the hash onchain when you need to rely on a proof."
+                <ProofTimeline
+                  steps={[
+                    {
+                      title: "Fingerprint created locally",
+                      text: "The file content stayed in this browser.",
+                      complete: true,
+                    },
+                    {
+                      title: "Hash registered onchain",
+                      text: "Only the SHA-256 fingerprint was written to Base Sepolia.",
+                      complete: true,
+                    },
+                    {
+                      title: "Receipt generated locally",
+                      text: "The JSON receipt was not uploaded or stored by OpenProof.",
+                      complete: true,
+                    },
+                  ]}
                 />
-                <HelperTooltip
-                  label="BaseScan"
-                  text="BaseScan is the public block explorer used to inspect the registration transaction."
-                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <ExplorerLink href={transactionExplorerUrl(receipt.transactionHash)}>
+                    View on BaseScan
+                  </ExplorerLink>
+                  <ActionButton
+                    variant="secondary"
+                    onClick={() =>
+                      downloadJson(`openproof-${receipt.sha256Hash.slice(2, 10)}.json`, receipt)
+                    }
+                  >
+                    <Download className="size-4" />
+                    Download receipt JSON
+                  </ActionButton>
+                  <CopyButton label="Copy hash" value={receipt.sha256Hash} />
+                  <CopyButton label="Copy tx hash" value={receipt.transactionHash} />
+                  <CopyButton label="Copy proof URL" value={receipt.verificationUrl} />
+                </div>
+                <ProofQrCode url={receipt.verificationUrl} />
+                <dl className="grid gap-2 text-sm">
+                  {Object.entries(receipt).map(([key, value]) => (
+                    <div className="rounded-xl bg-bg-surface-muted p-4" key={key}>
+                      <dt className="text-xs font-semibold tracking-wider uppercase text-text-muted">
+                        {key}
+                      </dt>
+                      <dd className="mt-2 break-words font-mono text-xs text-text-primary">
+                        {key === "createdTimestamp"
+                          ? formatLocalTimestamp(String(value))
+                          : String(value)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
-              <dl className="grid gap-3 text-xs sm:text-sm">
-                {Object.entries(receipt).map(([key, value]) => (
-                  <div className="rounded-lg bg-bg-surface-muted p-3 sm:p-4" key={key}>
-                    <dt className="text-xs uppercase text-text-muted">
-                      {key}
-                    </dt>
-                    <dd className="mt-2 break-words font-mono text-xs">
-                      {key === "createdTimestamp"
-                        ? formatLocalTimestamp(String(value))
-                        : String(value)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          ) : (
-            <EmptyState
-              icon={ReceiptText}
-              title="Receipt appears after registration"
-              text="Register a proof to see the downloadable receipt and BaseScan transaction link."
-            />
-          )}
+            ) : (
+              <div className="rounded-xl bg-bg-surface-muted p-8 text-center">
+                <p className="text-sm text-text-secondary">
+                  Register a proof to see the downloadable receipt and
+                  BaseScan transaction link.
+                </p>
+              </div>
+            )}
+          </div>
         </Card>
       </Section>
 

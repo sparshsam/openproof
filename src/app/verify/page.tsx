@@ -5,12 +5,9 @@ import type { Dispatch, SetStateAction } from "react";
 import {
   CheckCircle2,
   CircleX,
-  FileSearch,
-  Fingerprint,
   Loader2,
   SearchCheck,
   ShieldQuestion,
-  Upload,
 } from "lucide-react";
 import { startTransition, useEffect, useState } from "react";
 import type { PublicClient } from "viem";
@@ -20,13 +17,11 @@ import {
   ActionButton,
   Badge,
   Card,
-  EmptyState,
   ExplorerLink,
   HelperTooltip,
   NetworkNotice,
   Section,
   StatusPill,
-  StepCard,
 } from "@/components/design-system";
 import { CopyButton } from "@/components/copy-button";
 import { FileDrop } from "@/components/file-drop";
@@ -225,44 +220,30 @@ export default function VerifyProofPage() {
 
   return (
     <main>
-      <section className="bg-bg-base text-white">
-        <Section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <Badge tone="dark">Verify Proof</Badge>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-              Verify a file fingerprint on Base Sepolia.
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
-              Verification is a public read. No wallet is required to check
-              whether an exact file hash was registered.
-            </p>
-            <BaseSepoliaNotice className="mt-7 border-border-default bg-bg-surface-muted text-text-secondary" />
-          </div>
-          <Card className="grid content-start gap-4 sm:grid-cols-3">
-            {[
-              { icon: Upload, title: "Select file", text: "Choose the file to check." },
-              { icon: Fingerprint, title: "Hash locally", text: "Generate the same SHA-256 fingerprint." },
-              { icon: FileSearch, title: "Read registry", text: "Query the registry on Base Sepolia." },
-            ].map((item, index) => (
-              <StepCard
-                active={index === 0 || (index === 1 && Boolean(hash))}
-                icon={item.icon}
-                key={item.title}
-                step={index + 1}
-                text={item.text}
-                title={item.title}
-              />
-            ))}
-          </Card>
-        </Section>
+      {/* ── Header ───────────────────────────────────── */}
+      <section className="mx-auto max-w-5xl px-6 pt-20 pb-12 sm:pt-28 sm:pb-16">
+        <Badge tone="blue">Verify Proof</Badge>
+        <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          Verify a file fingerprint
+          <br />
+          <span className="text-text-secondary">on Base Sepolia.</span>
+        </h1>
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-text-secondary">
+          Verification is a public read. No wallet is required to check
+          whether an exact file hash was registered.
+        </p>
+        <div className="mt-6">
+          <BaseSepoliaNotice />
+        </div>
       </section>
 
-      <Section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <Card className="space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+      {/* ── File verification ─────────────────────────── */}
+      <Section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] !pt-0">
+        <Card>
+          <div className="flex items-start justify-between gap-4">
             <div>
               <Badge>No wallet required</Badge>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+              <h2 className="mt-4 text-2xl font-bold tracking-tight">
                 Check an exact file match
               </h2>
             </div>
@@ -283,82 +264,84 @@ export default function VerifyProofPage() {
             </StatusPill>
           </div>
 
-          <NetworkNotice title="Network: Base Sepolia" tone="muted">
-            Verification checks the deployed OpenProofRegistry contract on Base
-            Sepolia. The selected file never leaves your browser.
-          </NetworkNotice>
-          <div className="flex flex-wrap gap-3">
-            <HelperTooltip
-              label="Direct file verification"
-              text="OpenProof hashes the selected file locally and checks whether that exact SHA-256 fingerprint exists onchain."
-            />
-            <HelperTooltip
-              label="Bundle verification"
-              text="Bundle proofs require selecting the same exact set of files that produced the registered bundle hash."
-            />
-          </div>
+          <div className="mt-6 space-y-6">
+            <NetworkNotice title="Network: Base Sepolia" tone="muted">
+              Verification checks the deployed OpenProofRegistry contract on Base
+              Sepolia. The selected file never leaves your browser.
+            </NetworkNotice>
 
-          <FileDrop
-            file={file}
-            onFile={setFile}
-            onError={(message) => setResult({ status: "error", message })}
-          />
-
-          {file ? (
-            <div className="grid gap-3 rounded-lg border border-border-default bg-bg-surface-muted p-5 text-sm sm:grid-cols-3">
-              <div>
-                <p className="text-xs uppercase text-text-muted">Name</p>
-                <p className="mt-2 break-words font-semibold">{file.name}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-text-muted">Size</p>
-                <p className="mt-2 font-semibold">{formatBytes(file.size)}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-text-muted">Type</p>
-                <p className="mt-2 break-words font-semibold">{file.type || "unknown"}</p>
-              </div>
+            <div className="flex flex-wrap gap-3">
+              <HelperTooltip
+                label="Direct file verification"
+                text="OpenProof hashes the selected file locally and checks whether that exact SHA-256 fingerprint exists onchain."
+              />
+              <HelperTooltip
+                label="Bundle verification"
+                text="Bundle proofs require selecting the same exact set of files that produced the registered bundle hash."
+              />
             </div>
-          ) : null}
 
-          {hash ? <HashDisplay value={hash} /> : null}
+            <FileDrop
+              file={file}
+              onFile={setFile}
+              onError={(message) => setResult({ status: "error", message })}
+            />
 
-          <ActionButton
-            disabled={!configured || !hash || result.status === "loading"}
-            onClick={verifyProof}
-          >
-            {result.status === "loading" ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <SearchCheck className="size-4" />
-            )}
-            Verify on Base Sepolia
-          </ActionButton>
+            {file ? (
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <p className="text-xs font-semibold tracking-wider uppercase text-text-muted">Name</p>
+                  <p className="mt-2 font-medium break-words">{file.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold tracking-wider uppercase text-text-muted">Size</p>
+                  <p className="mt-2 font-medium">{formatBytes(file.size)}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold tracking-wider uppercase text-text-muted">Type</p>
+                  <p className="mt-2 font-medium break-words">{file.type || "unknown"}</p>
+                </div>
+              </div>
+            ) : null}
 
-          {!configured ? (
-            <p className="rounded-lg border border-border-default bg-bg-surface-muted p-4 text-sm text-text-muted">
-              Set NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS after deploying the
-              registry contract.
-            </p>
-          ) : null}
+            {hash ? <HashDisplay value={hash} /> : null}
+
+            <ActionButton
+              disabled={!configured || !hash || result.status === "loading"}
+              onClick={verifyProof}
+            >
+              {result.status === "loading" ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <SearchCheck className="size-4" />
+              )}
+              Verify on Base Sepolia
+            </ActionButton>
+
+            {!configured ? (
+              <p className="text-sm text-text-muted">
+                Set NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS after deploying the
+                registry contract.
+              </p>
+            ) : null}
+          </div>
         </Card>
 
-        <Card className="space-y-5">
+        <Card>
           {result.status === "verified" ? (
-            <div
-              aria-live="polite"
-              className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5"
-            >
-              <div>
-                <Badge tone="green">Verified</Badge>
-                <h2 className="mt-4 flex items-center gap-3 text-3xl font-semibold tracking-tight text-success">
-                  <CheckCircle2 className="size-8" />
-                  Proof found
-                </h2>
-                <p className="mt-3 text-sm leading-6 text-text-muted">
-                  A matching file fingerprint was registered on Base Sepolia by
-                  this wallet at the shown timestamp.
-                </p>
+            <div aria-live="polite" className="space-y-6">
+              <Badge tone="green">Verified</Badge>
+              <div className="flex items-center gap-4">
+                <CheckCircle2 className="size-10 text-accent shrink-0" />
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight text-accent">
+                    Proof found
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                    A matching file fingerprint was registered on Base Sepolia by
+                    this wallet at the shown timestamp.
+                  </p>
+                </div>
               </div>
               <ProofTimeline
                 steps={[
@@ -387,9 +370,9 @@ export default function VerifyProofPage() {
                 />
                 <ResultRow label="Proof ID" value={result.proofId} />
               </dl>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 <Link
-                  className="inline-flex min-h-10 items-center justify-center rounded-[6px] bg-accent px-4 py-2 text-sm font-semibold text-[#0a0a0a] transition hover:brightness-110"
+                  className="inline-flex items-center justify-center rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#0099ee]"
                   href={proofPath(result.proofId)}
                 >
                   Open proof page
@@ -399,65 +382,68 @@ export default function VerifyProofPage() {
                 {result.transactionHash ? (
                   <>
                     <ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>
-                      View transaction on BaseScan
+                      View on BaseScan
                     </ExplorerLink>
                     <CopyButton label="Copy tx hash" value={result.transactionHash} />
                   </>
                 ) : null}
               </div>
               {!result.transactionHash ? (
-                <p className="rounded-lg border border-border-default bg-bg-surface-muted p-4 text-sm leading-6 text-text-muted">
+                <p className="rounded-xl bg-bg-surface-muted p-5 text-sm leading-relaxed text-text-secondary">
                   Transaction link unavailable from the public RPC. The proof ID
                   and contract timestamp were read directly from Base Sepolia.
                 </p>
               ) : null}
             </div>
           ) : (
-            <>
-              <div>
-                <Badge tone={result.status === "not-found" ? "red" : "blue"}>
-                  Verification status
-                </Badge>
-                <h2
-                  className={`mt-4 flex items-center gap-3 text-3xl font-semibold tracking-tight ${
-                    result.status === "not-found" ? "text-error" : ""
-                  }`}
-                >
-                  {result.status === "not-found" ? (
-                    <CircleX className="size-8" />
-                  ) : (
-                    <ShieldQuestion className="size-8" />
-                  )}
-                  {result.status === "not-found" ? "Not found" : "Ready to check"}
-                </h2>
+            <div>
+              <Badge tone={result.status === "not-found" ? "red" : "blue"}>
+                Verification status
+              </Badge>
+              <div className="mt-6">
+                {result.status === "not-found" ? (
+                  <div className="flex items-center gap-4">
+                    <CircleX className="size-10 text-error shrink-0" />
+                    <div>
+                      <h2 className="text-2xl font-bold tracking-tight text-error">Not found</h2>
+                      <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                        {result.message}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <ShieldQuestion className="size-10 text-text-muted shrink-0" />
+                    <div>
+                      <h2 className="text-2xl font-bold tracking-tight">Ready to check</h2>
+                      <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                        {result.message}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-              <EmptyState
-                icon={ShieldQuestion}
-                title={
-                  result.status === "not-found"
-                    ? "No matching proof found"
-                    : "Ready for local verification"
-                }
-                text={result.message}
-              />
-            </>
+            </div>
           )}
         </Card>
       </Section>
 
-      <Section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <Card className="space-y-5">
+      {/* ── Receipt import section ─────────────────────── */}
+      <Section className="grid gap-8 lg:grid-cols-[1fr_1fr]">
+        <Card>
           <Badge>Receipt import</Badge>
-          <h2 className="text-3xl font-semibold tracking-tight">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight">
             Validate a downloaded receipt
           </h2>
-          <p className="text-sm leading-6 text-text-muted">
+          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
             Import an OpenProof receipt JSON from your device. The schema is
             checked locally, then the receipt hash is checked against Base
             Sepolia.
           </p>
-          <ReceiptImport onReceipt={verifyReceipt} />
-          <div className="flex flex-wrap gap-3">
+          <div className="mt-6">
+            <ReceiptImport onReceipt={verifyReceipt} />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
             <HelperTooltip
               label="Imported receipt verification"
               text="The receipt schema is checked locally, then its hash is checked against the onchain registry."
@@ -469,7 +455,7 @@ export default function VerifyProofPage() {
           </div>
         </Card>
 
-        <Card className="space-y-5">
+        <Card>
           <ReceiptResult result={receiptResult} />
         </Card>
       </Section>
@@ -485,9 +471,9 @@ export default function VerifyProofPage() {
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-bg-surface-muted p-3 sm:p-4">
-      <dt className="text-xs uppercase text-text-muted">{label}</dt>
-      <dd className="mt-2 break-words font-mono text-xs sm:text-sm">{value}</dd>
+    <div className="rounded-xl bg-bg-surface-muted p-4">
+      <dt className="text-xs font-semibold tracking-wider uppercase text-text-muted">{label}</dt>
+      <dd className="mt-2 break-words font-mono text-sm">{value}</dd>
     </div>
   );
 }
@@ -514,12 +500,19 @@ function hydrateTransactionHash(
 function ReceiptResult({ result }: { result: VerificationResult }) {
   if (result.status === "verified") {
     return (
-      <div className="space-y-5 rounded-lg border border-success/30 bg-success/10 p-5">
+      <div className="space-y-6">
         <Badge tone="green">Valid receipt</Badge>
-        <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-success">
-          <CheckCircle2 className="size-8" />
-          Proof exists
-        </h2>
+        <div className="flex items-center gap-4">
+          <CheckCircle2 className="size-10 text-accent shrink-0" />
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-accent">
+              Proof exists
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+              Receipt schema is valid and the hash exists onchain.
+            </p>
+          </div>
+        </div>
         <ProofTimeline
           steps={[
             {
@@ -547,7 +540,7 @@ function ReceiptResult({ result }: { result: VerificationResult }) {
         </dl>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="inline-flex min-h-10 items-center justify-center rounded-[6px] bg-accent px-4 py-2 text-sm font-semibold text-[#0a0a0a] transition hover:brightness-110"
+            className="inline-flex items-center justify-center rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#0099ee]"
             href={proofPath(result.proofId)}
           >
             Open proof page
@@ -557,7 +550,7 @@ function ReceiptResult({ result }: { result: VerificationResult }) {
           {result.transactionHash ? (
             <>
               <ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>
-                View transaction on BaseScan
+                View on BaseScan
               </ExplorerLink>
               <CopyButton label="Copy tx hash" value={result.transactionHash} />
             </>
@@ -568,18 +561,20 @@ function ReceiptResult({ result }: { result: VerificationResult }) {
   }
 
   return (
-    <EmptyState
-      icon={ShieldQuestion}
-      title={
-        result.status === "not-found"
+    <div className="rounded-xl bg-bg-surface-muted p-8 text-center">
+      <ShieldQuestion className="mx-auto mb-4 size-6 text-text-muted" />
+      <p className="text-lg font-semibold text-text-primary">
+        {result.status === "not-found"
           ? "Receipt not found onchain"
           : result.status === "error"
             ? "Receipt invalid"
             : result.status === "loading"
               ? "Checking receipt"
-              : "Receipt status"
-      }
-      text={result.message}
-    />
+              : "Receipt status"}
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-text-secondary max-w-md mx-auto">
+        {result.message}
+      </p>
+    </div>
   );
 }

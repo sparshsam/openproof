@@ -19,7 +19,7 @@ export function ProofTimeline({ steps }: { steps: TimelineStep[] }) {
               <span
                 className={`grid size-9 place-items-center rounded-lg ${
                   step.complete
-                    ? "bg-success text-[#0a0a0a]"
+                    ? "bg-success text-white"
                     : "bg-accent/15 text-accent"
                 }`}
               >
