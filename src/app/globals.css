@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 /* ─── OpenProof Design Tokens ───────────────────────────────
-   Cash App / Block inspired: black base, #0081CC accent,
-   bold typography, premium dark aesthetic.
+   Cash App / Block inspired: true black, #0081CC accent,
+   bold editorial feel, premium dark-first aesthetic.
    ─────────────────────────────────────────────────────── */
 
 :root {
-  /* Backgrounds — deep black base */
+  /* Backgrounds — deep true black */
   --bg-base: #000000;
-  --bg-surface: #111111;
+  --bg-surface: #0d0d0d;
   --bg-surface-muted: #1a1a1a;
 
   /* Text */
@@ -16,24 +16,25 @@
   --text-secondary: #a0a0a0;
   --text-muted: #8a8a8a;
 
-  /* Borders */
-  --border-default: rgba(255, 255, 255, 0.08);
+  /* Borders — ultra subtle */
+  --border-default: rgba(255, 255, 255, 0.06);
 
-  /* Accent — bold blue. Confident, infrastructural, calm. */
+  /* Accent — confident blue */
   --accent: #0081CC;
 
   /* Semantic */
   --success: #0081CC;
   --error: #ff4d4d;
 
-  /* Shadows */
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  /* Shadows — deep, premium */
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.6);
 
   /* Focus ring */
   --focus-ring: var(--accent);
 }
 
-/* Light mode — minimal, rarely used */
+/* Light mode — minimal, clean white */
 @media (prefers-color-scheme: light) {
   :root {
     --bg-base: #ffffff;
@@ -41,12 +42,13 @@
     --bg-surface-muted: #ebebeb;
     --text-primary: #000000;
     --text-secondary: #4a4a4a;
-    --text-muted: #6f6f6f;
-    --border-default: rgba(0, 0, 0, 0.08);
+    --text-muted: #8a8a8a;
+    --border-default: rgba(0, 0, 0, 0.06);
     --accent: #0081CC;
     --success: #0081CC;
     --error: #d32f2f;
-    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.12);
     --focus-ring: var(--accent);
   }
 }
@@ -67,7 +69,7 @@
   --font-sans: "Stack Sans Notch Variable", "Stack Sans Notch", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 
-  /* ── Backward-compatible aliases (for existing pages) ─ */
+  /* ── Backward-compatible aliases ──────────────── */
   --color-surface: var(--bg-surface);
   --color-surface-muted: var(--bg-surface-muted);
   --color-muted: var(--text-muted);
@@ -89,18 +91,12 @@ body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-button,
-input {
-  font: inherit;
-}
+button, input { font: inherit; }
 
-a,
-button,
-[tabindex="0"] {
-  outline-color: var(--focus-ring);
-}
+a, button, [tabindex="0"] { outline-color: var(--focus-ring); }
 
 a:focus-visible,
 button:focus-visible,
@@ -112,38 +108,21 @@ input:focus-visible,
 
 a:focus:not(:focus-visible),
 button:focus:not(:focus-visible),
-input:focus:not(:focus-visible) {
-  outline: none;
-}
+input:focus:not(:focus-visible) { outline: none; }
 
-/* Touch targets */
 @media (pointer: coarse) {
-  button,
-  a,
-  [role="button"] {
-    min-height: 44px;
-  }
+  button, a, [role="button"] { min-height: 44px; }
 }
 
-/* Prevent overflow */
-img,
-video,
-pre,
-code {
-  max-width: 100%;
-}
+img, video, pre, code { max-width: 100%; }
 
 ::selection {
   background: var(--accent);
-  color: var(--bg-base);
+  color: white;
 }
 
-/* ─── Reduced Motion ──────────────────────────────── */
-
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;

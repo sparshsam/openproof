@@ -13,14 +13,12 @@ export function HashDisplay({ value }: { value: string }) {
   }
 
   return (
-    <div className="min-w-0 max-w-full overflow-hidden rounded-lg border border-border-default bg-bg-surface-muted p-4">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs font-semibold uppercase text-text-muted">
-          SHA-256 fingerprint
-        </p>
+    <div className="rounded-2xl bg-bg-surface-muted p-5">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-semibold tracking-wide text-text-muted">SHA-256 fingerprint</p>
         <button
           aria-label="Copy SHA-256 fingerprint"
-          className="inline-flex items-center gap-1 rounded-[6px] border border-border-default bg-bg-surface px-3 py-1.5 text-xs font-semibold transition hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="inline-flex items-center gap-1.5 rounded-full bg-bg-surface px-4 py-2 text-xs font-semibold transition hover:bg-accent hover:text-white"
           type="button"
           onClick={copyHash}
         >
@@ -28,10 +26,7 @@ export function HashDisplay({ value }: { value: string }) {
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre
-        className="max-w-full whitespace-pre-wrap break-all font-mono text-xs leading-6 text-text-primary [overflow-wrap:anywhere]"
-        aria-label="SHA-256 hash value"
-      >
+      <pre className="mt-4 max-w-full whitespace-pre-wrap break-all font-mono text-sm leading-7 text-text-secondary [overflow-wrap:anywhere]">
         {value}
       </pre>
     </div>

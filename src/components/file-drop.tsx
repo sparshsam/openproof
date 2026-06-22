@@ -18,120 +18,63 @@ type FileDropProps = {
 };
 
 export function FileDrop({
-  file,
-  files = [],
-  onFile,
-  onFiles,
-  disabled,
-  multiple,
-  accept,
-  label,
-  helperText,
-  onError,
+  file, files = [], onFile, onFiles, disabled, multiple, accept, label, helperText, onError,
 }: FileDropProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const selectedCount = files.length || (file ? 1 : 0);
   const defaultHelperText = file
-    ? `${formatBytes(file.size)} - ${file.type || "unknown type"}`
-    : `The file stays in your browser. Max file: ${formatBytes(
-        maxFileSizeBytes,
-      )}. Max bundle: ${formatBytes(maxBundleSizeBytes)}.`;
+    ? `${formatBytes(file.size)}`
+    : `The file stays in your browser. Max: ${formatBytes(maxFileSizeBytes)}.`;
 
   function handleFiles(selectedFiles: File[]) {
     if (!selectedFiles.length || disabled) return;
-    const totalSize = selectedFiles.reduce((sum, selectedFile) => sum + selectedFile.size, 0);
-    const oversized = selectedFiles.find((selectedFile) => selectedFile.size > maxFileSizeBytes);
-
+    const totalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+    const oversized = selectedFiles.find((f) => f.size > maxFileSizeBytes);
     if (oversized) {
-      onError?.(
-        `${oversized.name} is too large. OpenProof supports files up to ${formatBytes(
-          maxFileSizeBytes,
-        )}.`,
-      );
+      onError?.(`${oversized.name} is too large (max ${formatBytes(maxFileSizeBytes)}).`);
       return;
     }
-
     if (selectedFiles.length > 1 && totalSize > maxBundleSizeBytes) {
-      onError?.(
-        `This bundle is too large. OpenProof supports bundles up to ${formatBytes(
-          maxBundleSizeBytes,
-        )}.`,
-      );
+      onError?.(`Bundle too large (max ${formatBytes(maxBundleSizeBytes)}).`);
       return;
     }
-
-    if (multiple && selectedFiles.length) {
-      onFiles?.(selectedFiles);
-      onFile(selectedFiles[0]);
-    } else {
-      onFile(selectedFiles[0]);
-    }
+    if (multiple && selectedFiles.length) { onFiles?.(selectedFiles); onFile(selectedFiles[0]); }
+    else { onFile(selectedFiles[0]); }
   }
 
-  const dropZoneLabel = label ||
-    (selectedCount > 1
-      ? `${selectedCount} files selected`
-      : file
-        ? file.name
-        : "Drop a file here or choose one");
-
-  const dropZoneHelper = helperText ||
-    (selectedCount > 1
-      ? "The bundle is hashed locally. File contents never leave your browser."
-      : defaultHelperText);
+  const dl = label || (selectedCount > 1 ? `${selectedCount} files` : file ? file.name : "Choose a file");
+  const dh = helperText || (selectedCount > 1 ? "Files are hashed locally." : defaultHelperText);
 
   return (
     <div
-      className={`rounded-lg border border-dashed p-8 transition ${
+      className={`rounded-2xl p-8 transition-all cursor-pointer ${
         isDragging
-          ? "border-accent bg-accent/10"
-          : "border-accent/25 bg-bg-surface hover:border-accent/60 hover:bg-bg-surface-muted"
+          ? "bg-accent/10 ring-2 ring-accent"
+          : "bg-bg-surface-muted hover:bg-[#222]"
       } ${disabled ? "opacity-60" : ""}`}
-      onDragOver={(event) => {
-        event.preventDefault();
-        if (!disabled) setIsDragging(true);
-      }}
+      onDragOver={(e) => { e.preventDefault(); if (!disabled) setIsDragging(true); }}
       onDragLeave={() => setIsDragging(false)}
-      onDrop={(event) => {
-        event.preventDefault();
-        setIsDragging(false);
-        handleFiles(Array.from(event.dataTransfer.files || []));
-      }}
+      onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFiles(Array.from(e.dataTransfer.files || [])); }}
+      onClick={() => inputRef.current?.click()}
     >
       <input
         ref={inputRef}
         accept={accept}
-        aria-label={dropZoneLabel}
+        aria-label={dl}
         className="sr-only"
         disabled={disabled}
         multiple={multiple}
         type="file"
-        onChange={(event) => {
-          handleFiles(Array.from(event.target.files || []));
-        }}
+        onChange={(e) => handleFiles(Array.from(e.target.files || []))}
       />
-      <button
-        aria-describedby={file ? undefined : "file-drop-helper"}
-        aria-label={dropZoneLabel}
-        className="flex w-full flex-col items-center gap-4 text-center"
-        disabled={disabled}
-        type="button"
-        onClick={() => inputRef.current?.click()}
-      >
-        <span className="grid size-16 place-items-center rounded-xl bg-accent text-white">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <span className="grid size-16 place-items-center rounded-full bg-accent/10 text-accent">
           <FileUp className="size-7" />
         </span>
-        <span className="text-base font-semibold">
-          {dropZoneLabel}
-        </span>
-        <span
-          id="file-drop-helper"
-          className="max-w-sm text-sm leading-6 text-text-muted"
-        >
-          {dropZoneHelper}
-        </span>
-      </button>
+        <span className="text-base font-bold">{dl}</span>
+        <span className="max-w-sm text-sm leading-6 text-text-muted">{dh}</span>
+      </div>
     </div>
   );
 }

@@ -4,17 +4,9 @@ import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
 export function CopyButton({
-  value,
-  label,
-  copiedLabel = "Copied",
-  className = "",
-  dark = false,
+  value, label, copiedLabel = "Copied", className = "", dark = false,
 }: {
-  value: string;
-  label: string;
-  copiedLabel?: string;
-  className?: string;
-  dark?: boolean;
+  value: string; label: string; copiedLabel?: string; className?: string; dark?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -27,10 +19,10 @@ export function CopyButton({
   return (
     <button
       aria-label={label}
-      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-[6px] border px-4 py-2 text-sm font-semibold transition ${
+      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
         dark
-          ? "border-border-default bg-bg-surface-muted text-text-primary hover:bg-bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          : "border-border-default bg-bg-surface text-text-primary hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          ? "bg-white/10 text-white hover:bg-white/20"
+          : "bg-bg-surface-muted text-text-primary hover:bg-[#252525]"
       } ${className}`}
       type="button"
       onClick={copyValue}
