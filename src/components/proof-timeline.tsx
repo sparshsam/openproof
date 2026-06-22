@@ -3,9 +3,9 @@ import { CheckCircle2, Clock3, FileCheck2, Fingerprint } from "lucide-react";
 
 export type TimelineStep = { title: string; text: string; icon?: LucideIcon; complete?: boolean };
 
-export function ProofTimeline({ steps }: { steps: TimelineStep[] }) {
+export function ProofTimeline({ steps, className = "" }: { steps: TimelineStep[]; className?: string }) {
   return (
-    <ol className="space-y-4">
+    <ol className={`space-y-4 ${className}`}>
       {steps.map((step, index) => {
         const Icon = step.icon || defaultIcons[index] || CheckCircle2;
         return (

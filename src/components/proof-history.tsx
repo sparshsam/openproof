@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Clock, ExternalLink, Trash2, X } from "lucide-react";
+import { ExternalLink, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   clearProofHistory, getProofHistory, removeProofHistoryItem,
@@ -9,7 +9,7 @@ import {
 } from "@/lib/history";
 import { formatLocalTimestamp } from "@/lib/time";
 import { proofPath } from "@/lib/proof-url";
-import { ActionPill, EmptyState, StatusPill } from "@/components/design-system";
+import { ActionPill } from "@/components/design-system";
 
 export function ProofHistory({ title, type }: { title: string; type: ProofHistoryType }) {
   const [items, setItems] = useState<ProofHistoryItem[]>([]);
@@ -47,7 +47,7 @@ export function ProofHistory({ title, type }: { title: string; type: ProofHistor
           ))}
         </div>
       ) : (
-        <EmptyState icon={Clock} title="No local history yet" text="Proofs and verifications you complete in this browser will appear here." />
+        <div className="py-12 text-center"><p className="text-xl font-bold">No local history yet</p><p className="mt-2 text-sm text-text-secondary">Proofs and verifications you complete in this browser will appear here.</p></div>
       )}
     </div>
   );
@@ -59,7 +59,7 @@ function HistoryRow({ item, onRemove }: { item: ProofHistoryItem; onRemove: () =
       <div className="min-w-0 space-y-2">
         <div className="flex items-center gap-2">
           <p className="font-bold break-words">{item.fileName}</p>
-          <StatusPill tone={item.proofType === "registered" ? "green" : "blue"}>{item.proofType}</StatusPill>
+          <span className="text-xs font-bold tracking-wider uppercase text-accent">{item.proofType}</span>
         </div>
         <p className="break-all font-mono text-xs text-text-muted">{item.fileHash}</p>
         <p className="text-xs text-text-muted">{item.chainName} &middot; {formatLocalTimestamp(item.timestamp)}</p>

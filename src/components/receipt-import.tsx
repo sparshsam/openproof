@@ -61,7 +61,7 @@ export function ReceiptImport({ onReceipt }: { onReceipt: (receipt: ProofReceipt
       ) : result.status === "valid" ? (
         <p aria-live="polite" className="rounded-2xl bg-accent/5 p-5 text-sm text-accent font-semibold">Receipt schema valid. Checking onchain...</p>
       ) : (
-        <EmptyState icon={FileJson} title="Receipt import" text={result.message} />
+        <EmptyState title="Receipt import" text={result.message} />
       )}
     </div>
   );
