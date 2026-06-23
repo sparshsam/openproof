@@ -16,7 +16,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="sticky top-0 z-50 bg-bg-base/90 backdrop-blur-md">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
             <div className="flex items-center gap-6">
-              <Link className="text-lg font-bold tracking-tight text-text-primary" href="/">
+              <Link className="inline-flex items-center gap-2 text-lg font-bold tracking-tight text-text-primary" href="/">
+                <img alt="" className="size-6" src="/icon-192x192.png" />
                 OpenProof
               </Link>
               <nav className="hidden items-center gap-1 sm:flex" aria-label="Main navigation">

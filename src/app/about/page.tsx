@@ -9,12 +9,15 @@ export default function AboutPage() {
   return (
     <main>
       <section className="mx-auto max-w-3xl px-6 pt-28 pb-20 sm:pt-40 sm:pb-28">
-        <h1 className="text-5xl font-black leading-none tracking-tight sm:text-7xl">
-          OpenProof
-        </h1>
-        <p className="mt-6 text-xl leading-relaxed text-text-secondary sm:text-2xl">
-          Proof without surrender.
-        </p>
+        <div className="flex flex-col items-center text-center">
+          <img alt="" className="size-24 sm:size-32" src="/icon-512x512.png" />
+          <h1 className="mt-8 text-5xl font-black leading-none tracking-tight sm:text-7xl">
+            OpenProof
+          </h1>
+          <p className="mt-6 text-xl leading-relaxed text-text-secondary sm:text-2xl">
+            Proof without surrender.
+          </p>
+        </div>
         <p className="mt-10 text-base leading-relaxed text-text-secondary sm:text-lg">
           OpenProof is an open-source, privacy-first cryptographic proof-of-existence
           infrastructure tool. It registers a SHA-256 fingerprint of a file on the

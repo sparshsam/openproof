@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "OpenProof",
     description:
       "Open-source cryptographic proof infrastructure built on Base Sepolia. Timestamp file fingerprints onchain without uploading files anywhere.",
-    images: ["/og.svg"],
+    images: ["/og.png"],
   },
   appleWebApp: {
     capable: true,
