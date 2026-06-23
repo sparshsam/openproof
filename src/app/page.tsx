@@ -5,19 +5,15 @@ export default function Home() {
     <main>
       {/* ── Hero — on the black canvas ───────────────────
            No container. No slab. Just type and action.
-           One subtle icon as brand anchor.
            ───────────────────────────────────────────── */}
       <section className="mx-auto max-w-5xl px-6 pt-28 sm:pt-40">
-        <div className="flex items-start justify-between gap-8">
-          <h1 className="text-5xl font-black leading-none tracking-tight sm:text-7xl lg:text-8xl">
-            Proof
-            <br />
-            <span className="text-accent">without</span>
-            <br />
-            surrender.
-          </h1>
-          <img alt="" className="mt-2 hidden size-16 shrink-0 opacity-20 sm:block sm:size-20" src="/icon-192x192.png" />
-        </div>
+        <h1 className="text-5xl font-black leading-none tracking-tight sm:text-7xl lg:text-8xl">
+          Proof
+          <br />
+          <span className="text-accent">without</span>
+          <br />
+          surrender.
+        </h1>
         <p className="mt-8 max-w-xl text-lg leading-relaxed text-text-secondary sm:text-xl">
           A file fingerprint. A blockchain timestamp. No uploads, no accounts,
           no backend. OpenProof registers a SHA-256 hash on Base Sepolia. The
