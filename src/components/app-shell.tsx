@@ -64,7 +64,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-text-muted">AGPL-3.0</span>
-              <span className="text-text-muted">v0.1.2</span>
+              <span className="text-text-muted">v0.1.4</span>
             </div>
           </div>
         </footer>

@@ -2,6 +2,25 @@
 
 All notable changes to OpenProof are documented here.
 
+## 0.1.4 - 2026-06-22
+
+### Added
+
+- Architecture diagram on `/about` showing the two-layer system (browser ↔ blockchain).
+- How proof works: six-step numbered walkthrough from file selection to verification.
+- Threat model section on `/about`: must-trust, no-trust, and known-risks breakdowns.
+- What OpenProof can / cannot prove: structured checkmark and cross lists.
+- Registry transparency table: contract address, network, chain ID, explorer, source code, license.
+- Block number displayed on proof explorer pages.
+- Proof explorer now shows all 6 onchain fields (fingerprint, timestamp, transaction, wallet, block, network) without needing a receipt.
+
+### Changed
+
+- About page fully restructured with editorial sections, matching Block/Cash App design.
+- Proof explorer data rows redesigned with clear labels and action buttons.
+- Onchain proof type extended to include `blockNumber` from event-log metadata.
+- Version bumped to 0.1.4 in package.json, footer, and documentation.
+
 ## 0.1.2 - 2026-06-22
 
 ### Added

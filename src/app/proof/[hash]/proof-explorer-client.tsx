@@ -14,7 +14,7 @@ import { ProofQrCode } from "@/components/qr-code";
 import { openProofChain, openProofContractAddress } from "@/lib/contracts";
 import { normalizeClientError } from "@/lib/errors";
 import { addressExplorerUrl, transactionExplorerUrl } from "@/lib/explorer";
-import { findProofTransactionHash, isBytes32Hash, readOnchainProof, type OnchainProof } from "@/lib/proofs";
+import { isBytes32Hash, readOnchainProof, type OnchainProof } from "@/lib/proofs";
 import { formatLocalTimestamp } from "@/lib/time";
 
 type LS =
@@ -36,7 +36,6 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
         const p = await readOnchainProof(pc, h);
         if (!p) { setState({ status: "not-found", message: "No proof found for this hash on Base Sepolia." }); return; }
         setState({ status: "found", proof: p });
-        findProofTransactionHash(pc, h).then((tx) => { if (!tx) return; setState((s) => s.status === "found" && s.proof.fileHash === h ? { status: "found", proof: { ...s.proof, transactionHash: tx } } : s); }).catch(() => {});
       } catch (e) { setState({ status: "error", message: normalizeClientError(e, "Could not load proof.") }); }
     }
     load();
@@ -50,7 +49,7 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
           Shareable proof page<br /><span className="text-text-secondary">on Base Sepolia.</span>
         </h1>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-text-secondary sm:text-lg">
-          Anyone can check whether this fingerprint exists in the OpenProofRegistry contract.
+          Anyone can check whether this fingerprint exists in the OpenProofRegistry contract. No receipt needed.
         </p>
       </section>
 
@@ -65,27 +64,61 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
               <CheckCircle2 className="size-14 text-accent shrink-0" />
               <div>
                 <p className="text-3xl font-black text-accent sm:text-4xl">Proof found</p>
-                <p className="mt-2 text-base text-text-secondary">Hash exists in the registry.</p>
+                <p className="mt-2 text-base text-text-secondary">
+                  This fingerprint is registered in the OpenProofRegistry contract on Base Sepolia.
+                </p>
               </div>
             </div>
 
             <ProofTimeline steps={[
-              { title: "Proof URL opened", text: "Page contains a SHA-256 hash.", complete: true },
-              { title: "Registry read completed", text: "Read the Base Sepolia contract.", complete: true },
-              { title: "Timestamp confirmed", text: formatLocalTimestamp(state.proof.timestamp), complete: true },
+              { title: "Proof URL opened", text: "Page contains a SHA-256 fingerprint.", complete: true },
+              { title: "Registry read completed", text: "Read onchain data from Base Sepolia.", complete: true },
+              { title: "Timestamp confirmed", text: "Block time recorded at registration.", complete: true },
             ]} />
 
-            <dl className="grid gap-3 text-sm">
-              <DataRow label="Creator wallet" value={state.proof.creator} />
-              <DataRow label="Timestamp" value={formatLocalTimestamp(state.proof.timestamp)} />
-              <DataRow label="Chain" value={openProofChain.name} />
-              <DataRow label="Contract" value={openProofContractAddress || "not configured"} />
-            </dl>
+            <div>
+              <Label color="muted">Onchain records</Label>
+              <dl className="mt-4 divide-y divide-border-default text-sm">
+                <DataRow
+                  label="Fingerprint"
+                  value={h}
+                  mono
+                />
+                <DataRow
+                  label="Timestamp"
+                  value={formatLocalTimestamp(state.proof.timestamp)}
+                />
+                <DataRow
+                  label="Wallet"
+                  value={state.proof.creator}
+                  mono
+                />
+                <DataRow
+                  label="Network"
+                  value={openProofChain.name}
+                />
+                <DataRow
+                  label="Block"
+                  value={state.proof.blockNumber ? `#${state.proof.blockNumber}` : "Fetching..."}
+                />
+                <DataRow
+                  label="Transaction"
+                  value={state.proof.transactionHash ?? "Fetching..."}
+                  mono
+                  link={state.proof.transactionHash ? transactionExplorerUrl(state.proof.transactionHash) : undefined}
+                />
+              </dl>
+            </div>
 
             <div className="flex flex-wrap gap-3">
-              <CopyButton label="Copy hash" value={state.proof.fileHash} />
-              <CopyButton label="Copy creator" value={state.proof.creator} />
-              {state.proof.transactionHash ? <><ExplorerLink href={transactionExplorerUrl(state.proof.transactionHash)}>View on BaseScan</ExplorerLink><CopyButton label="Copy tx hash" value={state.proof.transactionHash} /></> : null}
+              <CopyButton label="Copy fingerprint" value={h} />
+              <CopyButton label="Copy wallet" value={state.proof.creator} />
+              {state.proof.transactionHash ? <CopyButton label="Copy transaction" value={state.proof.transactionHash} /> : null}
+              {state.proof.transactionHash ? (
+                <ExplorerLink href={transactionExplorerUrl(state.proof.transactionHash)}>
+                  View on BaseScan
+                </ExplorerLink>
+              ) : null}
               {openProofContractAddress ? (
                 <a className="inline-flex items-center gap-2 rounded-full bg-bg-surface-muted px-5 py-3 text-sm font-semibold text-text-primary transition-all hover:bg-[#252525]" href={addressExplorerUrl(openProofContractAddress)} rel="noreferrer" target="_blank">
                   Registry contract <ExternalLink className="size-4" />
@@ -107,6 +140,11 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
                   {state.status === "not-found" ? "Proof not found" : "Could not load proof"}
                 </p>
                 <p className="mt-2 text-base text-text-secondary">{state.message}</p>
+                {state.status === "not-found" ? (
+                  <p className="mt-2 text-sm text-text-muted">
+                    This hash does not exist in the OpenProofRegistry contract on Base Sepolia.
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>
@@ -116,6 +154,20 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
   );
 }
 
-function DataRow({ label, value }: { label: string; value: string }) {
-  return <div className="flex justify-between gap-4 py-3 border-b border-border-default"><span className="text-text-muted text-xs font-bold tracking-wider uppercase shrink-0">{label}</span><span className="text-right break-all font-mono text-sm">{value}</span></div>;
+function DataRow({
+  label, value, mono, link,
+}: {
+  label: string; value: string; mono?: boolean; link?: string;
+}) {
+  const inner = (
+    <span className={`text-right ${mono ? "font-mono text-xs sm:text-sm break-all" : "text-sm"}`}>
+      {value}
+    </span>
+  );
+  return (
+    <div className="flex justify-between gap-4 py-3">
+      <span className="text-text-muted text-xs font-bold tracking-wider uppercase shrink-0">{label}</span>
+      {link ? <a className="text-right text-accent transition hover:underline font-mono text-xs sm:text-sm break-all" href={link} rel="noreferrer" target="_blank">{value} ↗</a> : inner}
+    </div>
+  );
 }

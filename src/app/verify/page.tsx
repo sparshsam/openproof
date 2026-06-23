@@ -212,5 +212,5 @@ function DataRow({ label, value }: { label: string; value: string }) {
 }
 
 function hydrateTx(pc: PublicClient, h: `0x${string}`, sr: Dispatch<SetStateAction<VResult>>, f?: string) {
-  findProofTransactionHash(pc, h).then((tx) => { const n = tx || f; if (!n) return; sr((c) => c.status === "verified" && c.proofId === h ? { ...c, transactionHash: n } : c); }).catch(() => {});
+  findProofTransactionHash(pc, h).then((res) => { const n = res?.transactionHash || f; if (!n) return; sr((c) => c.status === "verified" && c.proofId === h ? { ...c, transactionHash: n } : c); }).catch(() => {});
 }

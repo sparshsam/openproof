@@ -1,7 +1,7 @@
 # OpenProof Agent Source of Truth
 
-Last updated: 2026-06-21
-Update signed by: v0.1.1-release-agent
+Last updated: 2026-06-22
+Update signed by: v0.1.4-trust-transparency-agent
 
 ## 1. Project Identity
 
@@ -36,15 +36,15 @@ Principles:
 
 OpenProof proves narrow claims well. It should never imply broader claims it cannot support.
 
-## 3. Current State
+## 3. Current State (v0.1.4)
 
 OpenProof currently supports:
 
-- Local SHA-256 hashing in the browser.
+- Local SHA-256 hashing in the browser (Web Crypto API).
 - Single-file proof registration on Base Sepolia.
 - Bundle proof hashing through deterministic local manifests.
 - Onchain proof lookup through the OpenProof registry.
-- JSON proof receipt generation and local download.
+- JSON proof receipt generation, automated download, and local download.
 - Receipt import and validation against onchain state.
 - Local proof history using browser storage only.
 - Public proof pages at `/proof/[hash]`.
@@ -52,6 +52,13 @@ OpenProof currently supports:
 - Base Sepolia contract integration.
 - Testnet-first deployment posture.
 - AGPL-3.0-only open-source licensing.
+- **Theme toggle**: light/dark mode with localStorage persistence + system preference detection.
+- **Native pages**: `/about`, `/privacy`, `/terms` (no GitHub redirects).
+- **PWA**: installable with service worker, manifest, all platform icons.
+- **Light/dark mode**: CSS custom properties via `[data-theme]` attribute.
+- **Design system**: pill buttons, editorial layout, Block/Cash App-inspired aesthetic.
+- **Trust & Transparency page** (`/about`): architecture diagram, how proof works, threat model, can/cannot-prove sections, registry transparency table.
+- **Enhanced proof explorer** (`/proof/[hash]`): shows fingerprint, timestamp, transaction, wallet, block, and network without needing a receipt.
 
 The current registry contract is intentionally minimal:
 
@@ -62,7 +69,7 @@ The current registry contract is intentionally minimal:
 - empty hash rejection
 - `ProofRegistered` event emission
 
-The app currently has no backend, no database, no file upload pipeline, no storage bucket, no account system, no token, no marketplace, and no analytics mandate.
+The app has no backend, no database, no file upload pipeline, no storage bucket, no account system, no token, no marketplace, no analytics, and no tracking.
 
 ## 4. v1.0 Freeze Wall
 
@@ -176,9 +183,12 @@ Forbidden work without explicit human approval:
 Primary app routes:
 
 - `/` — landing and education surface.
-- `/create` — local file or bundle hashing, wallet connection, proof registration, receipt generation.
-- `/verify` — local file hashing, receipt import, registry verification, verification states.
+- `/create` — single-column transaction terminal flow: file select → hash → connect → register → receipt auto-download.
+- `/verify` — scanner-style single column: file select → hash → verify → result as hero.
 - `/proof/[hash]` — public read-only proof page for a registered or queried hash.
+- `/about` — brand story, mission, philosophy, details strip.
+- `/privacy` — native privacy policy (human-readable, no GitHub redirect).
+- `/terms` — native terms of service (human-readable, no GitHub redirect).
 
 Supporting public/static surfaces:
 
@@ -196,26 +206,30 @@ Contracts:
 
 Application routes:
 
-- `src/app/page.tsx` — public landing page.
-- `src/app/create/page.tsx` — create proof flow.
-- `src/app/verify/page.tsx` — verify proof and receipt flow.
+- `src/app/page.tsx` — public landing page (editorial hero, no cards).
+- `src/app/create/page.tsx` — transaction terminal: select file, hash, connect wallet, register, receipt auto-download.
+- `src/app/verify/page.tsx` — scanner-style verification: file select, hash, verify, result as hero.
 - `src/app/proof/[hash]/page.tsx` — proof page wrapper.
 - `src/app/proof/[hash]/proof-explorer-client.tsx` — proof page client logic.
+- `src/app/about/page.tsx` — brand story, mission, philosophy (native page).
+- `src/app/privacy/page.tsx` — privacy policy (native page).
+- `src/app/terms/page.tsx` — terms of service (native page).
 
 Components:
 
-- `src/components/app-shell.tsx` — global layout with header, nav, footer, and skip link.
+- `src/components/app-shell.tsx` — global layout with header, nav (icon + wordmark), footer, skip link, theme toggle.
 - `src/components/base-notice.tsx` — Base Sepolia testnet info banner.
-- `src/components/copy-button.tsx` — accessible copy-to-clipboard button with dark variant.
-- `src/components/design-system.tsx` — shared UI primitives (Badge, Card, Section, ButtonLink, etc.).
-- `src/components/file-drop.tsx` — local file selection surface with drag-and-drop.
+- `src/components/copy-button.tsx` — accessible copy-to-clipboard pill button.
+- `src/components/design-system.tsx` — shared primitives (ActionPill, PillLink, ExplorerLink, Label, Section).
+- `src/components/file-drop.tsx` — premium dropzone (no dashed borders, hover ring).
 - `src/components/hash-display.tsx` — hash display with copy surface.
 - `src/components/helper-tooltip.tsx` — accessible tooltip with keyboard support.
-- `src/components/proof-history.tsx` — local proof history UI.
-- `src/components/proof-timeline.tsx` — proof lifecycle display.
+- `src/components/proof-history.tsx` — local proof history as activity rows.
+- `src/components/proof-timeline.tsx` — proof lifecycle display (pill dots).
 - `src/components/qr-code.tsx` — QR proof URL display and download.
 - `src/components/receipt-import.tsx` — receipt import and validation UI.
 - `src/components/providers/wallet-provider.tsx` — RainbowKit and wagmi provider isolation.
+- `src/components/providers/theme-provider.tsx` — ThemeProvider + ThemeToggle (sun/moon icons, localStorage persistence).
 
 Libraries:
 
@@ -233,10 +247,11 @@ Libraries:
 Documentation:
 
 - `README.md` — public project overview.
-- `docs/architecture.md` — technical architecture.
+- `docs/ARCHITECTURE.md` — technical architecture.
 - `docs/threat-model.md` — security and privacy boundaries.
 - `docs/deployment-notes.md` — operator wallet and deployment configuration notes.
 - `docs/repo-metadata.md` — GitHub description, website, and topic recommendations.
+- `docs/DESIGN_PLAYBOOK.md` — reusable UI/UX design playbook (Cash App/Block inspired).
 - `docs/RELEASE_CHECKLIST.md` — release process checklist.
 - `docs/STORE_METADATA.md` — app store metadata, keywords, age ratings.
 - `docs/PRIVACY.md` — privacy policy.
@@ -438,8 +453,34 @@ Recommended next tasks:
 - PWA support: manifest, service worker, app icons, splash screens.
 - Cross-platform icon set for Web/PWA, Windows (MSIX/Icons), macOS (.iconset), iOS, Android (adaptive).
 - Release documentation: `docs/RELEASE_CHECKLIST.md`, `docs/STORE_METADATA.md`, `docs/PRIVACY.md`, `docs/TERMS.md`.
-- Platform readiness documentation: `docs/PLATFORM_READINESS.md` covering crash reporting, analytics, versioning, updates, permissions, data deletion, and accessibility.
-- Version bump to 0.1.1 in all locations (package.json, receipts, footer).
+- Platform readiness documentation: `docs/PLATFORM_READINESS.md`.
+- Version bump to 0.1.1 in all locations.
 - README tech stack corrected from Next.js 15 to Next.js 16.
-- ROADMAP.md and AGENTS.md accuracy fixes (3 incorrectly marked `[x]` items reverted to `[ ]`).
-- All four validation commands pass: `npm run lint`, `npm run typecheck`, `npm run build`, `npm run test:contracts`.
+- ROADMAP.md and AGENTS.md accuracy fixes.
+- Receipt silent-failure fix: RPC error handling + manual fallback button.
+- Design revamp: black base, `#0081CC` accent, bold typography, more whitespace.
+
+### Delivered in v0.1.2
+
+- Light/dark theme toggle with localStorage persistence + system preference detection.
+- Native `/about`, `/privacy`, `/terms` pages (no GitHub redirects).
+- Premium light mode (white bg, black text, same `#0081CC` accent).
+- Navigation updated: About link, theme toggle in top-right corner.
+- Footer updated: native page links, `v0.1.2`.
+- Smooth CSS transitions on theme switch.
+- `docs/DESIGN_PLAYBOOK.md` — reusable Block/Cash App-inspired design playbook.
+
+### Delivered in v0.1.3
+
+- Nav wordmark: `[24px icon] OpenProof` — icon inline with brand name.
+- About page hero: large centered icon (96–128px) as brand anchor.
+- Favicon fix: replaced Next.js auto-generated default with OpenProof icon (RGBA ICO, works on dark + light tabs).
+- Metadata audit: all OG/Twitter/manifest/apple-touch-icon references verified from canonical source.
+- Removed stale template SVGs from `public/`.
+
+### Delivered in v0.1.4 — Trust & Transparency Release
+
+- About page restructured with architecture diagram (CSS visual flow), how proof works (numbered steps), threat model (must-trust / no-trust / known-risks), can/cannot-prove sections (check/cross lists), and registry transparency table (contract, network, chain ID, explorer, source code, license).
+- Proof explorer enhanced: shows all 6 onchain fields — fingerprint, timestamp, transaction, wallet, block, network — without needing a receipt.
+- Block number support added to onchain proof lookup via event-log block metadata.
+- Version bumped to 0.1.4.

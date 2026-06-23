@@ -6,19 +6,40 @@ export type OnchainProof = {
   timestamp: string;
   fileHash: `0x${string}`;
   transactionHash?: string;
+  blockNumber?: string;
 };
-
-const transactionHashCache = new Map<string, string | undefined>();
-const maxTransactionHashCacheEntries = 128;
 
 export function isBytes32Hash(value: string): value is `0x${string}` {
   return /^0x[a-fA-F0-9]{64}$/.test(value);
 }
 
+type TxBlockResult =
+  | { transactionHash: `0x${string}`; blockNumber: string }
+  | undefined;
+
+const txCache = new Map<string, TxBlockResult>();
+const maxCacheEntries = 128;
+
+function cacheKey(fileHash: `0x${string}`) {
+  return `${openProofContractAddress || "unconfigured"}:${fileHash.toLowerCase()}`;
+}
+
+function getCached(fileHash: `0x${string}`): TxBlockResult {
+  return txCache.get(cacheKey(fileHash));
+}
+
+function setCached(fileHash: `0x${string}`, value: TxBlockResult) {
+  const key = cacheKey(fileHash);
+  txCache.set(key, value);
+  if (txCache.size > maxCacheEntries) {
+    const first = txCache.keys().next().value;
+    if (first) txCache.delete(first);
+  }
+}
+
 export async function readOnchainProof(
   publicClient: PublicClient,
   fileHash: `0x${string}`,
-  options: { includeTransactionHash?: boolean } = {},
 ): Promise<OnchainProof | null> {
   if (!openProofContractAddress) return null;
 
@@ -38,26 +59,38 @@ export async function readOnchainProof(
     args: [fileHash],
   });
 
-  const transactionHash = options.includeTransactionHash
-    ? await findProofTransactionHash(publicClient, fileHash).catch(() => undefined)
-    : getCachedTransactionHash(fileHash);
-
-  return {
+  // Build base result from onchain read
+  const result: OnchainProof = {
     creator: proof.creator,
     timestamp: new Date(Number(proof.timestamp) * 1000).toISOString(),
     fileHash: proof.fileHash,
-    transactionHash,
   };
+
+  // Try cached tx/block info first, then fetch if missing
+  const cached = getCached(fileHash);
+  if (cached) {
+    result.transactionHash = cached.transactionHash;
+    result.blockNumber = cached.blockNumber;
+  } else {
+    findProofTransactionHash(publicClient, fileHash).then((r) => {
+      if (r) {
+        result.transactionHash = r.transactionHash;
+        result.blockNumber = r.blockNumber;
+      }
+    }).catch(() => {});
+  }
+
+  return result;
 }
 
 export async function findProofTransactionHash(
   publicClient: PublicClient,
   fileHash: `0x${string}`,
-) {
+): Promise<TxBlockResult> {
   if (!openProofContractAddress) return undefined;
 
-  const cached = getCachedTransactionHash(fileHash);
-  if (transactionHashCache.has(cacheKey(fileHash))) return cached;
+  const cached = getCached(fileHash);
+  if (cached !== undefined) return cached;
 
   const latestBlock = await publicClient.getBlockNumber();
   const chunkSize = 1_900n;
@@ -84,34 +117,17 @@ export async function findProofTransactionHash(
 
     const log = logs.at(-1);
     if (log?.transactionHash) {
-      setCachedTransactionHash(fileHash, log.transactionHash);
-      return log.transactionHash;
+      const result = {
+        transactionHash: log.transactionHash,
+        blockNumber: log.blockNumber?.toString() ?? "",
+      };
+      setCached(fileHash, result);
+      return result;
     }
     if (fromBlock === 0n || fromBlock === floorBlock) break;
     toBlock = fromBlock - 1n;
   }
 
-  setCachedTransactionHash(fileHash, undefined);
+  setCached(fileHash, undefined);
   return undefined;
-}
-
-export function getCachedTransactionHash(fileHash: `0x${string}`) {
-  return transactionHashCache.get(cacheKey(fileHash));
-}
-
-function setCachedTransactionHash(
-  fileHash: `0x${string}`,
-  transactionHash: string | undefined,
-) {
-  const key = cacheKey(fileHash);
-  transactionHashCache.set(key, transactionHash);
-
-  if (transactionHashCache.size > maxTransactionHashCacheEntries) {
-    const firstKey = transactionHashCache.keys().next().value;
-    if (firstKey) transactionHashCache.delete(firstKey);
-  }
-}
-
-function cacheKey(fileHash: `0x${string}`) {
-  return `${openProofContractAddress || "unconfigured"}:${fileHash.toLowerCase()}`;
 }
