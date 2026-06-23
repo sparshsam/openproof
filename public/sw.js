@@ -8,7 +8,7 @@
  * and no file contents are ever uploaded or cached by this worker.
  */
 
-const CACHE_NAME = "openproof-v0.1.1";
+const CACHE_NAME = "openproof-v0.1.2";
 const STATIC_ASSETS = [
   "/",
   "/create",

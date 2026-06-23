@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "@fontsource-variable/stack-sans-notch";
 import { AppShell } from "@/components/app-shell";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     siteName: "OpenProof",
     images: [
       {
-        url: "/og.svg",
+        url: "/og.png",
         width: 1200,
         height: 630,
         alt: "OpenProof cryptographic proof infrastructure built on Base",
@@ -87,17 +88,18 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              (function(){var t=localStorage.getItem('openproof-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)})();
               if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
                 window.addEventListener('load', () => {
-                  navigator.serviceWorker.register('/sw.js').catch(() => {
-                    // Service worker registration failures are non-blocking
-                  });
+                  navigator.serviceWorker.register('/sw.js').catch(() => {});
                 });
               }
             `,
           }}
         />
-        <AppShell>{children}</AppShell>
+        <ThemeProvider>
+          <AppShell>{children}</AppShell>
+        </ThemeProvider>
       </body>
     </html>
   );

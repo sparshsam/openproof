@@ -1,56 +1,41 @@
 @import "tailwindcss";
 
 /* ─── OpenProof Design Tokens ───────────────────────────────
-   Cash App / Block inspired: true black, #0081CC accent,
-   bold editorial feel, premium dark-first aesthetic.
+   Theme-aware via [data-theme] attribute on <html>.
+   Dark is default. Light applies on data-theme="light".
    ─────────────────────────────────────────────────────── */
 
-:root {
-  /* Backgrounds — deep true black */
+:root,
+[data-theme="dark"] {
   --bg-base: #000000;
   --bg-surface: #0d0d0d;
   --bg-surface-muted: #1a1a1a;
-
-  /* Text */
   --text-primary: #ffffff;
   --text-secondary: #a0a0a0;
   --text-muted: #8a8a8a;
-
-  /* Borders — ultra subtle */
   --border-default: rgba(255, 255, 255, 0.06);
-
-  /* Accent — confident blue */
   --accent: #0081CC;
-
-  /* Semantic */
   --success: #0081CC;
   --error: #ff4d4d;
-
-  /* Shadows — deep, premium */
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.6);
-
-  /* Focus ring */
   --focus-ring: var(--accent);
 }
 
-/* Light mode — minimal, clean white */
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg-base: #ffffff;
-    --bg-surface: #f5f5f5;
-    --bg-surface-muted: #ebebeb;
-    --text-primary: #000000;
-    --text-secondary: #4a4a4a;
-    --text-muted: #8a8a8a;
-    --border-default: rgba(0, 0, 0, 0.06);
-    --accent: #0081CC;
-    --success: #0081CC;
-    --error: #d32f2f;
-    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
-    --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.12);
-    --focus-ring: var(--accent);
-  }
+[data-theme="light"] {
+  --bg-base: #ffffff;
+  --bg-surface: #f5f5f5;
+  --bg-surface-muted: #ebebeb;
+  --text-primary: #000000;
+  --text-secondary: #4a4a4a;
+  --text-muted: #8a8a8a;
+  --border-default: rgba(0, 0, 0, 0.06);
+  --accent: #0081CC;
+  --success: #0081CC;
+  --error: #d32f2f;
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --focus-ring: var(--accent);
 }
 
 /* ─── Tailwind Theme ─────────────────────────────────── */
@@ -93,6 +78,9 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
+
+html { transition: background .25s ease; }
+body { transition: background .25s ease, color .25s ease; }
 
 button, input { font: inherit; }
 

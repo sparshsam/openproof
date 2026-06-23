@@ -2,6 +2,28 @@
 
 All notable changes to OpenProof are documented here.
 
+## 0.1.2 - 2026-06-22
+
+### Added
+
+- Light/dark theme toggle with system preference detection and persistence.
+- Native `/about` page with brand story, mission, and philosophy.
+- Native `/privacy` page with human-readable data practices.
+- Native `/terms` page with terms of service.
+- Premium light mode design with white background and black typography.
+
+### Changed
+
+- Navigation updated: About link added, theme toggle in top-right corner.
+- Footer updated: native page links instead of GitHub redirects.
+- All icons regenerated from canonical source.
+- Accessibility: keyboard navigation, focus states, WCAG AA contrast.
+
+### Fixed
+
+- Footer and navigation now link to native pages for legal documents.
+- Mobile layout: spacing, typography scale, touch targets.
+
 ## 0.1.1 - 2026-06-21
 
 ### Added
