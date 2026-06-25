@@ -1,5 +1,5 @@
 /**
- * OpenProof Service Worker v0.1.1
+ * OpenProof Service Worker v0.9.0
  *
  * Strategy: Cache-First for static assets, Network-First for dynamic routes.
  * Keeps the app functional offline for previously visited pages and assets.
@@ -8,11 +8,14 @@
  * and no file contents are ever uploaded or cached by this worker.
  */
 
-const CACHE_NAME = "openproof-v0.1.2";
+const CACHE_NAME = "openproof-v0.9.0";
 const STATIC_ASSETS = [
   "/",
   "/create",
   "/verify",
+  "/about",
+  "/privacy",
+  "/terms",
   "/docs",
   "/manifest.json",
   "/favicon.ico",
@@ -22,6 +25,14 @@ const STATIC_ASSETS = [
   "/apple-touch-icon.png",
   "/robots.txt",
   "/sitemap.xml",
+];
+
+// Routes that should always be fetched from the network
+const NETWORK_ONLY_PATTERNS = [
+  "sepolia.base.org",
+  "walletconnect",
+  "reown.com",
+  "basescan.org",
 ];
 
 // ── Install: pre-cache static assets ──────────────────────────
@@ -40,10 +51,29 @@ self.addEventListener("activate", (event) => {
       return Promise.all(
         cacheNames
           .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name)),
+          .map((name) => {
+            console.log(`[SW] Clearing old cache: ${name}`);
+            return caches.delete(name);
+          }),
       );
     }).then(() => self.clients.claim()),
   );
+});
+
+// ── Message handling for cache migration ───────────────────────
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+  if (event.data?.type === "CLEAR_CACHE") {
+    caches.keys().then((names) => {
+      Promise.all(names.map((n) => caches.delete(n))).then(() => {
+        self.clients.matchAll().then((clients) => {
+          clients.forEach((client) => client.postMessage({ type: "CACHE_CLEARED" }));
+        });
+      });
+    });
+  }
 });
 
 // ── Fetch: cache-first for static, network-first for dynamic ──
@@ -52,14 +82,12 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
 
   // Only handle same-origin requests
-  if (url.origin !== self.location.origin) return;
-
-  // API calls and wallet connections: network-only
-  if (
-    url.hostname === "sepolia.base.org" ||
-    url.href.includes("walletconnect") ||
-    url.href.includes("reown.com")
-  ) {
+  if (url.origin !== self.location.origin) {
+    // Network-only for external API calls
+    if (NETWORK_ONLY_PATTERNS.some((p) => url.hostname.includes(p))) {
+      return;
+    }
+    event.respondWith(fetch(request).catch(() => new Response(null, { status: 408 })));
     return;
   }
 

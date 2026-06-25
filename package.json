@@ -1,6 +1,6 @@
 {
   "name": "openproof",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "private": true,
   "license": "AGPL-3.0-only",
   "scripts": {
@@ -11,7 +11,14 @@
     "typecheck": "tsc --noEmit",
     "compile": "hardhat compile",
     "test:contracts": "hardhat test",
-    "deploy:base-sepolia": "hardhat run scripts/deploy.js --network baseSepolia"
+    "deploy:base-sepolia": "hardhat run scripts/deploy.js --network baseSepolia",
+    "cap:init": "npx cap init OpenProof com.openproof.app",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:build:android": "npm run build && npx cap copy android && npx cap sync android",
+    "export": "next build",
+    "package:msix": "echo 'Run: npx electron-builder --win or manual MSIX packaging via Windows App Certification Kit'"
   },
   "dependencies": {
     "@fontsource-variable/stack-sans-notch": "^5.2.1",
@@ -26,6 +33,14 @@
     "wagmi": "^2.19.5"
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capacitor/share": "^7.0.0",
+    "@capacitor/filesystem": "^7.0.0",
+    "@capacitor/keyboard": "^7.0.0",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@tailwindcss/postcss": "^4",
     "@types/mocha": "^10.0.10",

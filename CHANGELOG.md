@@ -2,6 +2,49 @@
 
 All notable changes to OpenProof are documented here.
 
+## 0.9.0 — Native Platform Readiness
+
+### Windows (MSIX)
+- AppxManifest.xml with identity, display properties, capabilities
+- MSIX packaging assets in `assets/windows/`
+- Store logos (71px, 150px, 310px, 310x150px)
+- ICO icon for tile
+- `package:msix` script for manual packaging workflow
+- Keyboard shortcut, High-DPI, window resize validation docs
+
+### Android (Capacitor)
+- `capacitor.config.json` with SplashScreen, Share, Filesystem, Keyboard plugins
+- Capacitor devDependencies in package.json
+- Capacitor scripts: `cap:init`, `cap:add:android`, `cap:sync`, `cap:build:android`
+- Adaptive icons verified (all densities present in `assets/android/`)
+- Splash screen configuration (dark background, centered)
+- Play Store icon present
+
+### PWA Polish
+- Updated service worker (v0.9.0) with better caching patterns
+- Added message handling for SKIP_WAITING and cache migration
+- Added `about`, `privacy`, `terms` to pre-cache list
+- Update flow validation with `SKIP_WAITING` message handler
+- Browser compatibility notes documented
+- Offline verification: network-first navigation with offline fallback
+
+### Release Validation
+- Full manual regression checklist (core proof loop, bundles, explorer, error states)
+- Cross-browser regression: Chrome, Firefox, Safari, Edge + mobile
+- Mobile regression: iOS PWA, Android PWA, touch targets, share sheets
+- Accessibility audit checklist (WCAG 2.2 AA)
+- Lighthouse 100 pass checklist
+- Store package validation checklist
+- Updated `docs/RELEASE_CHECKLIST.md` with all sections
+- Updated `sitemap.xml` with priority values for all 7 pages
+
+### Changed
+- Version bumped to 0.9.0
+- `package.json` — Capacitor scripts and devDependencies
+- `public/sw.js` — v0.9.0 with message handling, expanded cache scope
+- `public/sitemap.xml` — all 7 pages with priority values
+- `docs/RELEASE_CHECKLIST.md` — comprehensive validation checklist
+
 ## 0.8.0 — Release Hardening
 
 ### Infrastructure
