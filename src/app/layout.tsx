@@ -3,6 +3,8 @@ import { Geist_Mono } from "next/font/google";
 import "@fontsource-variable/stack-sans-notch";
 import { AppShell } from "@/components/app-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { OfflineNotice } from "@/components/offline-notice";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -98,7 +100,10 @@ export default function RootLayout({
           }}
         />
         <ThemeProvider>
-          <AppShell>{children}</AppShell>
+          <AppShell>
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </AppShell>
+          <OfflineNotice />
         </ThemeProvider>
       </body>
     </html>

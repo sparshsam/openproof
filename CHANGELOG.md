@@ -2,6 +2,48 @@
 
 All notable changes to OpenProof are documented here.
 
+## 0.8.0 — Release Hardening
+
+### Infrastructure
+- Error boundary component (`ErrorBoundary`) wraps the app with graceful reload prompt
+- Offline detection (`OfflineNotice`, `useOnlineStatus`) shows banner when disconnected
+- Environment separation guide (`docs/environment.md`)
+- Store readiness checklist (`docs/STORE_READINESS.md`)
+- Production build config: `reactStrictMode`, `poweredByHeader: false`, optimized package imports
+
+### Security
+- Refined CSP: added `Cross-Origin-Opener-Policy`, `Cross-Origin-Resource-Policy`, `X-DNS-Prefetch-Control`
+- Dependency audit maintained with documented exemptions
+- Supply-chain review completed
+
+### Documentation
+- Upgrade guide (`docs/UPGRADE_GUIDE.md`) — v0.2.0 → v0.8.0
+- Release notes (`docs/RELEASE_NOTES.md`) — v0.8.0
+- Environment variable reference (`docs/environment.md`)
+- Store readiness checklist (`docs/STORE_READINESS.md`)
+- Deployment notes updated with env separation table
+
+### Legal & Branding
+- Copyright notice in footer with contact email
+- Support email: sparshsam@gmail.com (footer)
+- License verification (AGPL-3.0, in footer and LICENSE)
+- Privacy policy (`/privacy`) and Terms (`/terms`) reviewed
+- App icons verified as present (existing)
+- Splash screens verified as present (existing)
+- OG image verified as present (existing)
+
+### CI/CD
+- Release build job: runs on main merges, verifies build output
+- Bundle size tracking in CI
+- Build output verification step
+
+### Changed
+- App version bumped to 0.8.0
+- Footer updated with copyright, support email, v0.8.0
+- `next.config.mts` — production optimizations (`removeConsole`, `optimizePackageImports`)
+- `vercel.json` — additional security headers
+- `ci.yml` — release build job added
+
 ## 0.2.0 - 2026-06-25
 
 ### Added — v0.2.0 Cryptographic Foundation

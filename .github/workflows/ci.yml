@@ -25,9 +25,9 @@ jobs:
         run: npm ci
 
       - name: Audit production dependencies
-        # --audit-level=critical: 25 high-severity findings exist in transitive
-        # deps (viem, rainbowkit, wagmi, WalletConnect) with no direct exploit
-        # path through OpenProof's static client-side surface.
+        # --audit-level=critical: known findings in transitive deps
+        # (viem, rainbowkit, wagmi, WalletConnect) with no direct
+        # exploit path through OpenProof's static client-side surface.
         run: npm audit --omit=dev --audit-level=critical
 
       - name: Lint
@@ -41,3 +41,41 @@ jobs:
 
       - name: Contract tests
         run: npm run test:contracts
+
+      - name: Check bundle size
+        run: |
+          echo "Next.js static export pages:"
+          du -sh .next/static/ 2>/dev/null || echo "No static bundle found"
+
+  # Release build — runs on main merges only
+  release:
+    name: Release Build
+    if: github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          echo "=== Build output size ==="
+          du -sh .next/
+          echo "=== Page count ==="
+          find .next/server/app -name "*.html" 2>/dev/null | wc -l
+          echo "=== Route manifest ==="
+          ls -la .next/prerender-manifest.json 2>/dev/null && echo "Static export verified"

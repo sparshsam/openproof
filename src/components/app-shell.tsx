@@ -64,9 +64,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-text-muted">AGPL-3.0</span>
-              <span className="text-text-muted">v0.1.4</span>
+              <span className="text-text-muted">v0.8.0</span>
             </div>
           </div>
+          <p className="mt-4 text-[11px] text-text-muted text-center sm:text-left">
+            &copy; {new Date().getFullYear()} Sparsh Sam. 
+            Contact: <a className="underline transition hover:text-text-primary" href="mailto:sparshsam@gmail.com">sparshsam@gmail.com</a>
+          </p>
         </footer>
       </div>
     </WalletProvider>
