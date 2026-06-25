@@ -1,11 +1,12 @@
 # OpenProof Agent Source of Truth
 
-Last updated: 2026-06-22
-Update signed by: v0.1.4-trust-transparency-agent
+Last updated: 2026-06-25
+Update signed by: v0.9.0-release-hardening-agent
 
 ## 1. Project Identity
 
 OpenProof is a privacy-first, open-source proof-of-existence app for files, built on Base Sepolia.
+Deployed at **https://proof.kovina.org** (also answers at openproof.vercel.app).
 
 Core phrase:
 
@@ -36,42 +37,58 @@ Principles:
 
 OpenProof proves narrow claims well. It should never imply broader claims it cannot support.
 
-## 3. Current State (v0.1.4)
+## 3. Current State (v0.9.0)
 
 OpenProof currently supports:
 
 - Local SHA-256 hashing in the browser (Web Crypto API).
 - Single-file proof registration on Base Sepolia.
-- Bundle proof hashing through deterministic local manifests.
+- Bundle proof hashing through deterministic Merkle tree manifests.
 - Onchain proof lookup through the OpenProof registry.
-- JSON proof receipt generation, automated download, and local download.
+- JSON proof receipt generation (schema v3), automated download, and local download.
 - Receipt import and validation against onchain state.
 - Local proof history using browser storage only.
 - Public proof pages at `/proof/[hash]`.
-- QR verification URLs.
-- Base Sepolia contract integration.
-- Testnet-first deployment posture.
-- AGPL-3.0-only open-source licensing.
-- **Theme toggle**: light/dark mode with localStorage persistence + system preference detection.
-- **Native pages**: `/about`, `/privacy`, `/terms` (no GitHub redirects).
-- **PWA**: installable with service worker, manifest, all platform icons.
-- **Light/dark mode**: CSS custom properties via `[data-theme]` attribute.
-- **Design system**: pill buttons, editorial layout, Block/Cash App-inspired aesthetic.
-- **Trust & Transparency page** (`/about`): architecture diagram, how proof works, threat model, can/cannot-prove sections, registry transparency table.
-- **Enhanced proof explorer** (`/proof/[hash]`): shows fingerprint, timestamp, transaction, wallet, block, and network without needing a receipt.
+- Bundle proof pages at `/bundle/[hash]`.
+- Human-readable receipt view with print/PDF support and citation formats.
+- Full receipt verification pipeline (11+ checks: schema, chain, contract, onchain, registry version, bundle consistency).
+- Merkle tree bundle proofs with individual inclusion proof verification.
+- OpenProofRegistry contract v2 with `registryVersion` getter.
+- Chain abstraction layer (Base Sepolia active, Base Mainnet prepared).
+- Multi-platform icon set from canonical SVG.
+- Error boundary with graceful reload prompt.
+- Offline detection with banner notification.
+- Service worker v0.9.0 with cache migration and update flow.
+- Capacitor configuration for Android native packaging.
+- MSIX packaging manifest for Windows Store.
+- Release validation checklist (regression, cross-browser, mobile, accessibility, Lighthouse 100).
+- Store readiness checklist for all platforms.
+- Theme toggle (light/dark, localStorage persistence).
+- Native pages: `/about`, `/privacy`, `/terms`.
+- PWA: installable with service worker, manifest, splash screens, shortcut.
+- AGPL-3.0-only licensed.
 
-The current registry contract is intentionally minimal:
-
+The current registry contract (v2) provides:
 - `registerProof(bytes32 fileHash)`
 - `getProof(bytes32 fileHash)`
 - `proofExists(bytes32 fileHash)`
+- `registryVersion()` (new in v2)
 - duplicate hash prevention
 - empty hash rejection
 - `ProofRegistered` event emission
 
 The app has no backend, no database, no file upload pipeline, no storage bucket, no account system, no token, no marketplace, no analytics, and no tracking.
 
-## 4. v1.0 Freeze Wall
+## 4. Design & Brand
+
+- **Domain:** proof.kovina.org (parent site kovina.org)
+- **Accent color:** `#0081CC`
+- **Design:** Black canvas, pill buttons, Block/Cash App-inspired editorial layout
+- **Logo:** Shield with checkmark in `#0081CC` on white/transparent background
+- **Canonical icon source:** `public/icon.svg`
+- **All icon variants regenerated from SVG** (PWA, Apple, iOS, Android, Windows, macOS)
+
+## 5. v1.0 Freeze Wall
 
 OpenProof v1.0 is now governed by this wall:
 
@@ -92,34 +109,37 @@ File or file set
 → Local history / public proof page
 → Portable proof reference
 
-## 5. Included in v1.0
+## 6. Included in v1.0
 
 OpenProof v1.0 includes:
-
 - Local file hashing.
 - Onchain proof registration.
 - Receipt generation.
 - Receipt import.
 - Proof verification.
-- Bundle proofs.
+- Bundle proofs (Merkle tree).
 - Public proof pages.
+- Bundle proof pages.
 - Local proof history.
 - Threat model clarity.
 - Security posture clarity.
-- Strong receipt format.
+- Strong receipt format (v3).
 - Portable verification language.
 - Polished proof creation UX.
 - Polished proof verification UX.
 - Clear disclaimers about what hashes prove and do not prove.
+- Human-readable receipt with print/PDF and citations.
+- Verification engine with detailed reports.
 - Accessibility and mobile polish.
 - Self-hosting clarity.
 - Contract test strengthening.
 - Documentation alignment.
+- Error boundary and offline handling.
+- Multi-platform readiness (PWA, Windows MSIX, Android Capacitor).
 
-## 6. Explicitly Not v1
+## 7. Explicitly Not v1
 
 The following are not part of OpenProof v1.0:
-
 - File hosting.
 - User accounts.
 - Cloud storage.
@@ -137,9 +157,7 @@ The following are not part of OpenProof v1.0:
 - Hidden analytics.
 - Any architecture that makes OpenProof a backend-heavy SaaS product.
 
-## 7. Allowed Work During Freeze
-
-Allowed work:
+## 8. Allowed Work During Freeze
 
 - UX polish.
 - Receipt format strengthening.
@@ -159,10 +177,10 @@ Allowed work:
 - Dependency hygiene.
 - Error-state clarity.
 - Copy refinement that reduces legal or technical ambiguity.
+- Manual platform packaging tasks (MSIX, Capacitor, PWA).
+- Store submission tasks.
 
-## 8. Forbidden Work Before Real Users
-
-Forbidden work without explicit human approval:
+## 9. Forbidden Work Before Real Users
 
 - New backend systems.
 - Accounts.
@@ -178,114 +196,125 @@ Forbidden work without explicit human approval:
 - Unnecessary architecture expansion.
 - Features that make the app harder to self-host or audit.
 
-## 9. App Surface Map
+## 10. App Surface Map
 
 Primary app routes:
-
 - `/` — landing and education surface.
 - `/create` — single-column transaction terminal flow: file select → hash → connect → register → receipt auto-download.
 - `/verify` — scanner-style single column: file select → hash → verify → result as hero.
-- `/proof/[hash]` — public read-only proof page for a registered or queried hash.
+- `/proof/[hash]` — public proof page. Bundle aware (shows link if bundle manifest stored).
+- `/bundle/[hash]` — bundle proof page with file listing and inclusion verification.
 - `/about` — brand story, mission, philosophy, details strip.
-- `/privacy` — native privacy policy (human-readable, no GitHub redirect).
-- `/terms` — native terms of service (human-readable, no GitHub redirect).
+- `/privacy` — native privacy policy.
+- `/terms` — native terms of service.
+- `/docs` — documentation index.
 
-Supporting public/static surfaces:
-
-- `public/screenshots/` — documentation and social preview screenshots.
-- `public/robots.txt` and sitemap metadata where present.
-
-## 10. File Map by Layer
+## 11. File Map by Layer
 
 Contracts:
-
-- `contracts/OpenProofRegistry.sol` — minimal proof registry.
-- `test/` — Hardhat contract tests.
-- `scripts/` — deployment scripts.
-- `hardhat.config.*` — compiler and network configuration.
+- `contracts/OpenProofRegistry.sol` — minimal proof registry (v2).
+- `test/OpenProofRegistry.js` — Hardhat contract tests.
+- `scripts/deploy.js` — deployment scripts.
+- `hardhat.config.js` — compiler and network configuration.
 
 Application routes:
-
-- `src/app/page.tsx` — public landing page (editorial hero, no cards).
-- `src/app/create/page.tsx` — transaction terminal: select file, hash, connect wallet, register, receipt auto-download.
-- `src/app/verify/page.tsx` — scanner-style verification: file select, hash, verify, result as hero.
-- `src/app/proof/[hash]/page.tsx` — proof page wrapper.
+- `src/app/page.tsx` — landing page.
+- `src/app/create/page.tsx` — transaction terminal.
+- `src/app/verify/page.tsx` — scanner-style verification.
+- `src/app/proof/[hash]/page.tsx` — proof page server component.
 - `src/app/proof/[hash]/proof-explorer-client.tsx` — proof page client logic.
-- `src/app/about/page.tsx` — brand story, mission, philosophy (native page).
-- `src/app/privacy/page.tsx` — privacy policy (native page).
-- `src/app/terms/page.tsx` — terms of service (native page).
+- `src/app/bundle/[hash]/page.tsx` — bundle proof page.
+- `src/app/bundle/[hash]/bundle-explorer-client.tsx` — bundle page client logic.
+- `src/app/about/page.tsx` — brand story, mission, threat model.
+- `src/app/privacy/page.tsx` — privacy policy.
+- `src/app/terms/page.tsx` — terms of service.
+- `src/app/docs/page.tsx` — documentation index.
 
 Components:
-
-- `src/components/app-shell.tsx` — global layout with header, nav (icon + wordmark), footer, skip link, theme toggle.
-- `src/components/base-notice.tsx` — Base Sepolia testnet info banner.
-- `src/components/copy-button.tsx` — accessible copy-to-clipboard pill button.
+- `src/components/app-shell.tsx` — global layout (header, nav, footer, skip link, theme toggle, copyright).
+- `src/components/error-boundary.tsx` — global React error boundary.
+- `src/components/offline-notice.tsx` — offline banner.
 - `src/components/design-system.tsx` — shared primitives (ActionPill, PillLink, ExplorerLink, Label, Section).
-- `src/components/file-drop.tsx` — premium dropzone (no dashed borders, hover ring).
+- `src/components/file-drop.tsx` — premium dropzone.
 - `src/components/hash-display.tsx` — hash display with copy surface.
-- `src/components/helper-tooltip.tsx` — accessible tooltip with keyboard support.
-- `src/components/proof-history.tsx` — local proof history as activity rows.
-- `src/components/proof-timeline.tsx` — proof lifecycle display (pill dots).
+- `src/components/proof-history.tsx` — local proof history.
+- `src/components/proof-timeline.tsx` — proof lifecycle display.
 - `src/components/qr-code.tsx` — QR proof URL display and download.
 - `src/components/receipt-import.tsx` — receipt import and validation UI.
+- `src/components/human-readable-receipt.tsx` — print-friendly receipt with citations.
+- `src/components/copy-button.tsx` — accessible copy-to-clipboard pill button.
+- `src/components/helper-tooltip.tsx` — accessible tooltip.
+- `src/components/base-notice.tsx` — Base Sepolia testnet info banner.
 - `src/components/providers/wallet-provider.tsx` — RainbowKit and wagmi provider isolation.
-- `src/components/providers/theme-provider.tsx` — ThemeProvider + ThemeToggle (sun/moon icons, localStorage persistence).
+- `src/components/providers/theme-provider.tsx` — ThemeProvider + ThemeToggle.
 
 Libraries:
-
-- `src/lib/hash.*` — local hashing and byte formatting.
-- `src/lib/bundle.*` — deterministic bundle manifest and bundle hashing.
-- `src/lib/receipt.*` — receipt schema, receipt building, validation, and download.
-- `src/lib/history.*` — browser-local history.
-- `src/lib/contracts.*` — ABI, chain, and contract configuration.
-- `src/lib/proofs.*` — typed registry reads and event lookup.
-- `src/lib/proof-url.*` — shareable proof URL helpers.
-- `src/lib/explorer.*` — explorer URL helpers.
-- `src/lib/errors.*` — user-facing error normalization.
-- `src/lib/time.*` — timestamp formatting.
+- `src/lib/hash.ts` — local hashing, byte formatting.
+- `src/lib/bundle.ts` — Merkle tree bundle manifests.
+- `src/lib/merkle.ts` — binary Merkle tree with inclusion proofs.
+- `src/lib/receipt.ts` — receipt type, builder, validator, migration helpers (schema v3).
+- `src/lib/history.ts` — browser-local history.
+- `src/lib/chains.ts` — chain configuration registry (Base Sepolia active, Base Mainnet prepared).
+- `src/lib/contracts.ts` — ABI, chain, and contract configuration.
+- `src/lib/proofs.ts` — typed registry reads and event lookup.
+- `src/lib/proof-url.ts` — chain-aware shareable proof URL helpers.
+- `src/lib/explorer.ts` — chain-aware explorer URL helpers.
+- `src/lib/errors.ts` — user-facing error normalization with wallet error detection.
+- `src/lib/time.ts` — timestamp formatting with timezone support.
+- `src/lib/citations.ts` — citation format generation (APA, MLA, Legal, Plain).
+- `src/lib/verify.ts` — full receipt verification pipeline.
+- `src/lib/archive.ts` — archive export, hash algorithm abstraction, compatibility checks.
+- `src/lib/wallet.ts` — wallet state hook and helpers.
+- `src/lib/offline.ts` — online status detection.
+- `src/lib/bundle-storage.ts` — bundle manifest localStorage management.
 
 Documentation:
-
 - `README.md` — public project overview.
 - `docs/ARCHITECTURE.md` — technical architecture.
+- `docs/ARCHITECTURAL_INVARIANTS.md` — permanent invariant register.
 - `docs/threat-model.md` — security and privacy boundaries.
-- `docs/deployment-notes.md` — operator wallet and deployment configuration notes.
-- `docs/repo-metadata.md` — GitHub description, website, and topic recommendations.
-- `docs/DESIGN_PLAYBOOK.md` — reusable UI/UX design playbook (Cash App/Block inspired).
-- `docs/RELEASE_CHECKLIST.md` — release process checklist.
+- `docs/receipt-schema.md` — receipt format documentation (v3).
+- `docs/deployment-notes.md` — operator wallet and deployment notes.
+- `docs/environment.md` — environment variable reference.
+- `docs/DESIGN_PLAYBOOK.md` — reusable UI/UX design playbook.
+- `docs/RELEASE_CHECKLIST.md` — comprehensive release validation.
+- `docs/RELEASE_NOTES.md` — v0.8.0 release notes.
+- `docs/UPGRADE_GUIDE.md` — v0.2.0 → v0.8.0 upgrade guide.
+- `docs/STORE_READINESS.md` — store publishing checklists.
 - `docs/STORE_METADATA.md` — app store metadata, keywords, age ratings.
 - `docs/PRIVACY.md` — privacy policy.
 - `docs/TERMS.md` — terms of service.
 - `docs/PLATFORM_READINESS.md` — PWA, MSIX, DMG, iOS, Android readiness.
-- `SECURITY.md` — vulnerability reporting and security posture.
-- `CONTRIBUTING.md` — contribution rules and validation.
-- `CHANGELOG.md` — release/change history where maintained.
-- `CLAUDE.md` — primary agent/project source of truth.
+- `docs/SECURITY.md` — vulnerability reporting.
+- `docs/CONTRIBUTING.md` — contribution rules.
+- `CHANGELOG.md` — version history.
+- `ROADMAP.md` — completed roadmap.
+- `CLAUDE.md` — this file.
 
 PWA and assets:
-
 - `public/manifest.json` — PWA web manifest.
-- `public/sw.js` — service worker with cache-first strategy.
-- `public/icon-192x192.png`, `public/icon-512x512.png` — PWA icons.
-- `public/apple-touch-icon.png` — iOS home screen icon.
-- `public/favicon.ico`, `public/favicon.png` — favicons.
-- `public/og.png` — Open Graph / social preview image.
+- `public/sw.js` — service worker (v0.9.0, cache-first + network-first).
+- `public/icon.svg` — canonical icon source (your SVG design).
+- `public/icon-192x192.png` — PWA icon (from SVG).
+- `public/icon-512x512.png` — PWA icon (from SVG).
+- `public/apple-touch-icon.png` — iOS icon (from SVG).
+- `public/favicon.ico` — multi-res favicon (from SVG).
+- `public/favicon.png` — favicon (from SVG).
+- `public/og.png` — social preview image (from your PNG source).
+- `public/robots.txt`, `public/sitemap.xml` — SEO.
 - `public/splash/` — iOS and web splash screens.
-- `assets/icon.iconset/` — macOS app icon set.
-- `assets/ios-icons/` — iOS app icon set.
-- `assets/windows/` — Windows ICO and Store assets.
-- `assets/android/` — Android adaptive icons and Play Store icon.
+- `public/screenshots/` — PWA store screenshots.
+- `assets/` — multi-platform icon sets for Android, iOS, macOS, Windows.
+- `capacitor.config.json` — Capacitor native app config.
 
-## 11. Security and Threat-Model Notes
+## 12. Security and Threat-Model Notes
 
 OpenProof can support these claims:
-
 - A wallet registered a specific SHA-256 hash on the configured chain.
 - The registry recorded a timestamp for that registration.
 - A later file can be hashed locally and compared against the registered hash.
 
 OpenProof cannot support these claims by itself:
-
 - Authorship.
 - Ownership.
 - Copyright.
@@ -295,102 +324,24 @@ OpenProof cannot support these claims by itself:
 - File recovery.
 - Privacy against known-file or low-entropy hash guessing.
 
-Security priorities during v1.0 freeze:
-
-- Make receipt schema assumptions explicit and versioned.
-- Make bundle hashing rules explicit and stable.
-- Make chain ID and contract address visible before users rely on a proof.
-- Keep file bytes local.
-- Avoid accidental metadata leakage beyond user-controlled receipt fields.
-- Warn users that receipts can reveal file names, file sizes, MIME types, hashes, wallet addresses, transaction hashes, timestamps, and verification URLs.
-- Warn users that public proof URLs expose hashes and public onchain metadata.
-- Keep deployment and wallet secrets out of git.
-- Keep contract behavior minimal and test-covered.
-
-Known risks to keep documented:
-
-- Malicious frontend deployments can lie about what is being hashed or submitted.
-- Public hashes can leak information for known, small, or guessable files.
-- Browser local storage can be cleared, corrupted, or inspected by someone with device/browser access.
-- Wallet prompts may confuse users about chain, contract, and transaction intent.
-- RPC providers can rate-limit or fail.
-- Testnet proofs are not production legal/compliance instruments.
-
-## 12. Documentation Gaps Still Open
-
-The repository has strong baseline documentation but the following gaps identified at freeze start remain open as of the v1.0 final review. Future agents should consider these priorities:
-
-- **Receipt schema documentation** — a formal `docs/receipt-schema.md` with field descriptions, versioning expectations, and example JSON.
-- **Bundle proof rule documentation** — a standalone explanation of deterministic ordering, stable-stringify, and future compatibility.
-- **Frontend integrity guidance** — explicit instructions for users who need high assurance that the served frontend hashes correctly.
-- **Release checklist** — a v1.0 release checklist covering build validation, docs review, security review, screenshots, and deploy.
-- **Receipt sharing guidance** — more accessible language about what a receipt reveals to recipients.
-- **Self-hosting notes** — a standalone `docs/self-hosting.md` for custom contract deployments, custom RPCs, and static hosting.
-- **Testnet vs mainnet language** — ensure all references to Base mainnet are consistently marked as roadmap items, not promises.
-
-These gaps do not block v1.0 freeze. They are documentation improvements to pursue after real user validation.
-
-## 13. UX Surfaces Needing Polish
-
-Prioritize clarity over novelty:
-
-- Create proof preflight: file hash, chain, contract, wallet, and irreversible public hash warning.
-- Registration lifecycle: waiting for wallet, submitted, confirming, confirmed, duplicate proof, failed transaction.
-- Receipt generation: what is included, what is not included, what sharing reveals.
-- Verify proof result states: exact match, no onchain proof, malformed receipt, unsupported chain, mismatched contract, RPC failure.
-- Bundle proofs: explain that the bundle manifest is local and verification requires the same files and same deterministic rules.
-- Public proof pages: make it unmistakable that they display hash metadata only, not the underlying file.
-- Mobile: keep file selection, copy actions, QR display, and receipt import readable and tappable.
-- Accessibility: maintain keyboard navigation, visible focus, reduced motion, semantic status messages, and useful labels.
-
-## 14. Future Ecosystem Notes
-
-OpenProof may eventually become the proof layer for a calm software ecosystem, including Elora and other quiet tools.
-
-Possible future uses:
-
-- Prove a policy snapshot existed at a given time.
-- Prove a vault state export without exposing private contents.
-- Prove a local activity ledger export.
-- Prove an app release bundle.
-- Prove a personal document, research artifact, creative work, or project archive.
-- Provide portable receipts across tools.
-- Allow future ecosystem apps to generate, import, and verify standardized proof receipts.
-
-Rules for ecosystem readiness:
-
-- Build standards before integrations.
-- Keep receipt format portable.
-- Keep proof semantics narrow.
-- Do not add Elora-specific assumptions to OpenProof v1.0.
-- Do not add cross-app sync.
-- Do not add accounts.
-- Do not add storage.
-- Do not turn OpenProof into a platform silo.
-
-OpenProof's future role is private proof and verification infrastructure. Elora's role is behavioral capital protection infrastructure. They may align philosophically without sharing runtime systems yet.
-
-## 15. Agent Coordination Rules
-
-Future agents must:
+## 13. Agent Coordination Rules
 
 1. Read `CLAUDE.md` before making changes.
 2. Treat `CLAUDE.md` as the primary source of truth for product boundaries.
 3. Inspect the repository directly before planning work.
 4. Keep changes inside the v1.0 freeze wall unless explicitly approved by Sparsh.
 5. Update `CLAUDE.md` after meaningful product, architecture, security, or documentation changes.
-6. Sign `CLAUDE.md` updates with their assigned agent/model name and date.
+6. Sign `CLAUDE.md` updates with your assigned agent name and date.
 7. Avoid broad refactors mixed with product changes.
 8. Avoid legal, authorship, ownership, copyright, or compliance overclaims.
 9. Preserve zero-backend, no-upload, local-first architecture unless explicitly approved.
 10. Never commit secrets.
+11. Check `manualtasksforsparsh.md` before planning platform packaging or store submission work.
+12. No scope expansion without explicit approval.
 
-No scope expansion without explicit approval.
-
-## 16. Validation Rules
+## 14. Validation Rules
 
 Before pushing meaningful changes, run:
-
 ```bash
 npm run lint
 npm run typecheck
@@ -398,89 +349,6 @@ npm run build
 npm run test:contracts
 ```
 
-If a command fails, document:
+## 15. Secret Handling
 
-- command
-- failure summary
-- whether the failure appears related to the change
-- recommended fix
-
-For UI changes:
-
-- include screenshots or describe tested responsive states.
-- verify mobile and desktop layouts where practical.
-
-For security-sensitive changes:
-
-- update `docs/threat-model.md` or `SECURITY.md` if assumptions changed.
-- update receipt, bundle, or contract documentation if proof semantics changed.
-
-For contract changes:
-
-- update tests.
-- document deployment implications.
-- do not silently change the registry address in documentation.
-
-## 17. Secret Handling Rules
-
-Never commit:
-
-- `.env`
-- `.env.local`
-- private keys
-- RPC secrets
-- WalletConnect/Reown secrets
-- deployment credentials
-- database credentials
-- Vercel secrets
-- seed phrases
-- wallet JSON files
-
-Public client environment variables may be documented when they are intentionally public, but private deployment credentials must stay local or in the deployment provider's secret store.
-
-## 18. Immediate v1.0 Refinement Backlog
-
-Recommended next tasks:
-
-1. Define and document a versioned OpenProof receipt schema. ✅ *Delivered in v0.1.0*
-2. Strengthen receipt validation states for unsupported chain, mismatched contract, malformed receipt, and missing onchain proof.
-3. Add or expand bundle determinism tests and documentation.
-4. Add a v1.0 release checklist covering docs, validation, security review, and screenshots. ✅ *Delivered in v0.1.1 — see `docs/RELEASE_CHECKLIST.md`*
-5. Polish proof creation and proof verification copy around what hashes prove and do not prove.
-
-### Delivered in v0.1.1
-
-- PWA support: manifest, service worker, app icons, splash screens.
-- Cross-platform icon set for Web/PWA, Windows (MSIX/Icons), macOS (.iconset), iOS, Android (adaptive).
-- Release documentation: `docs/RELEASE_CHECKLIST.md`, `docs/STORE_METADATA.md`, `docs/PRIVACY.md`, `docs/TERMS.md`.
-- Platform readiness documentation: `docs/PLATFORM_READINESS.md`.
-- Version bump to 0.1.1 in all locations.
-- README tech stack corrected from Next.js 15 to Next.js 16.
-- ROADMAP.md and AGENTS.md accuracy fixes.
-- Receipt silent-failure fix: RPC error handling + manual fallback button.
-- Design revamp: black base, `#0081CC` accent, bold typography, more whitespace.
-
-### Delivered in v0.1.2
-
-- Light/dark theme toggle with localStorage persistence + system preference detection.
-- Native `/about`, `/privacy`, `/terms` pages (no GitHub redirects).
-- Premium light mode (white bg, black text, same `#0081CC` accent).
-- Navigation updated: About link, theme toggle in top-right corner.
-- Footer updated: native page links, `v0.1.2`.
-- Smooth CSS transitions on theme switch.
-- `docs/DESIGN_PLAYBOOK.md` — reusable Block/Cash App-inspired design playbook.
-
-### Delivered in v0.1.3
-
-- Nav wordmark: `[24px icon] OpenProof` — icon inline with brand name.
-- About page hero: large centered icon (96–128px) as brand anchor.
-- Favicon fix: replaced Next.js auto-generated default with OpenProof icon (RGBA ICO, works on dark + light tabs).
-- Metadata audit: all OG/Twitter/manifest/apple-touch-icon references verified from canonical source.
-- Removed stale template SVGs from `public/`.
-
-### Delivered in v0.1.4 — Trust & Transparency Release
-
-- About page restructured with architecture diagram (CSS visual flow), how proof works (numbered steps), threat model (must-trust / no-trust / known-risks), can/cannot-prove sections (check/cross lists), and registry transparency table (contract, network, chain ID, explorer, source code, license).
-- Proof explorer enhanced: shows all 6 onchain fields — fingerprint, timestamp, transaction, wallet, block, network — without needing a receipt.
-- Block number support added to onchain proof lookup via event-log block metadata.
-- Version bumped to 0.1.4.
+Never commit: `.env`, `.env.local`, private keys, RPC secrets, WalletConnect/Reown secrets, deployment credentials, Vercel secrets, seed phrases, wallet JSON files.
