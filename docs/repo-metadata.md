@@ -9,7 +9,7 @@ Privacy-first proof-of-existence app for timestamping local SHA-256 file hashes 
 Website:
 
 ```text
-https://openproof.vercel.app
+https://proof.kovina.org
 ```
 
 Recommended topics:

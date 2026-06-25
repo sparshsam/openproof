@@ -249,7 +249,7 @@ Proofs registered through any OpenProof deployment must be verifiable without us
 
 ### VI-3. No privileged deployments.
 
-All deployments are equal. There is no "official" deployment with special privileges, additional features, or exclusive access. The canonical deployment (openproof.vercel.app) is distinguished by convention and community awareness, not by technical superiority or exclusive capabilities.
+All deployments are equal. There is no "official" deployment with special privileges, additional features, or exclusive access. The canonical deployment (proof.kovina.org) is distinguished by convention and community awareness, not by technical superiority or exclusive capabilities.
 
 ---
 
@@ -603,7 +603,7 @@ Proofs registered through any OpenProof deployment must be verifiable without us
 
 ### VI-3. No privileged deployments.
 
-All deployments are equal. There is no "official" deployment with special privileges, additional features, or exclusive access. The canonical deployment (openproof.vercel.app) is distinguished by convention and community awareness, not by technical superiority or exclusive capabilities.
+All deployments are equal. There is no "official" deployment with special privileges, additional features, or exclusive access. The canonical deployment (proof.kovina.org) is distinguished by convention and community awareness, not by technical superiority or exclusive capabilities.
 
 ---
 

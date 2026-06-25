@@ -6,7 +6,7 @@ OpenProof is a privacy-first, open-source proof-of-existence app for files, buil
 
 It lets users create timestamped blockchain proofs for file fingerprints without uploading or storing the files themselves. Files are hashed locally in the browser with SHA-256, and only the resulting `bytes32` hash is registered onchain through a minimal Solidity contract.
 
-[![Live app](https://img.shields.io/badge/live-openproof.vercel.app-0052FF?style=for-the-badge)](https://openproof.vercel.app)
+[![Live app](https://img.shields.io/badge/live-proof.kovina.org-0052FF?style=for-the-badge)](https://proof.kovina.org)
 [![CI](https://img.shields.io/github/actions/workflow/status/sparshsam/openproof/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/sparshsam/openproof/actions/workflows/ci.yml)
 [![License: AGPL v3](https://img.shields.io/github/license/sparshsam/openproof?style=for-the-badge)](LICENSE)
 [![Built on Base Sepolia](https://img.shields.io/badge/Built%20on-Base%20Sepolia-0052FF?style=for-the-badge)](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a)
@@ -15,7 +15,7 @@ It lets users create timestamped blockchain proofs for file fingerprints without
 
 ## Quick Links
 
-- [Live app](https://openproof.vercel.app)
+- [Live app](https://proof.kovina.org)
 - [BaseScan contract](https://sepolia.basescan.org/address/0x60d3DD631E6e4F6D76f761689d6FA229945a874a)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Receipt specification](docs/spec/receipt-specification.md)

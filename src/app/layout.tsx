@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://openproof.vercel.app"),
+  metadataBase: new URL("https://proof.kovina.org"),
   title: {
     default: "OpenProof",
     template: "%s | OpenProof",
@@ -32,13 +32,13 @@ export const metadata: Metadata = {
     "wagmi",
   ],
   alternates: {
-    canonical: "https://openproof.vercel.app",
+    canonical: "https://proof.kovina.org",
   },
   openGraph: {
     title: "OpenProof",
     description:
       "Open-source cryptographic proof infrastructure built on Base Sepolia. Timestamp file fingerprints onchain without uploading files anywhere.",
-    url: "https://openproof.vercel.app",
+    url: "https://proof.kovina.org",
     siteName: "OpenProof",
     images: [
       {

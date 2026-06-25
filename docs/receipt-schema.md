@@ -75,7 +75,7 @@ New receipts are always created at the latest version pair. Old receipts without
   "createdTimestamp": "2025-01-15T10:30:00.000Z",  // ISO-8601 string
 
   // ── Verification links ──
-  "verificationUrl": "https://openproof.vercel.app/proof/0xabc...",
+  "verificationUrl": "https://proof.kovina.org/proof/0xabc...",
   "verificationInstructions": "Open OpenProof, choose Verify Proof..."
 
   // ── Forward-compatible metadata (v3+) ──
@@ -286,7 +286,7 @@ Receipts from older schema versions are automatically migrated by `migrateReceip
   "transactionUrl": "https://sepolia.basescan.org/tx/0xabcdef...",
   "creatorWallet": "0x1234567890abcdef1234567890abcdef12345678",
   "createdTimestamp": "2025-01-15T10:30:00.000Z",
-  "verificationUrl": "https://openproof.vercel.app/proof/0x9f86d0818...",
+  "verificationUrl": "https://proof.kovina.org/proof/0x9f86d0818...",
   "verificationInstructions": "Open OpenProof, choose Verify Proof, select the original file, and compare the locally generated SHA-256 hash against the onchain registry entry. The file must match exactly."
 }
 ```
@@ -327,7 +327,7 @@ Receipts from older schema versions are automatically migrated by `migrateReceip
   "transactionUrl": "https://sepolia.basescan.org/tx/0x1234...",
   "creatorWallet": "0x1234...",
   "createdTimestamp": "2025-01-15T10:30:00.000Z",
-  "verificationUrl": "https://openproof.vercel.app/proof/0x55aabbccddee...",
+  "verificationUrl": "https://proof.kovina.org/proof/0x55aabbccddee...",
   "verificationInstructions": "Open OpenProof, choose Verify Proof..."
 }
 ```
