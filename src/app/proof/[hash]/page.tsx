@@ -18,6 +18,9 @@ export function generateMetadata(): Metadata {
       description:
         "View a Base Sepolia proof-of-existence record for an OpenProof SHA-256 fingerprint.",
     },
+    alternates: {
+      canonical: `/proof/`,
+    },
   };
 }
 

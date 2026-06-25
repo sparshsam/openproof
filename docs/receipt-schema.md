@@ -18,22 +18,25 @@ OpenProof receipts use two version numbers to track schema evolution independent
 
 | Field | Current | Purpose |
 |-------|---------|---------|
-| `schemaVersion` | `2` | Tracks the structural schema of the receipt JSON. Incremented when fields are added, removed, or renamed. |
-| `receiptVersion` | `2` | Tracks the receipt format iteration. Incremented when the semantic content changes (new validation rules, new optional fields, etc.) within a schema version. |
+| `schemaVersion` | `3` | Tracks the structural schema of the receipt JSON. Incremented when fields are added, removed, or renamed. |
+| `receiptVersion` | `3` | Tracks the receipt format iteration. Incremented when the semantic content changes (new validation rules, new optional fields, etc.) within a schema version. |
 
 New receipts are always created at the latest version pair. Old receipts without these fields are treated as version `1` by the validator.
 
 ---
 
-## Full Schema (v2)
+## Full Schema (v3)
 
 ```typescript
 {
   // ── Schema versioning ──
-  "schemaVersion": 2,                          // number, required
-  "receiptVersion": 2,                         // number, required
+  "schemaVersion": 3,                          // number, required
+  "receiptVersion": 3,                         // number, required
   "appName": "OpenProof",                      // string, must be "OpenProof"
-  "appVersion": "0.1.1",                       // string, required
+  "appVersion": "0.2.0",                       // string, required
+
+  // ── Registry version (v3+) ──
+  "registryVersion": 2,                        // number, optional, contract version
 
   // ── Proof metadata ──
   "proofType": "single-file",                  // "single-file" | "bundle"
@@ -64,12 +67,22 @@ New receipts are always created at the latest version pair. Old receipts without
   "transactionUrl": "https://sepolia.basescan.org/tx/0x1234...",
   "creatorWallet": "0xabcd...",                // string, 40-char hex with 0x prefix
 
+  // ── Optional chain context (v3+) ──
+  "chainExplorerUrl": "https://sepolia.basescan.org",  // string, optional
+  "chainCurrency": "ETH",                      // string, optional
+
   // ── Timestamp ──
   "createdTimestamp": "2025-01-15T10:30:00.000Z",  // ISO-8601 string
 
   // ── Verification links ──
   "verificationUrl": "https://openproof.vercel.app/proof/0xabc...",
   "verificationInstructions": "Open OpenProof, choose Verify Proof..."
+
+  // ── Forward-compatible metadata (v3+) ──
+  "metadata": {                                // object, optional
+    "source": "web-app",
+    "appBuild": "production"
+  }
 }
 ```
 
@@ -85,6 +98,12 @@ New receipts are always created at the latest version pair. Old receipts without
 | `receiptVersion` | `number` | Yes | Receipt format version within the schema. Semver-independent of appVersion. |
 | `appName` | `string` | Yes | Must equal `"OpenProof"`. Used to distinguish OpenProof receipts from other tools. |
 | `appVersion` | `string` | Yes | The OpenProof app version that created the receipt. Informational; does not affect validation. |
+
+### Registry Version (v3+)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `registryVersion` | `number` | No | Version of the OpenProofRegistry contract that registered the proof. `1` = original contract. `2` = v2 contract with `registryVersion` getter. |
 
 ### Proof Metadata
 
@@ -132,6 +151,19 @@ New receipts are always created at the latest version pair. Old receipts without
 |-------|------|----------|-------------|
 | `verificationUrl` | `string` | Yes | Shareable URL to the OpenProof proof explorer page for this hash. |
 | `verificationInstructions` | `string` | Yes | Human-readable instructions for verifying the proof via OpenProof. |
+
+### Optional Chain Context (v3+)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `chainExplorerUrl` | `string` | No | Base URL for the block explorer on the registration chain. Enables chain-agnostic explorer links. |
+| `chainCurrency` | `string` | No | Symbol for the chain's native currency (e.g., `"ETH"`). |
+
+### Forward-Compatible Metadata (v3+)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `metadata` | `object` | No | Arbitrary key-value metadata attached to the receipt. Consumers must ignore unknown keys. Reserved for future use. |
 
 ---
 
@@ -195,9 +227,24 @@ Receipts without `schemaVersion` are implicitly version `1`. These receipts are 
 
 All v1 receipts must still pass the hex format and field-type checks. A v1 receipt with valid data is accepted; only receipts with structural issues are rejected.
 
-### Schema v2 (current)
+### Schema v3 (current)
 
-All newly created receipts use schema v2. The canonical `ProofReceipt` type in the codebase always includes all fields with defaults filled in, so consumers never deal with partial data.
+Schema v3 adds:
+- `registryVersion` — optional field linking receipts to the deploying contract version
+- `chainExplorerUrl`, `chainCurrency` — optional chain context for multi-chain support
+- `metadata` — forward-compatible arbitrary key-value store
+- `migrateReceipt()` — helper function to upgrade receipts to the latest schema
+- Validation accepts `registryVersion` as an optional positive integer, and `metadata` as an optional object
+
+All newly created receipts use schema v3. The `buildProofReceipt()` function always includes v3 fields with defaults.
+Receipts from older schema versions are automatically migrated by `migrateReceipt()`.
+
+| Change | Impact |
+|--------|--------|
+| `registryVersion` added | Optional. V1/v2 validators ignore it. V3 validators accept it as optional. |
+| `metadata` added | Optional object. Consumers must ignore unknown keys. |
+| `chainExplorerUrl`, `chainCurrency` added | Optional. Enables multi-chain receipt portability. |
+| `migrateReceipt()` | Upgrades v1/v2 receipts to v3 with sensible defaults. |
 
 ---
 

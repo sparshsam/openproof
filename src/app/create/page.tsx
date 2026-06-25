@@ -19,7 +19,7 @@ import { ProofQrCode } from "@/components/qr-code";
 import { transactionExplorerUrl } from "@/lib/explorer";
 import { genericWalletErrorMessage, normalizeClientError } from "@/lib/errors";
 import { formatBytes, hashFileSha256 } from "@/lib/hash";
-import { hashBundleFiles, type BundleManifest } from "@/lib/bundle";
+import { hashBundleFiles, type BundleManifest, type BundleResult } from "@/lib/bundle";
 import { addProofHistoryItem } from "@/lib/history";
 import {
   expectedChainId, isContractConfigured, openProofAbi,
@@ -29,6 +29,7 @@ import { isWalletConnectConfigured } from "@/components/providers/wallet-provide
 import { buildProofReceipt, downloadJson, type ProofReceipt } from "@/lib/receipt";
 import { formatLocalTimestamp } from "@/lib/time";
 import { proofUrl } from "@/lib/proof-url";
+import { storeBundleManifest } from "@/lib/bundle-storage";
 
 export default function CreateProofPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -58,7 +59,7 @@ export default function CreateProofPage() {
     startTransition(() => { setHash(null); setHashError(null); setReceipt(null); setPreflightMsg(null); setBundleManifest(null); });
     autoDl.current = false;
     if (isBundle) {
-      hashBundleFiles(bundleFiles).then(({ bundleHash, manifest }) => { setHash(bundleHash); setBundleManifest(manifest); }).catch((e) => setHashError(e instanceof Error ? e.message : "Could not hash bundle."));
+      hashBundleFiles(bundleFiles).then((result: BundleResult) => { setHash(result.bundleHash); setBundleManifest(result.manifest); }).catch((e) => setHashError(e instanceof Error ? e.message : "Could not hash bundle."));
     } else if (file) {
       hashFileSha256(file).then(setHash).catch((e) => setHashError(e instanceof Error ? e.message : "Could not hash file."));
     }
@@ -83,13 +84,17 @@ export default function CreateProofPage() {
     load().catch(() => {});
   }, [address, bundleManifest?.files, file, hash, isBundle, pc, totalSz, txHash, txReceipt]);
 
-  // ── Auto-download + history ───────────────────────
+  // ── Auto-download + history + bundle storage ──────
   useEffect(() => {
     if (!receipt || autoDl.current) return;
     autoDl.current = true;
     downloadJson(`openproof-${receipt.sha256Hash.slice(2, 10)}.json`, receipt);
     addProofHistoryItem({ proofType: "registered", fileName: receipt.fileName, fileHash: receipt.sha256Hash, txHash: receipt.transactionHash, chainName: receipt.chainName, chainId: receipt.chainId, timestamp: receipt.createdTimestamp, verificationUrl: receipt.verificationUrl, baseScanUrl: receipt.transactionUrl });
-  }, [receipt]);
+    // Store bundle manifest for bundle proof explorer
+    if (isBundle && bundleManifest) {
+      storeBundleManifest(receipt.sha256Hash, bundleManifest);
+    }
+  }, [receipt, isBundle, bundleManifest]);
 
   const statusText = useMemo(() => {
     if (hashError) return hashError;

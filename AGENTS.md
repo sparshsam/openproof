@@ -2,29 +2,44 @@
 
 ## Product Identity
 
-OpenProof is a minimal, verifiable proof-of-existence app on Base Sepolia. Users submit document fingerprints (hashes) onchain to create timestamped, immutable attestations.
+OpenProof is a privacy-first, open-source cryptographic proof-of-existence tool for files, built on Base Sepolia. Users hash files locally in the browser and register only the SHA-256 fingerprint onchain. No uploads, no accounts, no backend.
 
-## Architecture Boundaries
+## Current Version
 
-1. **Onchain minimalism.** The smart contract is intentionally simple — just hash submission and verification. Receipt metadata lives off-chain.
-2. **Base Sepolia only.** Testnet deployment. No mainnet until vetted.
-3. **Wallet-required.** All attestations require a connected wallet (Coinbase Smart Wallet, MetaMask, or any EIP-1193 provider).
-4. **Receipt schema v2.** Receipts are versioned JSON documents. See [docs/receipt-spec.md](docs/receipt-spec.md) for the canonical schema.
+v0.2.0 — Cryptographic Foundation + Bundle Proofs + Professional Evidence + Verification Engine + Long-Term Preservation + Explorer Improvements.
+
+Deployed at https://openproof.vercel.app.
+
+## Architecture
+
+1. **Onchain minimalism.** Smart contract: registerProof, getProof, proofExists, registryVersion. Receipt metadata lives off-chain.
+2. **Chain registry.** Chain configuration abstraction supports multiple EVM chains (Base Sepolia active, Base Mainnet prepared).
+3. **Wallet-required.** RainbowKit + wagmi. Coinbase Smart Wallet, MetaMask, any EIP-1193 provider.
+4. **Receipt schema v3.** Versioned JSON receipts with forward-compatible metadata, registry version, optional chain context. Auto-download on registration.
+5. **Merkle tree bundles.** Bundle proofs use SHA-256 Merkle trees. Each file's hash is a leaf; the Merkle root is registered onchain. Individual inclusion proofs are verifiable.
+6. **Verification engine.** Full receipt verification pipeline with 11+ checks: schema, chain, contract, onchain, timestamps, registry version, bundle consistency.
+7. **Theme toggle.** Light/dark mode with localStorage persistence. System preference on first visit.
+8. **Native pages.** `/about`, `/privacy`, `/terms` — no GitHub redirects.
+9. **Bundle explorer.** `/bundle/[hash]` — bundle proof page with file listing, Merkle root, inclusion verification.
 
 ## Tech Stack
 
-- **Contract:** Solidity (Hardhat, ethers.js)
-- **Frontend:** Next.js 16, TypeScript, Tailwind v4, wagmi, viem
-- **Chain:** Base Sepolia
-- **AI agenting:** Base MCP integration (roadmap item; not yet implemented)
+- **Contract:** Solidity 0.8.24 (Hardhat, ethers.js) — v2 (registryVersion getter)
+- **Frontend:** Next.js 16, TypeScript, Tailwind v4, wagmi v2, viem, RainbowKit
+- **Chain:** Base Sepolia (chain ID 84532), Base Mainnet (pre-configured, inactive)
+- **Design:** Black canvas, `#0081CC` accent, pill buttons, Block/Cash App-inspired editorial layout
+- **PWA:** Installable, service worker, cross-platform icons
+- **Verification:** Receipt schema validation, Merkle inclusion proofs, chain-aware lookups
 
 ## Rules
 
-1. Never modify the contract without updating the receipt schema.
-2. Keep the contract gas-efficient and minimal.
-3. Receipt design is guided by [docs/receipt-spec.md](docs/receipt-spec.md) and CLAUDE.md.
+1. Read `CLAUDE.md` before making changes — it is the primary source of truth.
+2. Never modify the contract without updating the receipt schema.
+3. Keep receipts versioned and backward-compatible.
 4. Branch naming: `feat/*`, `fix/*`, `docs/*`, `refactor/*`, `chore/*`.
-5. No direct pushes to `main`. PRs require CI pass.
+5. No direct pushes to `main`. CI must pass.
+6. Run `npm run lint`, `typecheck`, `build`, `test:contracts` before meaningful changes.
+7. Preserve zero-backend, no-upload, local-first architecture.
 
 ## Ecosystem Standards
 

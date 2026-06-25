@@ -1,12 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.24;
 
+/// @title OpenProofRegistry v2
+/// @notice Minimal proof-of-existence registry with registry version support.
+/// @dev v2: Added registryVersion constant for v3 receipt compatibility.
 contract OpenProofRegistry {
     struct Proof {
         address creator;
         uint64 timestamp;
         bytes32 fileHash;
     }
+
+    /// @notice Current registry version. Incremented on contract upgrades
+    ///         that change proof semantics. Used in v3+ receipt metadata.
+    uint256 public constant registryVersion = 2;
 
     error EmptyFileHash();
     error ProofAlreadyRegistered(bytes32 fileHash);

@@ -1,4 +1,7 @@
-import { baseSepolia } from "wagmi/chains";
+import {
+  defaultActiveChainConfig,
+  getChainConfig,
+} from "@/lib/chains";
 
 export const openProofAbi = [
   {
@@ -33,6 +36,13 @@ export const openProofAbi = [
     outputs: [{ name: "", type: "bool" }],
   },
   {
+    type: "function",
+    name: "registryVersion",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
     type: "event",
     name: "ProofRegistered",
     inputs: [
@@ -44,15 +54,36 @@ export const openProofAbi = [
   },
 ] as const;
 
-export const openProofChain = baseSepolia;
+/** The chain config the app is currently targeting */
+export const openProofChainConfig = defaultActiveChainConfig;
 
-export const openProofContractAddress = process.env
-  .NEXT_PUBLIC_OPENPROOF_CONTRACT_ADDRESS as `0x${string}` | undefined;
+/** The wagmi chain the app is currently targeting */
+export const openProofChain = openProofChainConfig.chain;
 
-export const expectedChainId = Number(
-  process.env.NEXT_PUBLIC_CHAIN_ID || baseSepolia.id,
-);
+/** The contract address on the active chain */
+export const openProofContractAddress = openProofChainConfig.contractAddress;
 
+/** The expected chain ID for the active chain */
+export const expectedChainId = openProofChainConfig.chain.id;
+
+/** The registry version for the active chain */
+export const openProofRegistryVersion = openProofChainConfig.registryVersion;
+
+/** Get the chain config for a given chain ID, or the default */
+export function getContractForChain(
+  chainId: number,
+): { chain: (typeof openProofChain); contractAddress: `0x${string}` | undefined } | undefined {
+  const config = getChainConfig(chainId);
+  if (!config) return undefined;
+  return {
+    chain: config.chain,
+    contractAddress: config.contractAddress,
+  };
+}
+
+/** Check if the active chain's contract is configured */
 export function isContractConfigured() {
-  return Boolean(openProofContractAddress?.match(/^0x[a-fA-F0-9]{40}$/));
+  return Boolean(
+    openProofChainConfig.contractAddress?.match(/^0x[a-fA-F0-9]{40}$/),
+  );
 }
