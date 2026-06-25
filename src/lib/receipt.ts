@@ -1,3 +1,5 @@
+"use client";
+
 export type ProofType = "single-file" | "bundle";
 
 export type BundleReceiptFile = {
@@ -7,12 +9,17 @@ export type BundleReceiptFile = {
   sha256: `0x${string}`;
 };
 
+// ── Schema v3 — forward-compatible metadata, registry version, chain context ──
+
 export type ProofReceipt = {
   // --- Schema versioning ---
   schemaVersion: number;
   receiptVersion: number;
   appName: "OpenProof";
   appVersion: string;
+
+  // --- Registry version (v3+) ---
+  registryVersion?: number;
 
   // --- Proof metadata ---
   proofType: ProofType;
@@ -36,12 +43,19 @@ export type ProofReceipt = {
   transactionUrl: string;
   creatorWallet: `0x${string}`;
 
+  // --- Optional chain context (v3+) ---
+  chainExplorerUrl?: string;
+  chainCurrency?: string;
+
   // --- Timestamp ---
   createdTimestamp: string;
 
   // --- Verification links ---
   verificationUrl: string;
   verificationInstructions: string;
+
+  // --- Forward-compatible metadata (v3+) ---
+  metadata?: Record<string, unknown>;
 };
 
 export function buildProofReceipt(
@@ -52,12 +66,76 @@ export function buildProofReceipt(
 ): ProofReceipt {
   return {
     appName: "OpenProof",
-    appVersion: "0.1.2",
+    appVersion: "0.2.0",
     verificationInstructions:
       "Open OpenProof, choose Verify Proof, select the original file, and compare the locally generated SHA-256 hash against the onchain registry entry. The file must match exactly.",
     ...input,
   };
 }
+
+// ── Receipt migration helpers (v3+) ──
+
+const RECEIPT_SCHEMA_VERSIONS = [1, 2, 3] as const;
+
+export function getSupportedSchemaVersions(): ReadonlyArray<number> {
+  return RECEIPT_SCHEMA_VERSIONS;
+}
+
+export function isSchemaVersionSupported(version: number): boolean {
+  return (RECEIPT_SCHEMA_VERSIONS as readonly number[]).includes(version);
+}
+
+export function migrateReceipt(
+  receipt: Record<string, unknown>,
+): Record<string, unknown> {
+  const sv = typeof receipt.schemaVersion === "number" ? receipt.schemaVersion : 1;
+
+  if (sv >= 3) return receipt; // Already current
+
+  let migrated = { ...receipt };
+
+  // v1 → v2: add explicit version fields
+  if (sv <= 1) {
+    if (migrated.schemaVersion === undefined) migrated.schemaVersion = 1;
+    if (migrated.receiptVersion === undefined) migrated.receiptVersion = 1;
+    if (migrated.hashAlgorithm === undefined) migrated.hashAlgorithm = "SHA-256";
+    if (migrated.proofType === undefined) {
+      migrated.proofType = Array.isArray(migrated.bundleFiles) ? "bundle" : "single-file";
+    }
+    if (migrated.bundleRuleVersion === undefined && Array.isArray(migrated.bundleFiles)) {
+      migrated.bundleRuleVersion = 1;
+    }
+    migrated.schemaVersion = 2;
+  }
+
+  // v2 → v3: add forward-compatible metadata and registry fields
+  if (migrated.schemaVersion === 2) {
+    migrated.schemaVersion = 3;
+    migrated.receiptVersion = typeof migrated.receiptVersion === "number" ? migrated.receiptVersion + 1 : 2;
+    if (migrated.metadata === undefined) migrated.metadata = {};
+    if (migrated.registryVersion === undefined) migrated.registryVersion = 1;
+    // Ensure chain fields are present as optional extras
+    if (migrated.chainExplorerUrl === undefined && typeof migrated.transactionUrl === "string") {
+      // Derive base explorer URL from transaction URL
+      const txUrl = migrated.transactionUrl as string;
+      const baseUrl = txUrl.replace(/\/tx\/.+$/, "");
+      if (baseUrl !== txUrl) migrated.chainExplorerUrl = baseUrl;
+    }
+  }
+
+  return migrated;
+}
+
+export function receiptVersionLabel(schemaVersion: number): string {
+  switch (schemaVersion) {
+    case 1: return "v1 (original, implicit)";
+    case 2: return "v2 (explicit version fields)";
+    case 3: return "v3 (forward-compatible metadata, registry version)";
+    default: return `v${schemaVersion} (unknown)`;
+  }
+}
+
+// ── Validation ──
 
 export type ReceiptValidation =
   | { ok: true; receipt: ProofReceipt }
@@ -79,7 +157,6 @@ function isValidISODate(value: string): boolean {
   const d = new Date(value);
   if (isNaN(d.getTime())) return false;
   const year = d.getUTCFullYear();
-  // Reject dates before 2020 (pre-Ethereum) and after 2100.
   return year >= 2020 && year <= 2100;
 }
 
@@ -98,7 +175,16 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
   const raw = value as Record<string, unknown>;
   const errors: string[] = [];
 
-  // --- Required string fields ---
+  // ── First, check schema version for forward-compat ──
+  const schemaVersion =
+    typeof raw.schemaVersion === "number" ? raw.schemaVersion : 1;
+  if (schemaVersion > 3) {
+    errors.push(
+      `Unsupported schema version ${schemaVersion}. Supported versions: 1-3.`,
+    );
+  }
+
+  // ── Required string fields ──
   const stringFields: Array<keyof typeof raw> = [
     "appName",
     "appVersion",
@@ -125,7 +211,7 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     errors.push("Receipt was not created by OpenProof.");
   }
 
-  // --- Numeric fields ---
+  // ── Numeric fields ──
   if (!isNonNegativeNumber(raw.fileSize)) {
     errors.push("Missing or invalid field: fileSize.");
   }
@@ -134,7 +220,7 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     errors.push("Missing or invalid field: chainId.");
   }
 
-  // --- Optional version fields (validate when present) ---
+  // ── Version fields ──
   if (
     raw.schemaVersion !== undefined &&
     !isPositiveInteger(raw.schemaVersion)
@@ -147,6 +233,13 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     !isPositiveInteger(raw.receiptVersion)
   ) {
     errors.push("receiptVersion must be a positive integer.");
+  }
+
+  if (
+    raw.registryVersion !== undefined &&
+    !isPositiveInteger(raw.registryVersion)
+  ) {
+    errors.push("registryVersion must be a positive integer.");
   }
 
   if (
@@ -166,7 +259,7 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     errors.push("proofType must be 'single-file' or 'bundle'.");
   }
 
-  // --- Hex format validations ---
+  // ── Hex format validations ──
   if (typeof raw.sha256Hash === "string" && !HEX_BYTES32.test(raw.sha256Hash)) {
     errors.push("sha256Hash is not a valid 64-character hex string.");
   }
@@ -196,7 +289,7 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     errors.push("creatorWallet is not a valid 40-character hex address.");
   }
 
-  // --- Timestamp validation ---
+  // ── Timestamp validation ──
   if (
     typeof raw.createdTimestamp === "string" &&
     !isValidISODate(raw.createdTimestamp)
@@ -206,7 +299,7 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     );
   }
 
-  // --- Bundle consistency ---
+  // ── Bundle consistency ──
   const effectiveProofType: ProofType =
     raw.proofType === "bundle" || Array.isArray(raw.bundleFiles)
       ? "bundle"
@@ -245,12 +338,12 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     }
   }
 
-  // --- Return aggregated errors ---
+  // ── Return aggregated errors ──
   if (errors.length > 0) {
     return { ok: false, reason: errors.join("; ") };
   }
 
-  // --- Build canonical receipt with defaults for missing fields ---
+  // ── Build canonical receipt with defaults for missing fields ──
   const normalizedProofType: ProofType =
     raw.proofType === "bundle" ? "bundle" : "single-file";
 
@@ -278,7 +371,29 @@ export function validateProofReceipt(value: unknown): ReceiptValidation {
     verificationInstructions: String(raw.verificationInstructions),
   };
 
-  // --- Bundle fields ---
+  // ── V3+ fields ──
+  if (
+    typeof raw.registryVersion === "number"
+  ) {
+    receipt.registryVersion = raw.registryVersion;
+  }
+  if (
+    typeof raw.chainExplorerUrl === "string"
+  ) {
+    receipt.chainExplorerUrl = raw.chainExplorerUrl;
+  }
+  if (
+    typeof raw.chainCurrency === "string"
+  ) {
+    receipt.chainCurrency = raw.chainCurrency;
+  }
+  if (
+    raw.metadata !== undefined && typeof raw.metadata === "object" && !Array.isArray(raw.metadata)
+  ) {
+    receipt.metadata = raw.metadata as Record<string, unknown>;
+  }
+
+  // ── Bundle fields ──
   if (raw.proofType === "bundle" || Array.isArray(raw.bundleFiles)) {
     if (Array.isArray(raw.bundleFiles) && raw.bundleFiles.length > 0) {
       receipt.bundleFiles = raw.bundleFiles.map(

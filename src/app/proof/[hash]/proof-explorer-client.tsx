@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, ExternalLink, Loader2, ShieldQuestion } from "lucide-react";
+import { CheckCircle2, ExternalLink, FileBox, Loader2, ShieldQuestion } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { usePublicClient } from "wagmi";
 import {
@@ -16,6 +16,7 @@ import { normalizeClientError } from "@/lib/errors";
 import { addressExplorerUrl, transactionExplorerUrl } from "@/lib/explorer";
 import { isBytes32Hash, readOnchainProof, type OnchainProof } from "@/lib/proofs";
 import { formatLocalTimestamp } from "@/lib/time";
+import { hasBundleManifest } from "@/lib/bundle-storage";
 
 type LS =
   | { status: "loading" }
@@ -125,6 +126,17 @@ export function ProofExplorerClient({ hash }: { hash: string }) {
                 </a>
               ) : null}
             </div>
+
+            {/* ── Bundle awareness ── */}
+            {hasBundleManifest(h) ? (
+              <Link
+                className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-6 py-3 text-sm font-semibold text-accent transition-all hover:bg-accent/20"
+                href={`/bundle/${h}`}
+              >
+                <FileBox className="size-4" />
+                View bundle details ({h.slice(2, 8)})
+              </Link>
+            ) : null}
 
             <HashDisplay value={h} />
             {url ? <ProofQrCode url={url} /> : null}

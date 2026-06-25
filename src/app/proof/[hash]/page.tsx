@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ProofExplorerClient } from "@/app/proof/[hash]/proof-explorer-client";
 
-export function generateMetadata(): Metadata {
+export function generateMetadata({ params }: { params: Promise<{ hash: string }> }): Metadata {
+  const hash = params.then(p => p.hash).catch(() => "");
   return {
     title: "OpenProof verification page",
     description:
@@ -17,6 +18,9 @@ export function generateMetadata(): Metadata {
       title: "OpenProof verification page",
       description:
         "View a Base Sepolia proof-of-existence record for an OpenProof SHA-256 fingerprint.",
+    },
+    alternates: {
+      canonical: `/proof/`,
     },
   };
 }

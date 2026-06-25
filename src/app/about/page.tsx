@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { openProofChain, openProofContractAddress } from "@/lib/contracts";
-import { baseSepoliaExplorerUrl } from "@/lib/explorer";
+import { getExplorerUrl } from "@/lib/explorer";
+
+const baseSepoliaExplorerUrl = getExplorerUrl(84532);
 import { ExternalLink } from "lucide-react";
 
 export const metadata = {

@@ -53,4 +53,9 @@ describe("OpenProofRegistry", function () {
       .to.be.revertedWithCustomError(registry, "ProofNotFound")
       .withArgs(missingHash);
   });
+
+  it("reports registry version", async function () {
+    const { registry } = await deployRegistry();
+    expect(await registry.registryVersion()).to.equal(2);
+  });
 });

@@ -1,19 +1,29 @@
 "use client";
 
 import QRCode from "qrcode";
-import { Download, Link2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Download, Link2, Smartphone } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { ActionPill } from "@/components/design-system";
 
-export function ProofQrCode({ url }: { url: string }) {
+export function ProofQrCode({ url, label }: { url: string; label?: string }) {
   const [dataUrl, setDataUrl] = useState<string>("");
   const [copied, setCopied] = useState(false);
+  const qrRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     QRCode.toDataURL(url, {
       color: { dark: "#050b18", light: "#ffffff" },
       errorCorrectionLevel: "M", margin: 2, width: 320,
     }).then(setDataUrl).catch(() => setDataUrl(""));
+  }, [url]);
+
+  // Generate a high-res QR for print/download
+  const [highResQr, setHighResQr] = useState<string>("");
+  useEffect(() => {
+    QRCode.toDataURL(url, {
+      color: { dark: "#050b18", light: "#ffffff" },
+      errorCorrectionLevel: "Q", margin: 2, width: 800,
+    }).then(setHighResQr).catch(() => {});
   }, [url]);
 
   async function copyLink() {
@@ -30,8 +40,19 @@ export function ProofQrCode({ url }: { url: string }) {
     link.click();
   }
 
+  function downloadHighResQr() {
+    if (!highResQr) return;
+    const link = document.createElement("a");
+    link.href = highResQr;
+    link.download = "openproof-verification-qr-high.png";
+    link.click();
+  }
+
   return (
-    <div className="rounded-2xl bg-bg-surface-muted p-5 sm:p-6 space-y-5">
+    <div ref={qrRef} className="rounded-2xl bg-bg-surface-muted p-5 sm:p-6 space-y-5">
+      {label ? (
+        <p className="text-xs font-bold tracking-wider uppercase text-accent">{label}</p>
+      ) : null}
       <div className="rounded-xl bg-white p-4">
         {dataUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -48,9 +69,13 @@ export function ProofQrCode({ url }: { url: string }) {
           <Link2 className="size-4" />
           {copied ? "Copied" : "Copy link"}
         </ActionPill>
-        <ActionPill disabled={!dataUrl} variant="secondary" onClick={downloadQr}>
+        <ActionPill variant="secondary" onClick={downloadQr}>
           <Download className="size-4" />
-          Download QR
+          QR (standard)
+        </ActionPill>
+        <ActionPill disabled={!highResQr} variant="secondary" onClick={downloadHighResQr}>
+          <Smartphone className="size-4" />
+          QR (high res)
         </ActionPill>
       </div>
     </div>
