@@ -13,6 +13,21 @@ import { normalizeClientError } from "@/lib/errors";
 import { addressExplorerUrl, transactionExplorerUrl } from "@/lib/explorer";
 import { isBytes32Hash, readOnchainProof, type OnchainProof } from "@/lib/proofs";
 import { formatLocalTimestamp } from "@/lib/time";
+import { hasBundleManifest } from "@/lib/bundle-storage";
+
+// ── Bundle file type ──
+type BundleFileEntry = {
+  name: string;
+  size: number;
+  type: string;
+  sha256: `0x${string}`;
+};
+
+type BundleManifestData = {
+  files: BundleFileEntry[];
+  merkleRoot?: `0x${string}`;
+  [key: string]: unknown;
+};
 
 type LS =
   | { status: "loading" }
@@ -23,7 +38,7 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
   const h = hash.toLowerCase();
   const pc = usePublicClient({ chainId: openProofChain.id });
   const [state, setState] = useState<LS>({ status: "loading" });
-  const [bundleManifest, setBundleManifest] = useState<Record<string, unknown> | null>(null);
+  const [bundleManifest, setBundleManifest] = useState<BundleManifestData | null>(null);
   const [bundleError, setBundleError] = useState<string | null>(null);
   const url = useMemo(() => (typeof window === "undefined" ? "" : window.location.href), []);
 
@@ -54,8 +69,7 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
   async function handleVerifyInclusion(fileSha256: string) {
     if (!bundleManifest || !bundleManifest.files) return;
     try {
-      const files = bundleManifest.files as Array<Record<string, unknown>>;
-      const leaves = files.map((f) => f.sha256 as `0x${string}`);
+      const leaves = bundleManifest.files.map((f) => f.sha256);
       const index = leaves.indexOf(fileSha256 as `0x${string}`);
       if (index === -1) { setBundleError("File not found in this bundle."); return; }
 
@@ -119,6 +133,7 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
   }
 
   const fileCount = bundleManifest?.files?.length ?? 0;
+  const bundleFiles = bundleManifest?.files ?? null;
 
   return (
     <main>
@@ -172,14 +187,14 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
             </div>
 
             {/* Bundle file listing */}
-            {bundleManifest?.files?.length > 0 ? (
+            {bundleFiles && bundleFiles.length > 0 ? (
               <div>
                 <Label color="muted">Bundle files</Label>
                 <p className="mt-2 text-xs text-text-muted">
                   Files sorted deterministically. Each file SHA-256 is a leaf in the Merkle tree.
                 </p>
                 <div className="mt-4 divide-y divide-border-default text-sm">
-                  {(bundleManifest.files as Array<Record<string, unknown>>).map((f: Record<string, unknown>, i: number) => (
+                  {bundleFiles.map((f: BundleFileEntry, i: number) => (
                     <div key={f.name} className="flex justify-between gap-4 py-3">
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="shrink-0 text-xs text-text-muted w-5">{i + 1}.</span>
@@ -189,7 +204,7 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
                         </span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        {bundleManifest._verifiedFile === f.sha256 ? (
+                        {bundleManifest?._verifiedFile === f.sha256 ? (
                           <span className="text-accent text-xs font-semibold">Verified ✓</span>
                         ) : (
                           <button
