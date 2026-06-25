@@ -6,9 +6,9 @@ OpenProof is a privacy-first, open-source cryptographic proof-of-existence tool 
 
 ## Current Version
 
-v0.2.0 — Cryptographic Foundation + Bundle Proofs + Professional Evidence + Verification Engine + Long-Term Preservation + Explorer Improvements.
+v0.9.0 — Native Platform Readiness (on Base Sepolia)
 
-Deployed at https://proof.kovina.org.
+Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 
 ## Architecture
 
@@ -21,6 +21,11 @@ Deployed at https://proof.kovina.org.
 7. **Theme toggle.** Light/dark mode with localStorage persistence. System preference on first visit.
 8. **Native pages.** `/about`, `/privacy`, `/terms` — no GitHub redirects.
 9. **Bundle explorer.** `/bundle/[hash]` — bundle proof page with file listing, Merkle root, inclusion verification.
+10. **Human-readable receipt.** Print/PDF citations page with citation formats.
+11. **Error boundary.** Global React error boundary with graceful reload.
+12. **Offline detection.** Banner notification when network is unavailable.
+13. **Multi-platform.** PWA (installable, offline, shortcuts), Windows (MSIX manifest, icons), Android (Capacitor config, adaptive icons).
+14. **Canonical icon.** All icon variants generated from public/icon.svg (your supplied SVG).
 
 ## Tech Stack
 
@@ -28,8 +33,9 @@ Deployed at https://proof.kovina.org.
 - **Frontend:** Next.js 16, TypeScript, Tailwind v4, wagmi v2, viem, RainbowKit
 - **Chain:** Base Sepolia (chain ID 84532), Base Mainnet (pre-configured, inactive)
 - **Design:** Black canvas, `#0081CC` accent, pill buttons, Block/Cash App-inspired editorial layout
-- **PWA:** Installable, service worker, cross-platform icons
-- **Verification:** Receipt schema validation, Merkle inclusion proofs, chain-aware lookups
+- **PWA:** Installable, service worker (v0.9.0), manifest with shortcuts, splash screens
+- **Verification:** Receipt schema validation, Merkle inclusion proofs, chain-aware lookups, full verification pipeline
+- **Domain:** proof.kovina.org (parent kovina.org)
 
 ## Rules
 
@@ -37,9 +43,10 @@ Deployed at https://proof.kovina.org.
 2. Never modify the contract without updating the receipt schema.
 3. Keep receipts versioned and backward-compatible.
 4. Branch naming: `feat/*`, `fix/*`, `docs/*`, `refactor/*`, `chore/*`.
-5. No direct pushes to `main`. CI must pass.
+5. No direct pushes to `main`. Branch protection requires PRs.
 6. Run `npm run lint`, `typecheck`, `build`, `test:contracts` before meaningful changes.
 7. Preserve zero-backend, no-upload, local-first architecture.
+8. Check `manualtasksforsparsh.md` before starting platform packaging or store submission work.
 
 ## Ecosystem Standards
 
