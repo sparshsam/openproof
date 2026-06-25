@@ -6,7 +6,7 @@ const eslintConfig = defineConfig([
   ...nextCoreWebVitals,
   ...nextTypescript,
   {
-    files: ["hardhat.config.js", "scripts/**/*.js", "test/**/*.js"],
+    files: ["hardhat.config.js", "scripts/**/*.js", "scripts/**/*.cjs", "test/**/*.js"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
     },
