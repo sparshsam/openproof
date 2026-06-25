@@ -51,7 +51,7 @@ See `CHANGELOG.md` for the full version history.
 
 ---
 
-**Deployed at:** https://openproof.vercel.app  
+**Deployed at:** https://proof.kovina.org  
 **Source:** https://github.com/sparshsam/openproof  
 **License:** AGPL-3.0-only  
 **Contact:** sparshsam@gmail.com

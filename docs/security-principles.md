@@ -70,7 +70,7 @@ npm run build
 
 ### 2.3 Domain and Hosting
 
-- The official deployment is at `openproof.vercel.app`. Self-hosted deployments on other domains are independent instances with their own trust boundary.
+- The official deployment is at `proof.kovina.org`. Self-hosted deployments on other domains are independent instances with their own trust boundary.
 - Users should verify they are on the correct domain before connecting a wallet or registering a proof.
 - Self-hosted operators should enable HTTPS and configure HSTS headers.
 

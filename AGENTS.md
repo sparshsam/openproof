@@ -8,7 +8,7 @@ OpenProof is a privacy-first, open-source cryptographic proof-of-existence tool 
 
 v0.2.0 — Cryptographic Foundation + Bundle Proofs + Professional Evidence + Verification Engine + Long-Term Preservation + Explorer Improvements.
 
-Deployed at https://openproof.vercel.app.
+Deployed at https://proof.kovina.org.
 
 ## Architecture
 

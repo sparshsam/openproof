@@ -94,7 +94,7 @@ Utilities / Productivity
 
 ## Privacy Notes for Store Listing
 
-> OpenProof never uploads, stores, or transmits user files. All file hashing occurs locally in the browser using the Web Crypto API. Only the resulting 32-byte SHA-256 hash may be sent to the blockchain if the user chooses to register a proof. No analytics, no tracking, no accounts, no backend. See full privacy policy at https://openproof.vercel.app/docs/privacy
+> OpenProof never uploads, stores, or transmits user files. All file hashing occurs locally in the browser using the Web Crypto API. Only the resulting 32-byte SHA-256 hash may be sent to the blockchain if the user chooses to register a proof. No analytics, no tracking, no accounts, no backend. See full privacy policy at https://proof.kovina.org/docs/privacy
 
 ## Support URL
 
@@ -102,11 +102,11 @@ https://github.com/sparshsam/openproof/issues
 
 ## Marketing URL
 
-https://openproof.vercel.app
+https://proof.kovina.org
 
 ## Privacy Policy URL
 
-https://openproof.vercel.app/docs/privacy — or refer to the published policy.
+https://proof.kovina.org/docs/privacy — or refer to the published policy.
 
 ## Screenshot Specifications
 
