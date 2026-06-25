@@ -20,7 +20,7 @@ export default function AboutPage() {
           <img
             alt=""
             className="size-24 sm:size-32"
-            src="/icon-512x512.png"
+            src="/icon.svg"
           />
           <h1 className="mt-8 text-5xl font-black leading-none tracking-tight sm:text-7xl">
             OpenProof

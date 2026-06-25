@@ -4,15 +4,29 @@
   "description": "Open-source cryptographic proof infrastructure built on Base Sepolia. Timestamp file fingerprints onchain without uploading files anywhere.",
   "start_url": "/",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
   "background_color": "#f8f8f3",
   "theme_color": "#0052FF",
   "orientation": "any",
   "lang": "en",
   "dir": "ltr",
   "scope": "/",
-  "categories": ["utilities", "security", "blockchain"],
+  "categories": [
+    "utilities",
+    "security",
+    "blockchain"
+  ],
   "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
