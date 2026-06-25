@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, FileBox, Loader2, ShieldQuestion } from "lucide-react";
+import { FileBox, Loader2, ShieldQuestion } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { usePublicClient } from "wagmi";
 import { CopyButton } from "@/components/copy-button";
@@ -23,7 +23,7 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
   const h = hash.toLowerCase();
   const pc = usePublicClient({ chainId: openProofChain.id });
   const [state, setState] = useState<LS>({ status: "loading" });
-  const [bundleManifest, setBundleManifest] = useState<any>(null);
+  const [bundleManifest, setBundleManifest] = useState<Record<string, unknown> | null>(null);
   const [bundleError, setBundleError] = useState<string | null>(null);
   const url = useMemo(() => (typeof window === "undefined" ? "" : window.location.href), []);
 
@@ -43,20 +43,19 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
 
   // Try to load bundle manifest from local storage
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(`openproof:bundle:${h}`);
-      if (raw) {
-        setBundleManifest(JSON.parse(raw));
-      }
-    } catch {
-      // No manifest stored — bundle explorer still shows onchain data
+    const raw = localStorage.getItem(`openproof:bundle:${h}`);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Use queueMicrotask to defer state update outside the effect body
+      queueMicrotask(() => { setBundleManifest(parsed); });
     }
   }, [h]);
 
   async function handleVerifyInclusion(fileSha256: string) {
     if (!bundleManifest || !bundleManifest.files) return;
     try {
-      const leaves = bundleManifest.files.map((f: any) => f.sha256 as `0x${string}`);
+      const files = bundleManifest.files as Array<Record<string, unknown>>;
+      const leaves = files.map((f) => f.sha256 as `0x${string}`);
       const index = leaves.indexOf(fileSha256 as `0x${string}`);
       if (index === -1) { setBundleError("File not found in this bundle."); return; }
 
@@ -180,7 +179,7 @@ export function BundleExplorerClient({ hash }: { hash: string }) {
                   Files sorted deterministically. Each file SHA-256 is a leaf in the Merkle tree.
                 </p>
                 <div className="mt-4 divide-y divide-border-default text-sm">
-                  {bundleManifest.files.map((f: any, i: number) => (
+                  {(bundleManifest.files as Array<Record<string, unknown>>).map((f: Record<string, unknown>, i: number) => (
                     <div key={f.name} className="flex justify-between gap-4 py-3">
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="shrink-0 text-xs text-text-muted w-5">{i + 1}.</span>

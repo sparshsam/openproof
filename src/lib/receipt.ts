@@ -92,7 +92,7 @@ export function migrateReceipt(
 
   if (sv >= 3) return receipt; // Already current
 
-  let migrated = { ...receipt };
+  const migrated = { ...receipt };
 
   // v1 → v2: add explicit version fields
   if (sv <= 1) {

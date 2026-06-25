@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { ProofExplorerClient } from "@/app/proof/[hash]/proof-explorer-client";
 
-export function generateMetadata({ params }: { params: Promise<{ hash: string }> }): Metadata {
-  const hash = params.then(p => p.hash).catch(() => "");
+export function generateMetadata(): Metadata {
   return {
     title: "OpenProof verification page",
     description:

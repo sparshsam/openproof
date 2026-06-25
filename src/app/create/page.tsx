@@ -29,7 +29,7 @@ import { isWalletConnectConfigured } from "@/components/providers/wallet-provide
 import { buildProofReceipt, downloadJson, type ProofReceipt } from "@/lib/receipt";
 import { formatLocalTimestamp } from "@/lib/time";
 import { proofUrl } from "@/lib/proof-url";
-import { storeBundleManifest, downloadBundleManifest } from "@/lib/bundle-storage";
+import { storeBundleManifest } from "@/lib/bundle-storage";
 
 export default function CreateProofPage() {
   const [file, setFile] = useState<File | null>(null);

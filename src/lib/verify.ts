@@ -3,7 +3,7 @@
 // registry compatibility checks.
 
 import type { PublicClient } from "viem";
-import { readOnchainProof, type OnchainProof } from "@/lib/proofs";
+import { readOnchainProof } from "@/lib/proofs";
 import {
   validateProofReceipt,
   isSchemaVersionSupported,

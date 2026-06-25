@@ -1,8 +1,6 @@
-import { baseSepolia } from "wagmi/chains";
 import {
   defaultActiveChainConfig,
   getChainConfig,
-  type ChainConfig,
 } from "@/lib/chains";
 
 export const openProofAbi = [

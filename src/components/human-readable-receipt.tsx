@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Printer } from "lucide-react";
+import { Printer } from "lucide-react";
 import { useRef } from "react";
 import { ActionPill, Label } from "@/components/design-system";
 import { CopyButton } from "@/components/copy-button";
