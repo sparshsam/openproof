@@ -1,0 +1,45 @@
+{
+  "appId": "com.openproof.app",
+  "appName": "OpenProof",
+  "webDir": "out",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": [
+      "sepolia.base.org",
+      "*.walletconnect.com",
+      "*.reown.com",
+      "*.basescan.org"
+    ]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1000,
+      "backgroundColor": "#000000",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
+    },
+    "Share": {
+      "enabled": true
+    },
+    "Filesystem": {
+      "enabled": true
+    },
+    "Keyboard": {
+      "resize": "body",
+      "style": "dark",
+      "resizeOnFullScreen": true
+    }
+  },
+  "android": {
+    "backgroundColor": "#000000",
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "ios": {
+    "backgroundColor": "#000000",
+    "allowsLinkPreview": false,
+    "scrollEnabled": true
+  }
+}

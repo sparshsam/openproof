@@ -1,89 +1,134 @@
-# OpenProof Release Checklist — v0.1.1
+# OpenProof Release Validation Checklist
 
-## 1. Pre-Release Validation
+## Full Manual Regression
 
-- [ ] `npm run lint` passes with zero warnings
-- [ ] `npm run typecheck` passes with zero type errors
-- [ ] `npm run build` completes successfully
-- [ ] `npm run test:contracts` passes (Hardhat contract tests)
-- [ ] Source version is `0.1.1` everywhere:
-  - `package.json` (`"version": "0.1.1"`)
-  - `src/lib/receipt.ts` (`appVersion: "0.1.1"`)
-  - `src/components/app-shell.tsx` (footer `v0.1.1`)
-- [ ] `CHANGELOG.md` has a `0.1.1` entry with complete `Added`, `Changed`, `Documentation`, and `Infrastructure` sections
-- [ ] `README.md` tech stack is accurate (Next.js 16, not 15)
-- [ ] `ROADMAP.md` items marked `[x]` are genuinely implemented; aspirational items are `[ ]`
-- [ ] Contract deployment on Base Sepolia (if contract changes were made)
-- [ ] Registry address in code matches deployed contract
+### Core Proof Loop
+- [ ] File selection (single file)
+- [ ] File selection (bundle / multiple files)
+- [ ] Local SHA-256 hashing completes
+- [ ] Connect wallet flow
+- [ ] Wallet chain switch (wrong chain → correct chain)
+- [ ] Proof registration transaction
+- [ ] Transaction confirmation receipt
+- [ ] Receipt auto-download
+- [ ] Receipt JSON is valid and complete
+- [ ] Receipt contains all v3 fields
+- [ ] Proof history entry created
+- [ ] Bundle manifest stored in localStorage
+- [ ] Verify proof: file → hash → onchain check
+- [ ] Verify proof: receipt import → schema check → onchain check
+- [ ] Proof confirmed / not-found / error states all render
 
-## 2. Documentation Review
+### Bundle Proofs
+- [ ] Multi-file bundle selection
+- [ ] Bundle Merkle root computed
+- [ ] Bundle receipt generated
+- [ ] Bundle explorer page loads at `/bundle/[hash]`
+- [ ] Bundle file listing renders
+- [ ] "Verify inclusion" button works for each file
+- [ ] Bundle manifest downloadable
 
-- [ ] `README.md` — screenshots, badges, instructions accurate
-- [ ] `docs/PRIVACY.md` — privacy policy reflects actual data handling
-- [ ] `docs/TERMS.md` — terms of service reflect current app scope
-- [ ] `docs/RELEASE_CHECKLIST.md` — this checklist is up to date
-- [ ] `docs/STORE_METADATA.md` — app metadata is complete
-- [ ] `SECURITY.md` — vulnerability reporting contact is current
-- [ ] `CONTRIBUTING.md` — contribution guide is accurate
-- [ ] `LICENSE` — AGPL-3.0-only, year updated if needed
-- [ ] App screenshots are current (not showing outdated UI)
+### Proof Explorer
+- [ ] `/proof/[hash]` loads with valid hash
+- [ ] Invalid hash shows error state
+- [ ] Missing proof shows not-found state
+- [ ] All 6 onchain fields display (fingerprint, timestamp, wallet, network, block, tx)
+- [ ] Bundle awareness link shows when bundle manifest exists
+- [ ] QR code renders and downloads
+- [ ] Copy buttons work
 
-## 3. PWA Readiness
+### Navigation & UI
+- [ ] All nav links work (Create, Verify, About, GitHub)
+- [ ] Theme toggle switches dark/light
+- [ ] Theme persists across page reload
+- [ ] Skip-to-content link works
+- [ ] Footer links work (About, Privacy, Terms, GitHub)
 
-- [ ] `public/manifest.json` exists with correct app name, icons, theme color
-- [ ] `public/sw.js` service worker exists and registers without error
-- [ ] `public/icon-192x192.png` and `public/icon-512x512.png` exist
-- [ ] `public/apple-touch-icon.png` exists (180×180)
-- [ ] `public/favicon.ico` exists (multi-resolution)
-- [ ] Service worker caches essential assets and handles offline gracefully
-- [ ] Lighthouse PWA audit passes (installable, offline-capable)
+### Error States
+- [ ] Wallet not connected: appropriate messaging
+- [ ] Wrong chain: switch prompt
+- [ ] RPC failure: graceful error message
+- [ ] Duplicate proof detection
+- [ ] Receipt import: malformed JSON error
+- [ ] Receipt import: wrong contract error
+- [ ] Receipt import: wrong chain error
+- [ ] Receipt import: hash not found error
+- [ ] Empty bundle: validation error
+- [ ] File too large: limit enforcement
 
-## 4. Icon Set Verification
+## Cross-Browser Regression
 
-- [ ] Web/PWA icons: `public/icon-192x192.png`, `public/icon-512x512.png`, `public/apple-touch-icon.png`, `public/favicon.ico`, `public/favicon.png`
-- [ ] macOS: `assets/icon.iconset/` contains all required sizes (16, 32, 128, 256, 512, @2x variants, 1024)
-- [ ] iOS: `assets/ios-icons/` contains all required sizes (40, 58, 60, 80, 87, 120, 180, 1024)
-- [ ] Windows: `assets/windows/icon.ico` (multi-size 16–256), `assets/windows/store-logo-*.png`
-- [ ] Android: `assets/android/` contains density-based launcher icons and adaptive icon foreground/background
+- [ ] Chrome (latest)
+- [ ] Firefox (latest)
+- [ ] Safari (latest)
+- [ ] Edge (latest)
+- [ ] Chrome on Android
+- [ ] Safari on iOS
 
-## 5. Security Headers (vercel.json)
+### Per-Browser Checks
+- [ ] File picker opens
+- [ ] Wallet connection works
+- [ ] QR code renders
+- [ ] Theme toggle works
+- [ ] Service worker registers
+- [ ] Offline fallback serves cached pages
+- [ ] Copy-to-clipboard works
+- [ ] Keyboard navigation works
 
-- [ ] Content-Security-Policy covers all external connect-src (WalletConnect, Reown, Base Sepolia RPC, BaseScan)
-- [ ] `frame-ancestors 'none'` set
-- [ ] `X-Frame-Options: DENY` set
-- [ ] `Strict-Transport-Security` with `max-age=63072000; includeSubDomains; preload` set
-- [ ] `X-Content-Type-Options: nosniff` set
-- [ ] `Referrer-Policy: strict-origin-when-cross-origin` set
-- [ ] `Permissions-Policy` denies camera, microphone, geolocation, payment
+## Mobile Regression
 
-## 6. Git Tagging
+### iOS
+- [ ] PWA install prompt (Share → Add to Home Screen)
+- [ ] Standalone mode: no browser chrome
+- [ ] Safe area rendering (notch, home indicator)
+- [ ] Touch targets ≥ 44px
+- [ ] Zoom disabled on input focus
+- [ ] Keyboard doesn't break layout
+- [ ] File picker from camera roll
+- [ ] Share sheet integration
 
-```bash
-git tag -a v0.1.1 -m "v0.1.1 — PWA support, cross-platform icons, release documentation"
-git push origin v0.1.1
-```
+### Android
+- [ ] PWA install prompt (Chrome banner)
+- [ ] Standalone mode
+- [ ] Status bar color matches theme
+- [ ] Back button navigation works
+- [ ] File picker from gallery/files
+- [ ] Share sheet integration
+- [ ] Adaptive icon renders correctly
 
-## 7. GitHub Release
+## Accessibility Audit
 
-- [ ] Tag `v0.1.1` pushed to origin
-- [ ] GitHub Release created with changelog summary
-- [ ] Release artifacts attached (if any):
-  - Source code archive (auto-generated by GitHub)
+- [ ] Skip-to-content link visible on focus
+- [ ] All images have alt text
+- [ ] All buttons have accessible labels
+- [ ] Color contrast ≥ 4.5:1 for text
+- [ ] Focus indicators visible on all interactive elements
+- [ ] Keyboard navigation: all pages reachable
+- [ ] Screen reader: headings follow hierarchy
+- [ ] Screen reader: status updates announced (aria-live)
+- [ ] Reduced motion respected
+- [ ] Touch target minimum 44×44px
 
-## 8. Deployment
+## Lighthouse 100 Pass
 
-- [ ] Deploy to Vercel from `main`
-- [ ] Verify live app at https://openproof.vercel.app
-- [ ] Verify PWA install prompt works
-- [ ] Verify service worker registers
-- [ ] Verify proof creation flow end-to-end on Base Sepolia
-- [ ] Verify proof verification flow
-- [ ] Verify public proof page at `/proof/[hash]`
-- [ ] Run Lighthouse audit — target ≥90 on all categories
-- [ ] Verify all social preview images render (OpenGraph, Twitter Card)
+- [ ] Performance ≥ 90
+- [ ] Accessibility ≥ 90
+- [ ] Best Practices ≥ 90
+- [ ] SEO ≥ 90
+- [ ] PWA installable
+- [ ] PWA registers service worker
+- [ ] No console errors
+- [ ] No deprecated APIs
 
-## 9. Post-Release
+## Store Package Validation
 
-- [ ] Update `CHANGELOG.md` `v0.1.1` release date if deploying on a different day
-- [ ] Announce in relevant channels if applicable
-- [ ] Close associated GitHub milestone if using one
+- [ ] PWA manifest validates
+- [ ] All icon sizes present (192, 512)
+- [ ] Screenshots present (wide + narrow)
+- [ ] Service worker registers and caches
+- [ ] Static export builds without errors
+- [ ] Security headers present in vercel.json
+- [ ] robots.txt and sitemap.xml present
+- [ ] OG image renders in social preview
+- [ ] Apple touch icon renders
+- [ ] Splash screens render
