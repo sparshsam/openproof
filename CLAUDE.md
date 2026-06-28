@@ -1,7 +1,7 @@
 # OpenProof Agent Source of Truth
 
-Last updated: 2026-06-25
-Update signed by: v0.9.0-release-hardening-agent
+Last updated: 2026-06-27
+Update signed by: copy+hydrate+csp-agent
 
 ## 1. Project Identity
 
@@ -66,6 +66,13 @@ OpenProof currently supports:
 - Theme toggle (light/dark, localStorage persistence).
 - Native pages: `/about`, `/privacy`, `/terms`.
 - PWA: installable with service worker, manifest, splash screens, shortcut.
+- PWA install prompt with branded UI and localStorage dismissal memory (7-day cooldown).
+- Website copy across homepage (6 sections: Who uses, How it works, When to timestamp, What a proof means, Registry, Privacy by design), About page (Who uses, When to use), Create/Verify pages.
+- SEO metadata with proof-of-existence, file fingerprinting, blockchain timestamping keywords.
+- Hydration-safe theme toggle via suppressHydrationWarning on <html>.
+- Offline detection via useSyncExternalStore (no flash-of-offline-notice).
+- CSP headers allowing WalletConnect pulse + Web3Modal API endpoints.
+- Cross-Origin-Opener-Policy set to same-origin-allow-popups (Base Account SDK compat).
 - AGPL-3.0-only licensed.
 
 The current registry contract (v2) provides:
