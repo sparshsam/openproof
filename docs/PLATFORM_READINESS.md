@@ -1,7 +1,7 @@
 # OpenProof — Platform Readiness Report
 
-**Version:** 0.1.1  
-**Date:** 2026-06-21
+**Version:** 0.9.0  
+**Date:** 2026-06-27
 
 ## 1. Platform Coverage
 
@@ -9,10 +9,10 @@
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
-| PWA manifest | ✅ | `public/manifest.json` — standalone display, theme color #0052FF, background #f8f8f3 |
-| Service worker | ✅ | `public/sw.js` — cache-first for static assets, network-first for navigation |
-| Install prompt | ✅ | PWA meets installability criteria (manifest + SW + HTTPS) |
-| Offline support | ✅ | Cached shell available; core pages work after initial visit |
+|| PWA manifest | ✅ | `public/manifest.json` — standalone display, theme color #0081CC, background #000000 |
+|| Service worker | ✅ | `public/sw.js` v0.9.0 — cache-first for static assets, network-first for navigation, `/proof/` and `/bundle/` routes cached |
+|| Install prompt | ✅ | `PwaInstallPrompt` component — `beforeinstallprompt` handling with branded UI |
+|| Offline support | ✅ | Cached shell available; core pages work after initial visit; update flow via SKIP_WAITING message |
 | Icons (192/512) | ✅ | `public/icon-192x192.png`, `public/icon-512x512.png` |
 | Apple touch icon | ✅ | `public/apple-touch-icon.png` (180×180) |
 | Favicon | ✅ | `public/favicon.ico` (16/32/48/64), `public/favicon.png` |
@@ -30,9 +30,9 @@
 | Store logo (150×150) | ✅ | `assets/windows/store-logo-150.png` |
 | Store logo (310×310) | ✅ | `assets/windows/store-logo-310.png` |
 | Store logo (310×150) | ✅ | `assets/windows/store-logo-310x150.png` |
-| Splash screen (620×300) | ❌ | Not yet generated. Will be added on first MSIX packaging. |
-| Splash screen (868×420) | ❌ | Not yet generated. |
-| Splash screen (1116×540) | ❌ | Not yet generated. |
+| Splash screen (620×300) | ✅ | `assets/windows/splash-620x300.png` — centered icon on black |
+| Splash screen (868×420) | ✅ | `assets/windows/splash-868x420.png` — centered icon on black |
+| Splash screen (1116×540) | ✅ | `assets/windows/splash-1116x540.png` — centered icon on black |
 | MSIX package | 📝 | Documented strategy below — no packaging tooling set up yet. |
 
 **MSIX packaging strategy:**
@@ -101,15 +101,16 @@
 | Play Store icon (512×512) | ✅ | `assets/android/play-store-icon.png` |
 | Privacy policy | ✅ | `docs/PRIVACY.md` |
 | Age rating | ✅ | Everyone — documented in `docs/STORE_METADATA.md` |
-| APK/AAB package | 📝 | Documented strategy below |
+| APK/AAB package | ✅ | Capacitor Android project initialized at `android/` with 4 plugins (Filesystem, Keyboard, Share, SplashScreen). Build via `npm run cap:build:android`. |
 
 **Android distribution strategy:**
 
-1. OpenProof is primarily a web app. For Play Store presence:
-   - Use a Trusted Web Activity (TWA) with Bubblewrap to wrap the PWA.
-   - Bubblewrap will read `public/manifest.json` for configuration.
-   - Replace auto-generated icons with canonical icons from `assets/android/`.
-   - Sign with a release keystore.
+1. OpenProof uses Capacitor for native Android packaging:
+   - Run `npx cap add android` (done — `android/` project exists)
+   - Build with `npm run cap:build:android` (builds static export, copies to native project, syncs plugins)
+   - Re-generate adaptive icons from `scripts/generate-icons.cjs` if the source SVG changes
+   - Sign with a release keystore and generate AAB via Android Studio or `npx cap build android`
+   - 4 Capacitor plugins configured: Filesystem, Keyboard, Share, SplashScreen
 2. App content rating:
    - Self-assessment: Everyone (no restricted content).
    - Submit content questionnaire in Play Console using answers from `docs/STORE_METADATA.md`.

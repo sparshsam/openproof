@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { BundleExplorerClient } from "./bundle-explorer-client";
 
+export async function generateStaticParams() {
+  return [{ hash: "placeholder" }];
+}
+
+export const dynamicParams = false;
+
 export function generateMetadata(): Metadata {
   return {
     title: "Bundle proof",

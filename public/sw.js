@@ -25,6 +25,8 @@ const STATIC_ASSETS = [
   "/apple-touch-icon.png",
   "/robots.txt",
   "/sitemap.xml",
+  "/proof/",
+  "/bundle/",
 ];
 
 // Routes that should always be fetched from the network
