@@ -315,7 +315,7 @@ export default function AboutPage() {
               Details
             </span>
             <span>AGPL-3.0</span>
-            <span>v0.1.4</span>
+            <span>v0.9.0</span>
             <Link
               className="transition hover:text-text-primary"
               href="https://github.com/sparshsam/openproof"

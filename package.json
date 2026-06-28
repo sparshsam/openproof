@@ -16,7 +16,7 @@
     "cap:add:android": "npx cap add android",
     "cap:sync": "npx cap sync",
     "cap:open:android": "npx cap open android",
-    "cap:build:android": "npm run build && npx cap copy android && npx cap sync android",
+    "cap:build:android": "bash scripts/cap-build.sh",
     "export": "next build",
     "package:msix": "echo 'Run: npx electron-builder --win or manual MSIX packaging via Windows App Certification Kit'"
   },
@@ -68,5 +68,13 @@
   "bugs": {
     "url": "https://github.com/sparshsam/openproof/issues"
   },
-  "keywords": []
+  "keywords": [],
+  "allowScripts": {
+    "bufferutil@4.1.0": true,
+    "keccak@3.0.4": true,
+    "sharp@0.34.5": true,
+    "secp256k1@4.0.4": true,
+    "unrs-resolver@1.12.2": true,
+    "utf-8-validate@5.0.10": true
+  }
 }

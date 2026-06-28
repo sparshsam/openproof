@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">OpenProof</string>
+    <string name="title_activity_main">OpenProof</string>
+    <string name="package_name">com.openproof.app</string>
+    <string name="custom_url_scheme">com.openproof.app</string>
+</resources>

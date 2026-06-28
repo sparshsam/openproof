@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { ProofExplorerClient } from "@/app/proof/[hash]/proof-explorer-client";
 
+export async function generateStaticParams() {
+  return [{ hash: "placeholder" }];
+}
+
+export const dynamicParams = false;
+
 export function generateMetadata(): Metadata {
   return {
     title: "OpenProof verification page",

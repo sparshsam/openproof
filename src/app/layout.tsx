@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { OfflineNotice } from "@/components/offline-notice";
+import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -75,6 +76,7 @@ export const metadata: Metadata = {
   },
   other: {
     "mobile-web-app-capable": "yes",
+    "theme-color": "#0081CC",
   },
 };
 
@@ -104,6 +106,7 @@ export default function RootLayout({
             <ErrorBoundary>{children}</ErrorBoundary>
           </AppShell>
           <OfflineNotice />
+          <PwaInstallPrompt />
         </ThemeProvider>
       </body>
     </html>
