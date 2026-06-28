@@ -96,7 +96,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-bg-base text-text-primary">
         <link rel="manifest" href="/manifest.json" />
         <script

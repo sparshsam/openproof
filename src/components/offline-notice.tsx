@@ -8,7 +8,11 @@ export function OfflineNotice() {
   if (isOnline) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-lg rounded-full bg-error/90 px-6 py-3 text-sm font-semibold text-white text-center shadow-lg backdrop-blur-sm">
+    <div
+      aria-live="assertive"
+      className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-lg rounded-full bg-error/90 px-6 py-3 text-sm font-semibold text-white text-center shadow-lg backdrop-blur-sm"
+      role="alert"
+    >
       You are offline. Onchain verification requires an internet connection.
     </div>
   );
