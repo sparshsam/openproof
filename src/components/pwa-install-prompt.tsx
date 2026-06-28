@@ -2,6 +2,9 @@
 
 import { useEffect, useState, useCallback } from "react";
 
+const DISMISSED_KEY = "openproof-install-dismissed";
+const RE_SHOW_AFTER_DAYS = 7;
+
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
   readonly userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
@@ -14,6 +17,27 @@ declare global {
   }
 }
 
+function isDismissedRecently(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const stored = localStorage.getItem(DISMISSED_KEY);
+    if (!stored) return false;
+    const dismissedAt = parseInt(stored, 10);
+    if (isNaN(dismissedAt)) return false;
+    return Date.now() - dismissedAt < RE_SHOW_AFTER_DAYS * 24 * 60 * 60 * 1000;
+  } catch {
+    return false;
+  }
+}
+
+function markDismissed() {
+  try {
+    localStorage.setItem(DISMISSED_KEY, String(Date.now()));
+  } catch {
+    // localStorage unavailable
+  }
+}
+
 export function PwaInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -21,7 +45,11 @@ export function PwaInstallPrompt() {
 
   // Listen for beforeinstallprompt
   useEffect(() => {
+    // If user dismissed recently, don't intercept — let Chrome handle it
+    if (isDismissedRecently()) return;
+
     const handler = (e: BeforeInstallPromptEvent) => {
+      // Only preventDefault if we intend to show our own prompt
       e.preventDefault();
       setDeferredPrompt(e);
       // Show prompt after a short delay — don't interrupt initial load
@@ -88,6 +116,7 @@ export function PwaInstallPrompt() {
   const handleDismiss = useCallback(() => {
     setShowPrompt(false);
     setDeferredPrompt(null);
+    markDismissed();
   }, []);
 
   const handleUpdate = useCallback(() => {
