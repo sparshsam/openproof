@@ -19,6 +19,8 @@ const eslintConfig = defineConfig([
     "build/**",
     "typechain-types/**",
     "next-env.d.ts",
+    // Android native project — not source code
+    "android/**",
   ]),
 ]);
 

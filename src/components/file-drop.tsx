@@ -25,7 +25,7 @@ export function FileDrop({
   const selectedCount = files.length || (file ? 1 : 0);
   const defaultHelperText = file
     ? `${formatBytes(file.size)}`
-    : `The file stays in your browser. Max: ${formatBytes(maxFileSizeBytes)}.`;
+    : `Your file stays in your browser. Only its SHA-256 fingerprint can leave. Max: ${formatBytes(maxFileSizeBytes)}.`;
 
   function handleFiles(selectedFiles: File[]) {
     if (!selectedFiles.length || disabled) return;

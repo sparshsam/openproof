@@ -133,7 +133,8 @@ export default function CreateProofPage() {
           <br /><span className="text-text-secondary">on Base Sepolia.</span>
         </h1>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-text-secondary sm:text-lg">
-          Timestamp a SHA-256 fingerprint onchain. The file never leaves your browser.
+          Timestamp a SHA-256 fingerprint onchain. Prove a file existed at this moment.
+          The file never leaves your browser.
         </p>
       </section>
 
@@ -174,7 +175,7 @@ export default function CreateProofPage() {
               </ActionPill>
             )}
           </div>
-          <p className="mt-4 text-xs text-text-muted">Base Sepolia testnet &middot; No real funds required</p>
+          <p className="mt-4 text-xs text-text-muted">Base Sepolia testnet &middot; No real funds required &middot; Only the hash is written onchain</p>
         </div>
 
         {/* Status line */}

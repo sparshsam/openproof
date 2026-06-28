@@ -82,7 +82,9 @@ export default function VerifyProofPage() {
           Check a fingerprint<br /><span className="text-text-secondary">on Base Sepolia.</span>
         </h1>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-text-secondary sm:text-lg">
-          Public read. No wallet required. Hash a file locally and check the onchain registry.
+          Public read. No wallet required. Hash a file locally and check whether
+          its fingerprint exists in the onchain registry. Prove a file is unchanged
+          since it was registered.
         </p>
       </section>
 
