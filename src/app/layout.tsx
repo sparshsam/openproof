@@ -16,18 +16,28 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://proof.kovina.org"),
   title: {
-    default: "OpenProof",
+    default: "OpenProof — Proof-of-Existence · File Fingerprinting · Blockchain Timestamping",
     template: "%s | OpenProof",
   },
   description:
-    "Open-source cryptographic proof infrastructure built on Base Sepolia. Timestamp file fingerprints onchain without uploading files anywhere.",
+    "Prove a file existed at a specific time — without uploading it. OpenProof is a privacy-first, open-source proof-of-existence tool. Hash a file locally with SHA-256, register the fingerprint on Base Sepolia, and verify independently. No uploads, no accounts, no backend. Used by developers, creators, researchers, and legal professionals for document integrity, digital evidence, and cryptographic timestamping.",
   keywords: [
     "OpenProof",
     "proof of existence",
+    "file fingerprinting",
+    "blockchain timestamping",
+    "SHA-256 verification",
+    "cryptographic proof",
+    "document integrity",
+    "digital evidence",
+    "privacy-first",
     "Base Sepolia",
     "SHA-256",
     "cryptographic proof",
-    "privacy-first",
+    "privacy-preserving verification",
+    "file integrity verification",
+    "timestamping service",
+    "open source proof of existence",
     "web3",
     "Solidity",
     "wagmi",
@@ -36,9 +46,9 @@ export const metadata: Metadata = {
     canonical: "https://proof.kovina.org",
   },
   openGraph: {
-    title: "OpenProof",
+    title: "OpenProof — Privacy-First Proof-of-Existence",
     description:
-      "Open-source cryptographic proof infrastructure built on Base Sepolia. Timestamp file fingerprints onchain without uploading files anywhere.",
+      "Prove a file existed without uploading it. Hash locally with SHA-256, timestamp the fingerprint on Base Sepolia, verify independently. No accounts, no backend, no tracking.",
     url: "https://proof.kovina.org",
     siteName: "OpenProof",
     images: [
@@ -46,16 +56,16 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "OpenProof cryptographic proof infrastructure built on Base",
+        alt: "OpenProof — privacy-first cryptographic proof-of-existence on Base Sepolia",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "OpenProof",
+    title: "OpenProof — Proof-of-Existence · File Fingerprinting · Blockchain Timestamping",
     description:
-      "Open-source cryptographic proof infrastructure built on Base Sepolia. Timestamp file fingerprints onchain without uploading files anywhere.",
+      "Prove a file existed without uploading it. Hash locally with SHA-256, timestamp the fingerprint onchain, verify independently.",
     images: ["/og.png"],
   },
   appleWebApp: {

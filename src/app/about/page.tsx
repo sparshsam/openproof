@@ -8,7 +8,7 @@ import { ExternalLink } from "lucide-react";
 export const metadata = {
   title: "About",
   description:
-    "What OpenProof is and why it exists — a privacy-first, open-source proof-of-existence infrastructure tool.",
+    "What OpenProof is, who it is for, and when to use it — a privacy-first, open-source proof-of-existence tool for file fingerprinting, blockchain timestamping, and document integrity verification.",
 };
 
 export default function AboutPage() {
@@ -35,6 +35,72 @@ export default function AboutPage() {
           Base Sepolia blockchain. The file itself never leaves your browser. There
           are no uploads, no accounts, and no backend.
         </p>
+      </section>
+
+      {/* ──────────── Who uses OpenProof ──────────── */}
+      <section className="mx-auto max-w-3xl px-6 pb-20 sm:pb-28">
+        <h2 className="text-2xl font-bold sm:text-3xl">Who uses OpenProof</h2>
+        <p className="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
+          OpenProof is for anyone who needs a permanent, independently verifiable
+          timestamp for a file — without uploading, storing, or exposing the file
+          itself.
+        </p>
+        <div className="mt-8 grid gap-x-12 gap-y-6 sm:grid-cols-2">
+          {[
+            ["Developers", "Timestamp release builds, dependency manifests, and deployment artifacts. Verify that a deployed binary matches its source."],
+            ["Creators & artists", "Prove original work existed before sharing with collaborators, submitting to galleries, or publishing online."],
+            ["Researchers", "Establish priority for findings, datasets, and preprints before peer review. Protect against scooping."],
+            ["Legal professionals", "Create independently verifiable timestamps for contracts, disclosures, records of counsel, and evidence submissions."],
+            ["Journalists", "Anchoring source material, internal communications, and unpublished drafts — before publication or legal request."],
+            ["Businesses & compliance", "Document integrity verification for regulatory records, audit trails, and internal policy compliance."],
+            ["Archivists", "Long-term integrity checks for digital collections. Verify that archived files haven't drifted from their registered originals."],
+            ["Individuals", "Personal records — wills, letters, receipts, photos, certificates. Anyone can timestamp anything."],
+          ].map(([title, desc]) => (
+            <div key={title as string}>
+              <h3 className="text-sm font-bold sm:text-base">{title as string}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">{desc as string}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ──────────── Typical use cases ──────────── */}
+      <section className="mx-auto max-w-3xl px-6 pb-20 sm:pb-28">
+        <h2 className="text-2xl font-bold sm:text-3xl">When to use OpenProof</h2>
+        <p className="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
+          Timestamp a file before any event where you might later need to prove
+          what you had, and when.
+        </p>
+        <ol className="mt-8 space-y-6">
+          {[
+            [
+              "Before publishing or releasing",
+              "Timestamp a draft, dataset, or release artifact before making it public. If someone later claims priority or originality, the onchain fingerprint proves your file existed first.",
+            ],
+            [
+              "Before sharing with others",
+              "Send a file to a collaborator, client, or regulator? Timestamp it first. The registry preserves your version at that moment, independent of any later dispute.",
+            ],
+            [
+              "Before archiving or migrating",
+              "Timestamp a file before moving it to cold storage or converting formats. Years later, re-hash and verify the content is unchanged from the original.",
+            ],
+            [
+              "Before regulatory or legal submission",
+              "Records, logs, contracts, and disclosures benefit from an independent timestamp before submission. The onchain record is immutable and verifiable by anyone.",
+            ],
+          ].map(([title, desc], i) => (
+            <li className="flex gap-4" key={title as string}>
+              <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">
+                {i + 1}
+              </span>
+              <div>
+                <h3 className="text-base font-bold sm:text-lg">{title as string}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-text-secondary sm:text-base">{desc as string}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* ──────────── Architecture diagram ──────────── */}
