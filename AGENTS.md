@@ -18,14 +18,16 @@ Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 4. **Receipt schema v3.** Versioned JSON receipts with forward-compatible metadata, registry version, optional chain context. Auto-download on registration.
 5. **Merkle tree bundles.** Bundle proofs use SHA-256 Merkle trees. Each file's hash is a leaf; the Merkle root is registered onchain. Individual inclusion proofs are verifiable.
 6. **Verification engine.** Full receipt verification pipeline with 11+ checks: schema, chain, contract, onchain, timestamps, registry version, bundle consistency.
-7. **Theme toggle.** Light/dark mode with localStorage persistence. System preference on first visit.
+7. **Theme toggle.** Light/dark mode with localStorage persistence. System preference on first visit. Hydration-safe via `suppressHydrationWarning`.
 8. **Native pages.** `/about`, `/privacy`, `/terms` — no GitHub redirects.
 9. **Bundle explorer.** `/bundle/[hash]` — bundle proof page with file listing, Merkle root, inclusion verification.
 10. **Human-readable receipt.** Print/PDF citations page with citation formats.
 11. **Error boundary.** Global React error boundary with graceful reload.
-12. **Offline detection.** Banner notification when network is unavailable.
-13. **Multi-platform.** PWA (installable, offline, shortcuts), Windows (MSIX manifest, icons), Android (Capacitor config, adaptive icons).
+12. **Offline detection.** Banner notification when network is unavailable. Uses `useSyncExternalStore` (no flash-of-offline-notice).
+13. **Multi-platform.** PWA (installable, offline, shortcuts, branded install prompt with 7-day dismissal memory), Windows (MSIX manifest, icons, splash screens), Android (Capacitor project initialized, 4 plugins: Filesystem, Keyboard, Share, SplashScreen).
 14. **Canonical icon.** All icon variants generated from public/icon.svg (your supplied SVG).
+15. **Website copy.** Homepage with 6 sections (Who uses OpenProof, How it works, When to timestamp, What a proof means, Registry strip, Privacy by design). About page with Who uses and When to use sections. SEO-optimized metadata across all pages.
+16. **Security headers.** CSP allows sepolia.base.org, *.walletconnect.com, *.reown.com, *.basescan.org, pulse.walletconnect.org, api.web3modal.org. COOP: same-origin-allow-popups.
 
 ## Tech Stack
 
@@ -33,7 +35,7 @@ Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 - **Frontend:** Next.js 16, TypeScript, Tailwind v4, wagmi v2, viem, RainbowKit
 - **Chain:** Base Sepolia (chain ID 84532), Base Mainnet (pre-configured, inactive)
 - **Design:** Black canvas, `#0081CC` accent, pill buttons, Block/Cash App-inspired editorial layout
-- **PWA:** Installable, service worker (v0.9.0), manifest with shortcuts, splash screens
+- **PWA:** Installable, service worker (v0.9.0), manifest with shortcuts, splash screens, install prompt with dismissal memory
 - **Verification:** Receipt schema validation, Merkle inclusion proofs, chain-aware lookups, full verification pipeline
 - **Domain:** proof.kovina.org (parent kovina.org)
 
