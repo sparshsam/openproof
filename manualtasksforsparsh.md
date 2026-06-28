@@ -101,7 +101,26 @@
 
 ---
 
-## Domain & DNS
+## WEBSITE COPY REVIEW (NEW)
+
+From latest session:
+- [ ] **Review homepage copy** — Verify all 6 sections render correctly:
+      1. Hero ("Proof without surrender.")
+      2. Who uses OpenProof (8 audiences)
+      3. How it works (3 steps)
+      4. When to timestamp (4 scenarios)
+      5. What a proof means (proves vs doesn't prove)
+      6. Privacy by design (4 pillars)
+- [ ] **Review About page** — New "Who uses" and "When to use" sections
+- [ ] **Review Create/Verify pages** — Updated header copy
+- [ ] **Check for hydration errors** — Open DevTools Console, should be clean
+- [ ] **Check offline notice** — Should NOT appear on localhost
+- [ ] **Deploy to production** — Push latest changes to main triggers Vercel deploy
+- [ ] **Verify production** — Visit https://proof.kovina.org, check copy and console
+
+---
+
+## DOMAIN & DNS
 
 - [x] Cloudflare CNAME `proof → cname.vercel-dns.com` — DONE
 - [x] Vercel domain `proof.kovina.org` registered — DONE
@@ -111,26 +130,18 @@
 
 ---
 
-## v0.9.0 What Was Done (Automated)
+## v0.9.0 — Completed (Automated)
 
-These tasks were completed automatically this session:
-- [x] Windows MSIX: Updated AppxManifest.xml version to 0.9.0.0
-- [x] Windows MSIX: Generated splash screens (620x300, 868x420, 1116x540) with centered icon on black
-- [x] PWA: Updated manifest theme_color to #0081CC (brand), background_color to #000000 (black)
-- [x] PWA: Added `theme-color` meta tag to layout
-- [x] PWA: Created `PwaInstallPrompt` component (beforeinstallprompt handling + update flow notification)
-- [x] PWA: Added `/proof/` and `/bundle/` routes to SW static cache
-- [x] Android: Initialized Capacitor project with `npx cap add android`
-- [x] Android: Created `scripts/cap-build.sh` for static export + Capacitor sync
-- [x] Android: Updated capacitor.config.json with 4 plugins (Filesystem, Keyboard, Share, SplashScreen)
-- [x] Android: Dynamic routes support static export via `generateStaticParams`
-- [x] Icons: All platform icons regenerated from canonical SVG
-- [x] Footer: Version updated to v0.9.0
-- [x] Lint: 0 errors (6 pre-existing warnings) ✅
-- [x] Typecheck: Pass ✅
-- [x] Build (Vercel mode): Pass ✅
-- [x] Build (Capacitor static export): Pass ✅
-- [x] Updated PLATFORM_READINESS.md to v0.9.0
+- [x] Windows MSIX: AppxManifest.xml v0.9.0.0, splash screens (620×300, 868×420, 1116×540)
+- [x] PWA: manifest theme #0081CC, background #000000, theme-color meta tag
+- [x] PWA: PwaInstallPrompt component (beforeinstallprompt + update notification)
+- [x] PWA: SW cache extended to /proof/ and /bundle/ routes
+- [x] Android: Capacitor project initialized, build script created, 4 plugins configured
+- [x] Website copy: Homepage rewritten with 6 sections, About page enhanced, SEO metadata enriched
+- [x] Hydration fix: suppressHydrationWarning on <html>, offline hook rewritten with useSyncExternalStore
+- [x] Icons: All platform variants regenerated from SVG
+- [x] Version references: Footer, create page, about page all v0.9.0
+- [x] Lint / typecheck / build: All passing
 
 ---
 
