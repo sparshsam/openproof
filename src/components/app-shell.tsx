@@ -17,7 +17,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
             <div className="flex items-center gap-6">
               <Link className="flex items-center gap-1.5 group shrink-0" href="/" aria-label="OpenProof home">
-                <img alt="" className="size-6 sm:size-7" src="/icon-header.png" />
+                <style>{`
+                  [data-theme="dark"] .icon-light-proof { opacity: 0 !important; }
+                  [data-theme="dark"] .icon-dark-proof { opacity: 1 !important; }
+                `}</style>
+                <div className="relative size-6 sm:size-7 shrink-0">
+                  <img alt="" className="icon-light-proof absolute inset-0 size-6 sm:size-7 rounded-lg transition-opacity duration-300" src="/icon-header.png" />
+                  <img alt="" className="icon-dark-proof absolute inset-0 size-6 sm:size-7 rounded-lg transition-opacity duration-300 opacity-0" src="/icon-header-dark.png" />
+                </div>
                 <div className="flex flex-col leading-none">
                   <span className="text-[10px] font-bold tracking-[0.08em] uppercase text-text-muted opacity-[0.55]">
                     OPEN
