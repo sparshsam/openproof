@@ -6,7 +6,7 @@ OpenProof is a privacy-first, open-source cryptographic proof-of-existence tool 
 
 ## Current Version
 
-v0.9.0 — Native Platform Readiness (on Base Sepolia)
+v0.9.1 — Open Product Family Branding Alignment
 
 Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 
@@ -35,6 +35,7 @@ Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 - **Frontend:** Next.js 16, TypeScript, Tailwind v4, wagmi v2, viem, RainbowKit
 - **Chain:** Base Sepolia (chain ID 84532), Base Mainnet (pre-configured, inactive)
 - **Design:** Black canvas, `#0081CC` accent, pill buttons, Block/Cash App-inspired editorial layout
+- **Branding:** Open Product Family — see `docs/BRANDING.md` for lockup, hierarchy, and OpenPalette reference
 - **PWA:** Installable, service worker (v0.9.0), manifest with shortcuts, splash screens, install prompt with dismissal memory
 - **Verification:** Receipt schema validation, Merkle inclusion proofs, chain-aware lookups, full verification pipeline
 - **Domain:** proof.kovina.org (parent kovina.org)
@@ -53,3 +54,22 @@ Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 ## Ecosystem Standards
 
 All ecosystem repos follow: https://github.com/sparshsam/ecosystem-standards
+
+## Branding Architecture
+
+OpenProof belongs to the **Open Product Family** under **Kovina**:
+
+```
+Kovina
+└── Open Product Family
+    ├── OpenPalette (canonical design reference)
+    ├── OpenSend
+    ├── OpenProof
+    ├── OpenReader
+    └── [future open apps]
+```
+
+- **OPEN** has no icon. The shield icon belongs to OpenProof.
+- **Lockup:** `[product icon] OPEN / ProductName` — see `docs/BRANDING.md`.
+- **OpenPalette** is the canonical reference for all brand decisions.
+- "OpenProof" remains the application name in code, metadata, SEO, and docs.

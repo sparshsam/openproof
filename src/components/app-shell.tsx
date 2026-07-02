@@ -16,9 +16,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="sticky top-0 z-50 bg-bg-base/90 backdrop-blur-md">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
             <div className="flex items-center gap-6">
-              <Link className="inline-flex items-center gap-2 text-lg font-bold tracking-tight text-text-primary" href="/">
-                <img alt="" className="size-6" src="/icon.svg" />
-                OpenProof
+              <Link className="flex items-center gap-1.5 group shrink-0" href="/" aria-label="OpenProof home">
+                <img alt="" className="size-7 sm:size-8" src="/icon.svg" />
+                <div className="flex flex-col leading-tight">
+                  <span className="text-[10px] font-bold tracking-[0.06em] uppercase text-text-muted opacity-50">
+                    OPEN
+                  </span>
+                  <span className="text-sm sm:text-[15px] font-medium text-text-primary group-hover:text-accent transition-colors -mt-0.5">
+                    Proof
+                  </span>
+                </div>
               </Link>
               <nav className="hidden items-center gap-1 sm:flex" aria-label="Main navigation">
                 <Link className="rounded-full px-4 py-2 text-sm font-semibold text-text-secondary transition hover:bg-bg-surface-muted hover:text-text-primary" href="/create">
@@ -64,7 +71,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-text-muted">AGPL-3.0</span>
-              <span className="text-text-muted">v0.9.0</span>
+              <span className="text-text-muted">v0.9.1</span>
             </div>
           </div>
           <p className="mt-4 text-[11px] text-text-muted text-center sm:text-left">

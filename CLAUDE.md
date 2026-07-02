@@ -37,7 +37,7 @@ Principles:
 
 OpenProof proves narrow claims well. It should never imply broader claims it cannot support.
 
-## 3. Current State (v0.9.0)
+## 3. Current State (v0.9.1)
 
 OpenProof currently supports:
 
@@ -94,6 +94,25 @@ The app has no backend, no database, no file upload pipeline, no storage bucket,
 - **Logo:** Shield with checkmark in `#0081CC` on white/transparent background
 - **Canonical icon source:** `public/icon.svg`
 - **All icon variants regenerated from SVG** (PWA, Apple, iOS, Android, Windows, macOS)
+
+### Branding Architecture
+
+OpenProof belongs to the **Kovina ecosystem** under the **Open Product Family**:
+
+```
+Kovina
+└── Open Product Family
+    ├── OpenPalette (canonical design reference)
+    ├── OpenSend
+    ├── OpenProof
+    ├── OpenReader
+    └── [future open apps]
+```
+
+- **OPEN** is the family identifier and **never has an icon**. Only the individual product (Proof) has an icon.
+- **Lockup:** `[app icon] OPEN / ProductName` — see `docs/BRANDING.md` for the header implementation.
+- **OpenPalette** is the canonical reference for Open Product Family branding.
+- The header lockup pattern is specified in `docs/BRANDING.md` and must be preserved across modifications.
 
 ## 5. v1.0 Freeze Wall
 
