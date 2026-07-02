@@ -97,3 +97,41 @@ AGPL-3.0-only. See [`LICENSE`](LICENSE).
 | [OpenSprout](https://github.com/sparshsam/opensprout) | Lightweight project scaffold |
 | [OpenTone](https://github.com/sparshsam/opentone) | Minimal audio tools |
 | **OpenProof (you are here)** | Privacy-first proof-of-existence |
+
+<br>
+
+---
+
+<br>
+
+<p align="center">
+  <strong>Part of the Kovina Collection</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/sparshsam/openreader">OpenReader</a> ·
+  <a href="https://github.com/sparshsam/openjournal">OpenJournal</a> ·
+  <a href="https://github.com/sparshsam/openledger">OpenLedger</a> ·
+  <a href="https://github.com/sparshsam/opentone">OpenTone</a> ·
+  <a href="https://github.com/sparshsam/openpalette">OpenPalette</a> ·
+  <a href="https://github.com/sparshsam/openconvert">OpenConvert</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/sparshsam/opensnap">OpenSnap</a> ·
+  <a href="https://github.com/sparshsam/worldclock-widget">WorldClock Widget</a> ·
+  <a href="https://github.com/sparshsam/openproof">OpenProof</a> ·
+  <a href="https://github.com/sparshsam/opensend">OpenSend</a> ·
+  <a href="https://github.com/sparshsam/opensprout">OpenSprout</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/sparshsam/wordwise">WordWise</a> ·
+  <a href="https://github.com/sparshsam/openscrabble">OpenScrabble</a> ·
+  <a href="https://github.com/sparshsam/chess">Chess</a> ·
+  <a href="https://github.com/sparshsam/hisstastic">Hisstastic</a>
+</p>
+
+<p align="center">
+  <sub>Minimal, focused tools for everyday tasks.</sub>
+</p>
