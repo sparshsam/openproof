@@ -17,7 +17,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
             <div className="flex items-center gap-6">
               <Link className="flex items-center gap-1.5 group shrink-0" href="/" aria-label="OpenProof home">
-                <img alt="" className="size-7 sm:size-8" src="/icon.svg" />
+                <img alt="" className="size-7 sm:size-8" src="/icon-header.png" />
                 <div className="flex flex-col leading-tight">
                   <span className="text-[10px] font-bold tracking-[0.06em] uppercase text-text-muted opacity-50">
                     OPEN
