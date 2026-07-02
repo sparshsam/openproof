@@ -21,15 +21,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   [data-theme="dark"] .icon-light-proof { opacity: 0 !important; }
                   [data-theme="dark"] .icon-dark-proof { opacity: 1 !important; }
                 `}</style>
-                <div className="relative size-6 sm:size-7 shrink-0">
-                  <img alt="" className="icon-light-proof absolute inset-0 size-6 sm:size-7 rounded-lg transition-opacity duration-300" src="/icon-header.png" />
-                  <img alt="" className="icon-dark-proof absolute inset-0 size-6 sm:size-7 rounded-lg transition-opacity duration-300 opacity-0" src="/icon-header-dark.png" />
+                <div className="relative size-7 sm:size-8 shrink-0">
+                  <img alt="" className="icon-light-proof absolute inset-0 size-7 sm:size-8 rounded-lg transition-opacity duration-300" src="/icon-header.png" />
+                  <img alt="" className="icon-dark-proof absolute inset-0 size-7 sm:size-8 rounded-lg transition-opacity duration-300 opacity-0" src="/icon-header-dark.png" />
                 </div>
-                <div className="flex flex-col leading-none">
-                  <span className="text-[10px] font-bold tracking-[0.08em] uppercase text-text-muted opacity-[0.55]">
+                <div className="flex flex-col leading-tight">
+                  <span className="text-[10px] font-bold tracking-[0.06em] uppercase text-text-muted opacity-50">
                     OPEN
                   </span>
-                  <span className="text-sm sm:text-[15px] font-semibold text-text-primary group-hover:text-accent transition-colors">
+                  <span className="text-sm sm:text-[15px] font-medium text-text-primary group-hover:text-accent transition-colors -mt-0.5">
                     Proof
                   </span>
                 </div>
