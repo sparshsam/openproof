@@ -397,3 +397,21 @@ npm run test:contracts
 ## 15. Secret Handling
 
 Never commit: `.env`, `.env.local`, private keys, RPC secrets, WalletConnect/Reown secrets, deployment credentials, Vercel secrets, seed phrases, wallet JSON files.
+
+## 16. Session History
+
+### 2026-07-03 — v0.9.1
+
+**Branding**
+- Header lockup: `[shield icon] OPEN / Proof` stacked
+- `docs/BRANDING.md` created
+- OpenPalette canonical spec alignment
+
+**Icons**
+- 210 assets generated from light + dark masters (1024x1024) via Lanczos (Windows ICO, MSIX, Android, iOS, macOS, Web/PWA, Social OG, GitHub, Header)
+- 114 dark mode assets
+- Favicon: replaced old favicon.png/icon-192x192.png with new generated assets
+- Header icon switched from icon.svg to icon-header.png for reliable rendering
+
+**Dark/Light Theme**
+- Dual-image wrap with `[data-theme="dark"]` CSS rules and 0.3s transition
