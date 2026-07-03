@@ -1,7 +1,7 @@
 # OpenProof Agent Source of Truth
 
-Last updated: 2026-06-27
-Update signed by: copy+hydrate+csp-agent
+Last updated: 2026-07-02
+Update signed by: op-branding-agent
 
 ## 1. Project Identity
 
@@ -55,7 +55,8 @@ OpenProof currently supports:
 - Merkle tree bundle proofs with individual inclusion proof verification.
 - OpenProofRegistry contract v2 with `registryVersion` getter.
 - Chain abstraction layer (Base Sepolia active, Base Mainnet prepared).
-- Multi-platform icon set from canonical SVG.
+- Multi-platform icon set from canonical PNG master (light + dark variants).
+- Dark/light themed header icon with `[data-theme="dark"]` CSS rules and 0.3s transition.
 - Error boundary with graceful reload prompt.
 - Offline detection with banner notification.
 - Service worker v0.9.0 with cache migration and update flow.
@@ -92,8 +93,11 @@ The app has no backend, no database, no file upload pipeline, no storage bucket,
 - **Accent color:** `#0081CC`
 - **Design:** Black canvas, pill buttons, Block/Cash App-inspired editorial layout
 - **Logo:** Shield with checkmark in `#0081CC` on white/transparent background
-- **Canonical icon source:** `public/icon.svg`
-- **All icon variants regenerated from SVG** (PWA, Apple, iOS, Android, Windows, macOS)
+- **Canonical icon source:** `public/icon-source.png` (1024x1024 PNG master; dark variant from dark master)
+- **Icon generation:** 210 assets generated from light + dark PNG masters via Lanczos resampling — Windows ICO, MSIX, Android, iOS, macOS, Web/PWA, social OG, GitHub, header
+- **Dark mode assets:** 114 dark assets including `icon-dark-192.png`, `icon-dark-512.png`, `icon-header-dark.png`
+- **Themed header icon:** dual-image wrap with `[data-theme="dark"]` CSS rules and 0.3s transition
+- **Favicon regenerated** from new master (favicon.ico, favicon-16.png, favicon-32.png)
 
 ### Branding Architecture
 
@@ -298,6 +302,7 @@ Documentation:
 - `README.md` — public project overview.
 - `docs/ARCHITECTURE.md` — technical architecture.
 - `docs/ARCHITECTURAL_INVARIANTS.md` — permanent invariant register.
+- `docs/BRANDING.md` — Open Product Family branding, lockup, hierarchy, OpenPalette reference.
 - `docs/threat-model.md` — security and privacy boundaries.
 - `docs/receipt-schema.md` — receipt format documentation (v3).
 - `docs/deployment-notes.md` — operator wallet and deployment notes.
@@ -320,17 +325,31 @@ Documentation:
 PWA and assets:
 - `public/manifest.json` — PWA web manifest.
 - `public/sw.js` — service worker (v0.9.0, cache-first + network-first).
-- `public/icon.svg` — canonical icon source (your SVG design).
-- `public/icon-192x192.png` — PWA icon (from SVG).
-- `public/icon-512x512.png` — PWA icon (from SVG).
-- `public/apple-touch-icon.png` — iOS icon (from SVG).
-- `public/favicon.ico` — multi-res favicon (from SVG).
-- `public/favicon.png` — favicon (from SVG).
-- `public/og.png` — social preview image (from your PNG source).
+- `public/icon-source.png` — canonical icon master (1024x1024, light).
+- `public/icon.svg` — vector icon source.
+- `public/icon.png` — generated single-size PNG.
+- `public/icon-192.png` — PWA icon (from master).
+- `public/icon-512.png` — PWA icon (from master).
+- `public/icon-dark-192.png` — dark mode PWA icon (from dark master).
+- `public/icon-dark-512.png` — dark mode PWA icon (from dark master).
+- `public/icon-header.png` — header icon, light variant.
+- `public/icon-header-dark.png` — header icon, dark variant.
+- `public/apple-touch-icon.png` — iOS icon (from master).
+- `public/favicon.ico` — multi-res favicon (from master).
+- `public/favicon-16.png` — 16px favicon.
+- `public/favicon-32.png` — 32px favicon.
+- `public/favicon.png` — fallback favicon (from master).
+- `public/og.png` — social preview image (from master).
 - `public/robots.txt`, `public/sitemap.xml` — SEO.
 - `public/splash/` — iOS and web splash screens.
 - `public/screenshots/` — PWA store screenshots.
-- `assets/` — multi-platform icon sets for Android, iOS, macOS, Windows.
+- `assets/branding/` — brand source files (icon.svg, og.png).
+- `assets/gallery/` — gallery screenshots (home, create, verify, proof on desktop + mobile).
+- `assets/hero/` — hero image.
+- `assets/icon.iconset/` — macOS icon set (10 sizes, 16x16 to 512x512@2x).
+- `assets/ios-icons/` — iOS icon set (8 sizes, 40x40 to 1024x1024).
+- `assets/android/` — Android icon set (mipmap densities + Play Store).
+- `assets/windows/` — Windows icon set (ICO, MSIX manifest, store logos, splash screens).
 - `capacitor.config.json` — Capacitor native app config.
 
 ## 12. Security and Threat-Model Notes

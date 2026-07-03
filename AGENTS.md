@@ -25,7 +25,7 @@ Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 11. **Error boundary.** Global React error boundary with graceful reload.
 12. **Offline detection.** Banner notification when network is unavailable. Uses `useSyncExternalStore` (no flash-of-offline-notice).
 13. **Multi-platform.** PWA (installable, offline, shortcuts, branded install prompt with 7-day dismissal memory), Windows (MSIX manifest, icons, splash screens), Android (Capacitor project initialized, 4 plugins: Filesystem, Keyboard, Share, SplashScreen).
-14. **Canonical icon.** All icon variants generated from public/icon.svg (your supplied SVG).
+14. **Canonical icon.** All icon variants generated from public/icon-source.png (1024x1024 PNG master, light variant; dark variant from dark master). 210 total assets across Windows, Android, iOS, macOS, Web/PWA, social OG, GitHub. Themed header icon with dark/light CSS swap (`[data-theme="dark"]` rules, 0.3s transition).
 15. **Website copy.** Homepage with 6 sections (Who uses OpenProof, How it works, When to timestamp, What a proof means, Registry strip, Privacy by design). About page with Who uses and When to use sections. SEO-optimized metadata across all pages.
 16. **Security headers.** CSP allows sepolia.base.org, *.walletconnect.com, *.reown.com, *.basescan.org, pulse.walletconnect.org, api.web3modal.org. COOP: same-origin-allow-popups.
 
