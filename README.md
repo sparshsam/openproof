@@ -1,5 +1,8 @@
 <div align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="assets/branding/icon.svg"><img src="assets/branding/icon.svg" width="96" height="96" alt="OpenProof"></picture>
+  <img src="assets/branding/icon.png" width="72" alt="OpenProof">
+</div>
+
+<div align="center">
   <h1>OpenProof</h1>
   <p><strong>Privacy-first proof-of-existence for files.</strong><br />Timestamp file fingerprints on Base Sepolia without uploading a single byte.</p>
 </div>
