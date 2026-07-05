@@ -1,96 +1,84 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import Link from "next/link";
-import { FileUp, Search, ShieldCheck, FileBox } from "lucide-react";
-import { AppSplash } from "@/components/app-splash";
-import { ProofHistory } from "@/components/proof-history";
+import { FileUp, Search } from "lucide-react";
+import { CreateProofForm } from "@/components/create-proof-form";
 
 export default function AppPage() {
-  const [showSplash, setShowSplash] = useState(true);
-
-  const handleSplashDone = useCallback(() => {
-    setShowSplash(false);
-  }, []);
-
-  if (showSplash) {
-    return <AppSplash onDone={handleSplashDone} />;
-  }
-
   return (
-    <div className="space-y-8">
-      {/* Quick actions */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Link
-          href="/create"
-          className="flex items-center gap-4 rounded-2xl border border-border-default bg-bg-surface p-5 transition hover:border-accent/50 hover:bg-accent/[0.02]"
-        >
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
-            <FileUp className="size-6 text-accent" />
-          </div>
-          <div>
-            <p className="font-bold text-text-primary">Create proof</p>
-            <p className="mt-0.5 text-sm text-text-secondary">
-              Hash a file and register on Base Sepolia
-            </p>
-          </div>
-        </Link>
-
-        <Link
-          href="/verify"
-          className="flex items-center gap-4 rounded-2xl border border-border-default bg-bg-surface p-5 transition hover:border-accent/50 hover:bg-accent/[0.02]"
-        >
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
-            <Search className="size-6 text-accent" />
-          </div>
-          <div>
-            <p className="font-bold text-text-primary">Verify proof</p>
-            <p className="mt-0.5 text-sm text-text-secondary">
-              Check a fingerprint against the registry
-            </p>
-          </div>
-        </Link>
-      </div>
-
-      {/* History */}
-      <section>
-        <ProofHistory title="Recent proofs" type="registered" />
-      </section>
-
-      {/* Bundle proofs CTA */}
-      <Link
-        href="/create"
-        className="flex items-center gap-4 rounded-2xl border border-border-default bg-bg-surface p-5 transition hover:border-accent/50"
-      >
-        <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
-          <FileBox className="size-6 text-accent" />
-        </div>
-        <div>
-          <p className="font-bold text-text-primary">Bundle proofs</p>
-          <p className="mt-0.5 text-sm text-text-secondary">
-            Register multiple files as a single combined proof
+    <>
+      {/* ── Desktop: Landing page with two huge entry cards ── */}
+      <div className="hidden md:flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
+        {/* Page title */}
+        <div className="text-center mb-16">
+          <p className="text-xs font-bold tracking-[0.12em] uppercase text-text-muted">
+            OpenProof
+          </p>
+          <h1 className="mt-3 text-5xl font-black tracking-tight text-text-primary">
+            Proof without surrender.
+          </h1>
+          <p className="mt-4 max-w-lg text-base text-text-secondary mx-auto">
+            Hash a file locally. Register its fingerprint on Base Sepolia. The file never leaves your browser.
           </p>
         </div>
-      </Link>
 
-      {/* Testnet notice */}
-      <div className="rounded-2xl border border-border-default bg-bg-surface p-5">
-        <div className="flex items-start gap-3">
-          <ShieldCheck className="mt-0.5 size-5 shrink-0 text-text-muted" />
-          <div>
-            <p className="text-sm font-semibold text-text-primary">
-              Base Sepolia testnet
-            </p>
-            <p className="mt-1 text-xs leading-relaxed text-text-secondary">
-              OpenProof runs on Base Sepolia — a test network. Proofs here are
-              for experimentation and verification. No real value is involved.
-            </p>
-          </div>
+        {/* Action cards — clean, no containers */}
+        <div className="grid w-full max-w-2xl grid-cols-2 gap-12">
+          {/* Create card */}
+          <Link
+            href="/create"
+            className="group flex flex-col items-center gap-6 transition-all hover:-translate-y-1"
+          >
+            <div className="flex size-28 items-center justify-center rounded-2xl bg-accent/10 transition-all group-hover:bg-accent/20 group-hover:scale-105">
+              <FileUp className="size-14 text-accent" />
+            </div>
+            <div className="text-center">
+              <h2 className="text-3xl font-black tracking-tight text-text-primary group-hover:text-accent transition-colors">
+                Create Proof
+              </h2>
+              <p className="mt-2 max-w-52 text-sm text-text-secondary">
+                Hash a file and register its fingerprint on the blockchain
+              </p>
+            </div>
+          </Link>
+
+          {/* Verify card */}
+          <Link
+            href="/app/verify"
+            className="group flex flex-col items-center gap-6 transition-all hover:-translate-y-1"
+          >
+            <div className="flex size-28 items-center justify-center rounded-2xl bg-accent/10 transition-all group-hover:bg-accent/20 group-hover:scale-105">
+              <Search className="size-14 text-accent" />
+            </div>
+            <div className="text-center">
+              <h2 className="text-3xl font-black tracking-tight text-text-primary group-hover:text-accent transition-colors">
+                Verify Proof
+              </h2>
+              <p className="mt-2 max-w-52 text-sm text-text-secondary">
+                Check a fingerprint against the onchain registry
+              </p>
+            </div>
+          </Link>
         </div>
       </div>
 
-      {/* Footer spacer for bottom nav on mobile */}
-      <div className="h-20 md:hidden" />
-    </div>
+      {/* ── Mobile: Direct create form (current behavior) ── */}
+      <div className="md:hidden space-y-8">
+        <div>
+          <h1 className="text-2xl font-black tracking-tight text-text-primary">
+            Create Proof
+          </h1>
+          <p className="mt-1.5 text-sm text-text-secondary">
+            Drop a file to hash it locally, then register its fingerprint on
+            Base Sepolia. The file never leaves your browser.
+          </p>
+        </div>
+
+        <CreateProofForm />
+
+        {/* Footer spacer for bottom nav */}
+        <div className="h-20" />
+      </div>
+    </>
   );
 }

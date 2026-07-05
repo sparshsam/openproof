@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { WalletProvider } from "@/components/providers/wallet-provider";
 import { ThemeToggle } from "@/components/providers/theme-provider";
+import { RouteProgress } from "@/components/route-progress";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <WalletProvider>
-      <div className="min-h-screen bg-bg-base text-text-primary">
+    <div className="min-h-screen bg-bg-base text-text-primary">
+      <RouteProgress />
         <a
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
           href="#main-content"
@@ -89,6 +89,5 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </footer>
       </div>
-    </WalletProvider>
   );
 }

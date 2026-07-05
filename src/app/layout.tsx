@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "@fontsource-variable/stack-sans-notch";
-import { AppShell } from "@/components/app-shell";
+import { WalletProvider } from "@/components/providers/wallet-provider";
 import { ConditionalShell } from "@/components/conditional-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -100,22 +100,12 @@ export default function RootLayout({
     <html lang="en" className={`${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-bg-base text-text-primary">
         <link rel="manifest" href="/manifest.json" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(){var t=localStorage.getItem('openproof-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)})();
-              if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
-                window.addEventListener('load', () => {
-                  navigator.serviceWorker.register('/sw.js').catch(() => {});
-                });
-              }
-            `,
-          }}
-        />
         <ThemeProvider>
-          <ConditionalShell>
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </ConditionalShell>
+          <WalletProvider>
+            <ConditionalShell>
+              <ErrorBoundary>{children}</ErrorBoundary>
+            </ConditionalShell>
+          </WalletProvider>
           <OfflineNotice />
           <PwaInstallPrompt />
         </ThemeProvider>

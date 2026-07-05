@@ -37,13 +37,20 @@ function getIsMobile(): boolean {
 }
 
 export function usePwaMode(): PwaMode {
-  const [mode, setMode] = useState<PwaMode>(() => ({
-    isPwa: false,
-    displayMode: "browser",
-    isMobile: false,
-    isDesktop: true,
-    prefersReducedMotion: false,
-  }));
+  const [mode, setMode] = useState<PwaMode>(() => {
+    if (typeof window === "undefined") {
+      return { isPwa: false, displayMode: "browser", isMobile: false, isDesktop: true, prefersReducedMotion: false };
+    }
+    const displayMode = getDisplayMode();
+    const isMobile = getIsMobile();
+    return {
+      isPwa: displayMode !== "browser",
+      displayMode,
+      isMobile,
+      isDesktop: !isMobile,
+      prefersReducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    };
+  });
 
   useEffect(() => {
     function update() {
