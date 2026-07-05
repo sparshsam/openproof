@@ -2,6 +2,35 @@
 
 All notable changes to OpenProof are documented here.
 
+## 0.9.2 — GeneratedAssets & PWA Refresh
+
+### Assets
+- Replaced entire `assets/` directory with fresh GeneratedAssets from OneDrive (324 files, 39 directories)
+- Added full dark-mode variants for all platforms (Android, iOS, macOS, Windows, PWA, Web, GitHub, Social, Header, WindowsStore)
+- Added `GeneratedAssets/` to `.gitignore`
+
+### Footer
+- Replaced copyright/contact line with Kovina wordmark logo (theme-aware dark/light swap)
+- Removed AGPL-3.0 and v0.9.1 labels
+- Compact single-row layout
+
+### About Page
+- Fixed broken hero icon (was PNG-in-SVG) — now uses 96px header icon from GeneratedAssets
+- Added dark/light theme swap for hero icon
+
+### PWA
+- Replaced all icons with GeneratedAssets set (9 sizes + 9 dark variants)
+- Updated manifest.json with full icon set and fresh screenshots
+- Updated service worker to v0.9.2 (cache bust)
+- Fixed install prompt to use PNG instead of stale icon.svg
+- Removed stale `icon-192x192.png` and `icon-512x512.png`
+
+### Documentation
+- README: fixed broken icon, hero, and gallery images
+- README: rewrote version journey to match real git history (12 versions)
+- README: removed stale Open Collection table
+- README: added section divider between License and Kovina Collection
+
 ## 0.9.0 — Native Platform Readiness
 
 ### Windows (MSIX)
