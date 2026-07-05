@@ -100,22 +100,6 @@ OpenProof is part of a broader direction: software that helps people prove thing
 
 AGPL-3.0-only. See [`LICENSE`](LICENSE).
 
-### Open Collection
-
-| Project | Description |
-|---|---|
-| [OpenPalette](https://github.com/sparshsam/openpalette) | Accessibility-first color system |
-| [OpenSend](https://github.com/sparshsam/opensend) | Encrypted file sharing |
-| [OpenSprout](https://github.com/sparshsam/opensprout) | Lightweight project scaffold |
-| [OpenTone](https://github.com/sparshsam/opentone) | Minimal audio tools |
-| **OpenProof (you are here)** | Privacy-first proof-of-existence |
-
-<br>
-
----
-
-<br>
-
 <p align="center">
   <strong>Part of the Kovina Collection</strong>
 </p>
