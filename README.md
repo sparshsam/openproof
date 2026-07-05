@@ -71,7 +71,12 @@ OpenProof is part of a broader direction: software that helps people prove thing
 | v0.1.1 | 2026-06-22 | PWA support (manifest, service worker, app icons), cross-platform icon set, store metadata, release checklist |
 | v0.1.2 | 2026-06-22 | Light/dark theme toggle, native About / Privacy / Terms pages, Block/Cash App UI revamp |
 | v0.1.4 | 2026-06-23 | Trust & Transparency — About page redesign, architecture diagram, threat model, registry transparency |
-| v0.2.0 | 2026-06-25 | Cryptographic Foundation — receipt schema v3, Merkle tree bundles, verification engine, evidence workflows, chain abstraction, explorer improvements |
+| v0.2.0 | 2026-06-25 | Cryptographic Foundation — receipt schema v3, registry abstraction layer, wallet state handling |
+| v0.3.0 | 2026-06-25 | Merkle tree bundle proofs, bundle explorer (`/bundle/[hash]`), bundle storage |
+| v0.4.0 | 2026-06-25 | Professional evidence workflows — timezone support, citation formats (APA/MLA/Legal), human-readable receipt view + print/PDF, QR improvements |
+| v0.5.0 | 2026-06-25 | Verification engine — full receipt validation pipeline (11+ checks), `VerificationReport` |
+| v0.6.0 | 2026-06-25 | Long-term preservation — archive package export, hash algorithm abstraction, compatibility checks |
+| v0.7.0 | 2026-06-25 | Explorer improvements — bundle awareness on proof pages, canonical URLs, chain-aware explorer |
 | v0.8.0 | 2026-06-25 | Release Hardening — error boundary, offline detection, CSP security headers, store readiness |
 | v0.9.0 | 2026-06-25 | Native Platform Readiness — MSIX packaging, Android (Capacitor), PWA polish, domain migration |
 | v0.9.1 | 2026-07-02 | Open Product Family branding — lockup alignment, Kovina Collection footer, dual-theme icon overhaul |
