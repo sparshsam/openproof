@@ -1,6 +1,6 @@
 {
   "name": "openproof",
-  "version": "0.9.3",
+  "version": "0.9.6",
   "private": true,
   "license": "AGPL-3.0-only",
   "scripts": {

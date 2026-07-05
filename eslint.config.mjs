@@ -9,6 +9,13 @@ const eslintConfig = defineConfig([
     files: ["hardhat.config.js", "scripts/**/*.js", "scripts/**/*.cjs", "test/**/*.js"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  // Static export uses <img> for local SVGs/PNGs — <Image> not needed
+  {
+    rules: {
+      "@next/next/no-img-element": "off",
     },
   },
   // Override default ignores of eslint-config-next.

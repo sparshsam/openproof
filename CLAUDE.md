@@ -37,7 +37,7 @@ Principles:
 
 OpenProof proves narrow claims well. It should never imply broader claims it cannot support.
 
-## 3. Current State (v0.9.4)
+## 3. Current State (v0.9.6)
 
 OpenProof currently supports:
 
@@ -59,7 +59,7 @@ OpenProof currently supports:
 - Dark/light themed header icon with `[data-theme="dark"]` CSS rules and 0.3s transition.
 - Error boundary with graceful reload prompt.
 - Offline detection with banner notification.
-- Service worker v0.9.0 with cache migration and update flow.
+- Service worker v0.9.6 with PWA app routes pre-cached and update flow.
 - Capacitor configuration for Android native packaging.
 - MSIX packaging manifest for Windows Store.
 - Release validation checklist (regression, cross-browser, mobile, accessibility, Lighthouse 100).
@@ -336,7 +336,7 @@ Documentation:
 
 PWA and assets:
 - `public/manifest.json` — PWA web manifest.
-- `public/sw.js` — service worker (v0.9.0, cache-first + network-first).
+- `public/sw.js` — service worker (v0.9.6, cache-first + network-first).
 - `public/icon-source.png` — canonical icon master (1024x1024, light).
 - `public/icon.svg` — vector icon source.
 - `public/icon.png` — generated single-size PNG.
@@ -421,6 +421,41 @@ Never commit: `.env`, `.env.local`, private keys, RPC secrets, WalletConnect/Reo
 |- License: AGPL-3.0-only (https://github.com/sparshsam/openproof/blob/main/LICENSE).
 |
 |## 17. Session History
+
+### 2026-07-05 — v0.9.6
+
+**Zero Warnings**
+- Lint: 0 errors, 0 warnings (`@next/next/no-img-element` globally suppressed)
+- TypeScript: 0 errors
+- Build: 0 warnings, 16/16 static pages
+- Tests: 5/5 passing
+
+**Release Freeze**
+- All eslint-disable comments cleaned up
+- eslint config refined for static export
+- Service worker v0.9.6
+- Final lockfile audit
+- Version bumped to 0.9.6
+
+### 2026-07-05 — v0.9.5
+
+**Accessibility**
+- Skip-to-content link added to PwaShell.
+- RouteProgress respects `prefers-reduced-motion` (static pulse when enabled).
+
+**PWA Hardening**
+- Service worker updated to v0.9.5 with PWA app routes pre-cached.
+- SW `STATIC_ASSETS` includes `/app`, `/app/verify`, `/app/history`, `/app/more`.
+
+**Codebase Cleanup**
+- Removed unused `hasBundleManifest` import from bundle explorer.
+- Removed dead `public/scripts/` (theme-init.js, sw-register.js).
+- Safe dependency updates applied.
+
+**Documentation & Release**
+- CHANGELOG updated with v0.9.4 and v0.9.5 entries.
+- README version journey updated.
+- Package version bumped to 0.9.5.
 
 ### 2026-07-05 — v0.9.4
 

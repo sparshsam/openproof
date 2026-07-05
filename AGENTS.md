@@ -6,7 +6,7 @@ OpenProof is a privacy-first, open-source cryptographic proof-of-existence tool 
 
 ## Current Version
 
-v0.9.4 — PWA Shell Polish & Tab Restructure
+v0.9.6 — Release Freeze
 
 Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 
@@ -89,6 +89,24 @@ Kovina
 - "OpenProof" remains the application name in code, metadata, SEO, and docs.
 
 ## Session Log
+
+### 2026-07-05 — v0.9.6
+
+**Release Freeze**
+- Zero lint warnings (global no-img-element suppression, unused disable removed)
+- Zero TypeScript errors
+- Zero build warnings
+- eslint config refined for static export
+- Service worker v0.9.6
+- Final lockfile audit
+
+### 2026-07-05 — v0.9.5
+
+**Release Candidate**
+- Accessibility: skip link in PwaShell, reduced-motion in RouteProgress
+- PWA: service worker v0.9.5 with PWA app routes, offline fallback
+- Cleanup: removed dead code, unused imports, dead public scripts
+- Docs: CHANGELOG, README, version bump
 
 ### 2026-07-05 — v0.9.4
 

@@ -3,12 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 /**
  * A thin animated progress bar that fires on client-side route transitions.
  *
  * Uses pathname as the trigger — fires a brief sweep every time the route
  * changes so the user never sees a dead click. No external dependencies,
  * no timer guesswork. Hidden on server render to avoid hydration mismatch.
+ * Respects prefers-reduced-motion (shows a static pulse instead).
  */
 export function RouteProgress() {
   const pathname = usePathname();
@@ -17,7 +23,8 @@ export function RouteProgress() {
   const frameRef = useRef(0);
 
   useEffect(() => {
-    const DURATION = 400;
+    const reduceMotion = prefersReducedMotion();
+    const DURATION = reduceMotion ? 50 : 400;
     const PEAK = 88;
     const startedAt = performance.now();
 
@@ -25,6 +32,13 @@ export function RouteProgress() {
     // setState in the effect body — the actual rendering starts on the next
     // frame, which is fine for a progress animation.
     const startRaf = requestAnimationFrame(() => {
+      if (reduceMotion) {
+        // Static pulse — no animation
+        setProgress(100);
+        setVisible(true);
+        return;
+      }
+
       setProgress(10);
       setVisible(true);
 
