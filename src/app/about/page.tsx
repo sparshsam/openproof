@@ -17,11 +17,22 @@ export default function AboutPage() {
       {/* ──────────── Hero ──────────── */}
       <section className="mx-auto max-w-3xl px-6 pt-28 pb-20 sm:pt-40 sm:pb-28">
         <div className="flex flex-col items-center text-center">
-          <img
-            alt=""
-            className="size-24 sm:size-32"
-            src="/icon.svg"
-          />
+          <div className="relative size-24 sm:size-32">
+            <style>{`
+              [data-theme="dark"] .about-hero-light { opacity: 0 !important; }
+              [data-theme="dark"] .about-hero-dark { opacity: 1 !important; }
+            `}</style>
+            <img
+              alt=""
+              className="about-hero-light absolute inset-0 size-24 sm:size-32 transition-opacity duration-300"
+              src="/icon-about-hero.png"
+            />
+            <img
+              alt=""
+              className="about-hero-dark absolute inset-0 size-24 sm:size-32 transition-opacity duration-300 opacity-0"
+              src="/icon-about-hero-dark.png"
+            />
+          </div>
           <h1 className="mt-8 text-5xl font-black leading-none tracking-tight sm:text-7xl">
             OpenProof
           </h1>

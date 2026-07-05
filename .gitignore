@@ -42,6 +42,9 @@ openproof-dev.err.log
 # vercel
 .vercel
 
+# generated asset source (OneDrive mirror)
+GeneratedAssets/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
