@@ -398,7 +398,17 @@ npm run test:contracts
 
 Never commit: `.env`, `.env.local`, private keys, RPC secrets, WalletConnect/Reown secrets, deployment credentials, Vercel secrets, seed phrases, wallet JSON files.
 
-## 16. Session History
+|## 16. Privacy & Legal Standard
+|
+|OpenProof follows the Kovina Privacy & Terms Standard for all legal/legal-facing pages.
+|
+|- **Privacy policy** (`/privacy`): 9 sections — Commitment, Local-First Data Model, No Cloud/Sync/Backup, What We Collect (nothing), Third-Party Services, Data Deletion, Data Export, Changes, Contact.
+|- **Terms of service** (`/terms`): 9 sections — Acceptance, License (AGPL-3.0), No Legal Advice, No Warranty, Data Responsibility, Service Availability, User Conduct, Changes, Contact.
+|- Both pages must be updated together when the Kovina standard is revised.
+|- Legal disclaimers: OpenProof is a tool for timestamping file fingerprints. It does not provide legal advice. Proofs on testnet (Base Sepolia) have no guarantee of permanence. Only SHA-256 hashes are registered, never file content.
+|- License: AGPL-3.0-only (https://github.com/sparshsam/openproof/blob/main/LICENSE).
+|
+|## 17. Session History
 
 ### 2026-07-03 — v0.9.1
 

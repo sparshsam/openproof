@@ -55,6 +55,16 @@ Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 
 All ecosystem repos follow: https://github.com/sparshsam/ecosystem-standards
 
+## Privacy & Legal Standard
+
+OpenProof follows the **Kovina Privacy & Terms Standard**.
+
+- **Privacy policy** (`/privacy`): 9 sections — Commitment, Local-First Data Model, No Cloud/Sync/Backup, What We Collect (nothing), Third-Party Services, Data Deletion, Data Export, Changes, Contact.
+- **Terms of service** (`/terms`): 9 sections — Acceptance, License (AGPL-3.0), No Legal Advice, No Warranty, Data Responsibility, Service Availability, User Conduct, Changes, Contact.
+- Both pages must use matching styling (mx-auto max-w-3xl, px-6, text-text-secondary, text-text-primary, text-accent).
+- Key disclaimers: OpenProof does not provide legal advice. Testnet proofs have no guarantee of permanence. Only SHA-256 hashes are registered onchain, never file content.
+- See `CLAUDE.md` section 16 for full details.
+
 ## Branding Architecture
 
 OpenProof belongs to the **Open Product Family** under **Kovina**:
