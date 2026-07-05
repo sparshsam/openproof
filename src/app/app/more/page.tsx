@@ -100,7 +100,7 @@ export default function AppMorePage() {
       </div>
 
       <p className="text-center text-xs text-text-muted">
-        OpenProof v0.9.4 &middot; AGPL-3.0
+        OpenProof v0.9.6 &middot; AGPL-3.0
       </p>
 
       {/* Kovina wordmark — visible on all devices */}

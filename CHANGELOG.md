@@ -2,6 +2,65 @@
 
 All notable changes to OpenProof are documented here.
 
+## 0.9.6 — Release Freeze
+
+### Zero Warnings
+- Lint warnings: **0** (suppressed `@next/next/no-img-element` globally, removed unused eslint-disable)
+- TypeScript errors: **0**
+- Build warnings: **0**
+- Unused vars in build scripts silenced
+
+### Vitals
+- Build: ✅ 16/16 static pages
+- Tests: ✅ 5/5 contract tests
+- Dependency lock audited
+- Service worker v0.9.6
+
+## 0.9.5 — Release Candidate
+
+### Accessibility
+- Added skip-to-content link to PwaShell (keyboard navigation)
+- RouteProgress respects `prefers-reduced-motion` (static pulse)
+- Global CSS reduced-motion rule kills all animations
+
+### PWA Hardening
+- Service worker updated to v0.9.5 with PWA app routes pre-cached
+- Offline fallback improved
+
+### Codebase Cleanup
+- Removed unused `hasBundleManifest` import
+- Removed dead public/scripts (theme-init.js, sw-register.js)
+- Safe dependency updates applied
+
+### Documentation
+- CHANGELOG updated with v0.9.4 and v0.9.5 entries
+
+## 0.9.4 — PWA Shell Polish & Tab Restructure
+
+### Desktop PWA Shell
+- PwaShell for all installed routes (no marketing footer) via `display-mode` detection
+- Desktop header navigation: Create (`/create`), Verify (`/app/verify`), History (`/app/history`), More (`/app/more`)
+- OPEN/Proof stacked branding lockup in PwaShell header
+- Kovina wordmark footer (desktop, centered)
+
+### Tab Restructure
+- `/app` landing page: two huge entry cards (desktop) / direct create form (mobile)
+- `/app/verify`: full verify flow + receipt import section
+- `/app/history`: expanded with bundle proofs CTA + testnet notice
+- `/app/more`: About, Docs, Privacy, Terms, GitHub with descriptions
+- Shared `CreateProofForm` and `VerifyProofForm` components
+
+### Loading & Hydration
+- `RouteProgress` bar on every client-side navigation
+- `AppSplash` replaced with clean gradient sweep (600ms)
+- Hydration guard in `ConditionalShell` + unconditional `AppLayout`
+- Theme/SW init at module level (no `next/script`, no React 19 errors)
+
+### Bug Fixes
+- `WalletProvider` at root layout (fixes WagmiProviderNotFoundError in PWA)
+- `usePwaMode` synchronous display-mode check (no hydration flash)
+- Kovina wordmark SVGs: `text-anchor="middle"` for proper centering
+
 ## 0.9.3 — Installed PWA App Experience
 
 ### PWA App Shell

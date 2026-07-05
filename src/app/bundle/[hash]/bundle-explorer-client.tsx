@@ -13,7 +13,6 @@ import { normalizeClientError } from "@/lib/errors";
 import { addressExplorerUrl, transactionExplorerUrl } from "@/lib/explorer";
 import { isBytes32Hash, readOnchainProof, type OnchainProof } from "@/lib/proofs";
 import { formatLocalTimestamp } from "@/lib/time";
-import { hasBundleManifest } from "@/lib/bundle-storage";
 
 // ── Bundle file type ──
 type BundleFileEntry = {

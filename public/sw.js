@@ -1,5 +1,5 @@
 /**
- * OpenProof Service Worker v0.9.2
+ * OpenProof Service Worker v0.9.6
  *
  * Strategy: Cache-First for static assets, Network-First for dynamic routes.
  * Keeps the app functional offline for previously visited pages and assets.
@@ -8,9 +8,13 @@
  * and no file contents are ever uploaded or cached by this worker.
  */
 
-const CACHE_NAME = "openproof-v0.9.2";
+const CACHE_NAME = "openproof-v0.9.6";
 const STATIC_ASSETS = [
   "/",
+  "/app",
+  "/app/verify",
+  "/app/history",
+  "/app/more",
   "/create",
   "/verify",
   "/about",

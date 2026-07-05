@@ -20,6 +20,15 @@ export function PwaShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-bg-base text-text-primary">
       <RouteProgress />
+
+      {/* Skip-to-content link for keyboard users */}
+      <a
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+        href="#pwa-main-content"
+      >
+        Skip to content
+      </a>
+
       {/* Compact app header */}
       <header className="sticky top-0 z-50 border-b border-border-default bg-bg-base/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">
@@ -79,7 +88,7 @@ export function PwaShell({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main content — flex-1 pushes footer to the bottom */}
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8 pb-24 md:pb-8">
+      <main id="pwa-main-content" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8 pb-24 md:pb-8">
         {children}
       </main>
 

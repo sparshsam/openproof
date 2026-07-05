@@ -55,7 +55,6 @@ export function ProofQrCode({ url, label }: { url: string; label?: string }) {
       ) : null}
       <div className="rounded-xl bg-white p-4">
         {dataUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img alt="QR code for OpenProof verification" className="mx-auto size-44 sm:size-52" src={dataUrl} />
         ) : (
           <div className="mx-auto grid size-44 place-items-center rounded-xl bg-bg-surface-muted text-sm text-text-muted sm:size-52">
