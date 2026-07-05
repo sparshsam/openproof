@@ -26,7 +26,7 @@ export function ConditionalShell({ children }: { children: React.ReactNode }) {
     }
   }, [isPwa, pathname, router]);
 
-  // After hydration: use PWA-aware routing (may differ from SSR)
+  // After hydration: use PWA-aware routing
   if (hydrated && isPwa) {
     // While redirecting from / → /app, show a minimal placeholder
     if (pathname === "/") {
@@ -36,10 +36,17 @@ export function ConditionalShell({ children }: { children: React.ReactNode }) {
         </PwaShell>
       );
     }
+    // /app routes: AppLayout provides PwaShell — pass through
+    if (pathname.startsWith("/app")) {
+      return <>{children}</>;
+    }
+    // Non-/app routes: wrap in PwaShell here
     return <PwaShell>{children}</PwaShell>;
   }
 
   // Before hydration OR browser mode: pathname-based routing (matches SSR)
+  // /app routes: AppLayout always provides PwaShell
+  // Non-/app routes: AppShell provides the website layout
   const isAppRoute = pathname.startsWith("/app");
   if (isAppRoute) {
     return <>{children}</>;
