@@ -67,14 +67,14 @@ OpenProof is part of a broader direction: software that helps people prove thing
 
 | Version | Date | Highlights |
 |---|---|---|
-| v0.1.0 | 2026-05 | MVP — local SHA-256 hashing, proof registration on Base Sepolia, JSON receipts, bundle proofs, QR verification |
-| v0.1.1 | 2026-06 | PWA support, cross-platform icons, store metadata, release checklist |
-| v0.1.2 | 2026-06 | Theme toggle (light/dark), native About / Privacy / Terms pages |
-| v0.1.4 | 2026-06 | About page redesign, architecture diagram, threat model, registry transparency |
-| v0.2.0 | 2026-06 | Receipt schema v3, Merkle tree bundles, verification engine, evidence workflows, chain abstraction |
-| v0.8.0 | 2026-06 | Error boundary, offline detection, security headers, store readiness |
-| v0.9.0 | 2026-06 | Native Platform Readiness — MSIX, Android (Capacitor), PWA polish, release validation |
-| v0.9.1 | 2026-07 | Open Product Family branding — lockup, icon overhaul (210 assets), dual-theme icons |
+| v0.1.0 | 2026-05-29 | MVP — local SHA-256 hashing, Base Sepolia proof registration, JSON receipts, bundle proofs, QR verification, proof explorer |
+| v0.1.1 | 2026-06-22 | PWA support (manifest, service worker, app icons), cross-platform icon set, store metadata, release checklist |
+| v0.1.2 | 2026-06-22 | Light/dark theme toggle, native About / Privacy / Terms pages, Block/Cash App UI revamp |
+| v0.1.4 | 2026-06-23 | Trust & Transparency — About page redesign, architecture diagram, threat model, registry transparency |
+| v0.2.0 | 2026-06-25 | Cryptographic Foundation — receipt schema v3, Merkle tree bundles, verification engine, evidence workflows, chain abstraction, explorer improvements |
+| v0.8.0 | 2026-06-25 | Release Hardening — error boundary, offline detection, CSP security headers, store readiness |
+| v0.9.0 | 2026-06-25 | Native Platform Readiness — MSIX packaging, Android (Capacitor), PWA polish, domain migration |
+| v0.9.1 | 2026-07-02 | Open Product Family branding — lockup alignment, Kovina Collection footer, dual-theme icon overhaul |
 
 ## Quick Links
 
