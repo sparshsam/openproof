@@ -100,6 +100,8 @@ OpenProof is part of a broader direction: software that helps people prove thing
 
 AGPL-3.0-only. See [`LICENSE`](LICENSE).
 
+---
+
 <p align="center">
   <strong>Part of the Kovina Collection</strong>
 </p>
