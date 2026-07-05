@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/branding/icon.png" width="72" alt="OpenProof">
+  <img src="assets/Header/openproof-icon-header.png" width="72" alt="OpenProof">
 </div>
 
 <div align="center">
