@@ -2,6 +2,31 @@
 
 All notable changes to OpenProof are documented here.
 
+## 0.9.3 — Installed PWA App Experience
+
+### PWA App Shell
+- New `/app` route — focused workbench for installed PWA users
+- App splash screen using existing icon assets (light/dark, respects reduced motion)
+- Compact app header with online/offline status, Base Sepolia badge, theme toggle
+- Mobile bottom tab navigation: Create, Verify, History, More
+- App sub-routes: `/app/history` (combined registered + verified), `/app/more` (About, Docs, GitHub)
+- `/app/verify` redirects to existing `/verify` page
+
+### Display-Mode Detection
+- New `usePwaMode()` hook — detects `display-mode: standalone`, `fullscreen`, `minimal-ui`, iOS standalone, and `?source=pwa`/`?mode=pwa` fallback
+- Returns `isPwa`, `displayMode`, `isMobile`, `isDesktop`, `prefersReducedMotion`
+- Safe client-only detection with media query listeners
+
+### Manifest
+- `start_url` changed from `/` to `/app?source=pwa` — installed PWA launches into the workbench
+- Website mode still serves the public marketing site from `/`
+
+### Architecture
+- Route group `src/app/app/` uses its own layout with `PwaShell` (no marketing footer)
+- Public routes (`/`, `/about`, `/privacy`, `/terms`, `/create`, `/verify`, `/proof/[hash]`, `/bundle/[hash]`) continue using the website `AppShell`
+- History system reused — no new backend, no accounts, no sync
+- Existing CSP, wallet compatibility, accessibility preserved
+
 ## 0.9.2 — GeneratedAssets & PWA Refresh
 
 ### Assets
