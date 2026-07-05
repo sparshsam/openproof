@@ -68,6 +68,7 @@ OpenProof is part of a broader direction: software that helps people prove thing
 | Version | Date | Highlights |
 |---|---|---|
 | v0.1.0 | 2026-05 | MVP — local SHA-256 hashing, proof registration on Base Sepolia, JSON receipts, bundle proofs, QR verification |
+| v0.1.1 | 2026-06 | PWA support, cross-platform icons, store metadata, release checklist |
 | v0.1.2 | 2026-06 | Theme toggle (light/dark), native About / Privacy / Terms pages |
 | v0.1.4 | 2026-06 | About page redesign, architecture diagram, threat model, registry transparency |
 | v0.2.0 | 2026-06 | Receipt schema v3, Merkle tree bundles, verification engine, evidence workflows, chain abstraction |
