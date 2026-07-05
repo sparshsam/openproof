@@ -6,7 +6,7 @@ OpenProof is a privacy-first, open-source cryptographic proof-of-existence tool 
 
 ## Current Version
 
-v0.9.1 — Open Product Family Branding Alignment
+v0.9.4 — PWA Shell Polish & Tab Restructure
 
 Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 
@@ -27,7 +27,11 @@ Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 13. **Multi-platform.** PWA (installable, offline, shortcuts, branded install prompt with 7-day dismissal memory), Windows (MSIX manifest, icons, splash screens), Android (Capacitor project initialized, 4 plugins: Filesystem, Keyboard, Share, SplashScreen).
 14. **Canonical icon.** All icon variants generated from public/icon-source.png (1024x1024 PNG master, light variant; dark variant from dark master). 210 total assets across Windows, Android, iOS, macOS, Web/PWA, social OG, GitHub. Themed header icon with dark/light CSS swap (`[data-theme="dark"]` rules, 0.3s transition).
 15. **Website copy.** Homepage with 6 sections (Who uses OpenProof, How it works, When to timestamp, What a proof means, Registry strip, Privacy by design). About page with Who uses and When to use sections. SEO-optimized metadata across all pages.
-16. **Security headers.** CSP allows sepolia.base.org, *.walletconnect.com, *.reown.com, *.basescan.org, pulse.walletconnect.org, api.web3modal.org. COOP: same-origin-allow-popups.
+16. **PWA shell.** `PwaShell` for installed mode with desktop header nav (Create, Verify, History, More) and mobile bottom nav. `ConditionalShell` routes between `PwaShell` (PWA) and `AppShell` (browser) with hydration guard.
+17. **Wallet context at root.** `WalletProvider` wraps all routes in root layout — wagmi context available in both PWA and browser mode.
+18. **Route progress.** `RouteProgress` component provides visual feedback on client-side navigation.
+19. **Shared proof forms.** `CreateProofForm` and `VerifyProofForm` used by both PWA tabs and standalone pages.
+20. **Security headers.** CSP allows sepolia.base.org, *.walletconnect.com, *.reown.com, *.basescan.org, pulse.walletconnect.org, api.web3modal.org. COOP: same-origin-allow-popups.
 
 ## Tech Stack
 
@@ -85,6 +89,16 @@ Kovina
 - "OpenProof" remains the application name in code, metadata, SEO, and docs.
 
 ## Session Log
+
+### 2026-07-05 — v0.9.4
+
+**PWA Restructure**
+- Desktop PWA shell (PwaShell) with header nav, landing page with entry cards.
+- Four-tab layout: Create, Verify, History, More.
+- WalletProvider at root level fixes wagmi context errors.
+- Route progress bar for navigation feedback.
+- All theme/SW initialization moved to module level (no Script components).
+- Kovina wordmark footer (desktop PWA).
 
 ### 2026-07-03 — v0.9.1
 

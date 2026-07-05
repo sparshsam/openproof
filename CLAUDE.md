@@ -1,6 +1,6 @@
 # OpenProof Agent Source of Truth
 
-Last updated: 2026-07-02
+Last updated: 2026-07-05
 Update signed by: op-branding-agent
 
 ## 1. Project Identity
@@ -37,7 +37,7 @@ Principles:
 
 OpenProof proves narrow claims well. It should never imply broader claims it cannot support.
 
-## 3. Current State (v0.9.1)
+## 3. Current State (v0.9.4)
 
 OpenProof currently supports:
 
@@ -68,6 +68,18 @@ OpenProof currently supports:
 - Native pages: `/about`, `/privacy`, `/terms`.
 - PWA: installable with service worker, manifest, splash screens, shortcut.
 - PWA install prompt with branded UI and localStorage dismissal memory (7-day cooldown).
+- PWA shell (PwaShell) for installed mode with desktop header navigation (Create, Verify, History, More).
+- PWA landing page with two huge entry cards (Create / Verify) on desktop; direct create form on mobile.
+- PWA bottom tab navigation (mobile) and desktop header nav — four tabs: Create, Verify, History, More.
+- PWA desktop nav links: Create → `/create`, Verify → `/app/verify`, History → `/app/history`, More → `/app/more`.
+- `WalletProvider` at root layout level (app-wide wagmi context, no WagmiProviderNotFoundError).
+- Route progress bar (`RouteProgress`) on client-side navigation.
+- AppSplash with clean gradient sweep (600ms, no three-dot timer).
+- Loading skeleton (`loading.tsx`) for PWA route transitions.
+- Hydration-safe shell selection (`ConditionalShell` with hydrated guard).
+- Theme initialization at module level (no `next/script`, avoids React 19 script tag errors).
+- Kovina wordmark footer in PWA (desktop, centered).
+- Shared `CreateProofForm` / `VerifyProofForm` components used by both `/app` (PWA) and standalone pages.
 - Website copy across homepage (6 sections: Who uses, How it works, When to timestamp, What a proof means, Registry, Privacy by design), About page (Who uses, When to use), Create/Verify pages.
 - SEO metadata with proof-of-existence, file fingerprinting, blockchain timestamping keywords.
 - Hydration-safe theme toggle via suppressHydrationWarning on <html>.
@@ -409,6 +421,37 @@ Never commit: `.env`, `.env.local`, private keys, RPC secrets, WalletConnect/Reo
 |- License: AGPL-3.0-only (https://github.com/sparshsam/openproof/blob/main/LICENSE).
 |
 |## 17. Session History
+
+### 2026-07-05 — v0.9.4
+
+**PWA Shell & Desktop Support**
+- Desktop PWA now uses PwaShell (no marketing footer) via `display-mode` detection.
+- Desktop header navigation added: Create (`/create`), Verify (`/app/verify`), History (`/app/history`), More (`/app/more`).
+- OPEN/Proof stacked branding lockup in PwaShell header.
+- Kovina wordmark footer in PWA (desktop, centered, SVG `text-anchor` fix).
+
+**Tab Restructure**
+- `/app` page: desktop landing with two huge entry cards (Create / Verify); mobile keeps direct create form.
+- `/app/verify`: full verify flow (file → hash → check onchain) + receipt import section.
+- `/app/history`: expanded with bundle proofs CTA + Base Sepolia testnet notice.
+- `/app/more`: About, Documentation, Privacy Policy, Terms of Service, GitHub with descriptions.
+- Shared `CreateProofForm` and `VerifyProofForm` components extracted.
+
+**Loading & Hydration**
+- `RouteProgress` bar on every client-side navigation.
+- `AppSplash` replaced with clean gradient sweep (600ms).
+- `loading.tsx` skeleton for PWA route transitions.
+- Hydration guard in `ConditionalShell` prevents SSR mismatch for PWA.
+
+**Bug Fixes**
+- `WalletProvider` moved to root layout (fixes `WagmiProviderNotFoundError` in PWA mode).
+- Theme initialization moved to module level (eliminates React 19 `<script>` tag warnings).
+- No `next/script` usage anywhere (avoids React 19 incompatibility).
+- `usePwaMode` state initializer now checks `display-mode` synchronously (no flash).
+- PwaShell `pb-24` made unconditional (fixes hydration mismatch on mobile).
+
+**Kovina Wordmark SVG**
+- Light and dark SVGs updated: `text-anchor="middle" x="156"` for proper centering.
 
 ### 2026-07-03 — v0.9.1
 
