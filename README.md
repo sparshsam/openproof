@@ -67,10 +67,12 @@ OpenProof is part of a broader direction: software that helps people prove thing
 
 | Version | Date | Highlights |
 |---|---|---|
-| v0.4.0 | 2026-06 | Receipt specification — canonical JSON receipt format with deterministic serialization |
-| v0.3.0 | 2026-05 | Bundle proofs — combined hash for multiple files with sorted commitments |
-| v0.2.0 | 2026-04 | QR verification — encode proof page URL for mobile verification |
-| v0.1.0 | 2026-03 | MVP — basic proof creation, verification, and local history |
+| v0.1.0 | 2026-05 | MVP — local SHA-256 hashing, proof registration on Base Sepolia, JSON receipts, bundle proofs, QR verification |
+| v0.1.2 | 2026-06 | Theme toggle (light/dark), native About / Privacy / Terms pages |
+| v0.1.4 | 2026-06 | About page redesign, architecture diagram, threat model, registry transparency |
+| v0.2.0 | 2026-06 | Receipt schema v3, Merkle tree bundles, verification engine, evidence workflows, chain abstraction |
+| v0.9.0 | 2026-06 | Native Platform Readiness — MSIX, Android (Capacitor), PWA polish, release validation |
+| v0.9.1 | 2026-07 | Open Product Family branding — lockup, icon overhaul (210 assets), dual-theme icons |
 
 ## Quick Links
 
