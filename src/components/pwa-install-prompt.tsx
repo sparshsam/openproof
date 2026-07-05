@@ -133,7 +133,7 @@ export function PwaInstallPrompt() {
       {showPrompt && deferredPrompt && (
         <div className="fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 animate-in slide-in-from-bottom-4 fade-in">
           <div className="flex items-center gap-3 rounded-full border border-border-default bg-bg-surface px-5 py-3 shadow-xl backdrop-blur-md">
-            <img alt="" className="size-6 shrink-0" src="/icon.svg" />
+            <img alt="" className="size-6 shrink-0" src="/icon-48.png" />
             <span className="text-sm font-semibold text-text-primary">Install OpenProof</span>
             <button
               className="rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-white transition hover:bg-accent/90 active:scale-[0.97]"
