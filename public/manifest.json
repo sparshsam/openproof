@@ -1,7 +1,7 @@
 {
   "name": "OpenProof",
   "short_name": "OpenProof",
-  "description": "Open-source cryptographic proof infrastructure built on Base Sepolia. Timestamp file fingerprints onchain without uploading files anywhere.",
+  "description": "Privacy-first proof-of-existence for files. Hash files locally, register only the SHA-256 fingerprint on Base Sepolia. No uploads, no accounts, no backend.",
   "start_url": "/",
   "display": "standalone",
   "display_override": [
@@ -79,38 +79,24 @@
   "screenshots": [
     {
       "src": "/screenshots/home-desktop.png",
-      "sizes": "1280x800",
+      "sizes": "1908x1027",
       "type": "image/png",
       "form_factor": "wide",
       "label": "OpenProof landing page showing the proof creation workflow"
     },
     {
       "src": "/screenshots/create-desktop.png",
-      "sizes": "1280x800",
+      "sizes": "1906x1033",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Create a cryptographic proof by uploading a file"
     },
     {
       "src": "/screenshots/verify-desktop.png",
-      "sizes": "1280x800",
+      "sizes": "1903x1036",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Verify an existing proof by re-hashing a local file"
-    },
-    {
-      "src": "/screenshots/proof-desktop.png",
-      "sizes": "1280x800",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Proof explorer page showing registered proof metadata"
-    },
-    {
-      "src": "/screenshots/create-mobile.png",
-      "sizes": "414x896",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Create proof flow on mobile"
     }
   ],
   "shortcuts": [
