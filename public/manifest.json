@@ -2,7 +2,7 @@
   "name": "OpenProof",
   "short_name": "OpenProof",
   "description": "Privacy-first proof-of-existence for files. Hash files locally, register only the SHA-256 fingerprint on Base Sepolia. No uploads, no accounts, no backend.",
-  "start_url": "/",
+  "start_url": "/app?source=pwa",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",

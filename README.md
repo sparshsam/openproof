@@ -81,6 +81,7 @@ OpenProof is part of a broader direction: software that helps people prove thing
 | v0.9.0 | 2026-06-25 | Native Platform Readiness — MSIX packaging, Android (Capacitor), PWA polish, domain migration |
 | v0.9.1 | 2026-07-02 | Open Product Family branding — lockup alignment, Kovina Collection footer, dual-theme icon overhaul |
 | v0.9.2 | 2026-07-04 | GeneratedAssets replacement, Kovina footer, PWA icon refresh, README overhaul |
+| v0.9.3 | 2026-07-04 | Installed PWA App Experience — `/app` workbench, splash screen, bottom nav, compact header, display-mode detection |
 
 ## Quick Links
 

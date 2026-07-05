@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "@fontsource-variable/stack-sans-notch";
 import { AppShell } from "@/components/app-shell";
+import { ConditionalShell } from "@/components/conditional-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { OfflineNotice } from "@/components/offline-notice";
@@ -112,9 +113,9 @@ export default function RootLayout({
           }}
         />
         <ThemeProvider>
-          <AppShell>
+          <ConditionalShell>
             <ErrorBoundary>{children}</ErrorBoundary>
-          </AppShell>
+          </ConditionalShell>
           <OfflineNotice />
           <PwaInstallPrompt />
         </ThemeProvider>
