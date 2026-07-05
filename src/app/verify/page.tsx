@@ -1,24 +1,22 @@
 "use client";
 
+import { CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 import Link from "next/link";
 import type { Dispatch, SetStateAction } from "react";
-import { CheckCircle2, CircleX, Loader2, SearchCheck } from "lucide-react";
-import { startTransition, useEffect, useState } from "react";
 import type { PublicClient } from "viem";
 import { usePublicClient } from "wagmi";
 import {
-  ActionPill, ExplorerLink, Label,
+  ExplorerLink,
+  Label,
 } from "@/components/design-system";
 import { CopyButton } from "@/components/copy-button";
-import { FileDrop } from "@/components/file-drop";
-import { HashDisplay } from "@/components/hash-display";
-import { ProofHistory } from "@/components/proof-history";
 import { ProofTimeline } from "@/components/proof-timeline";
 import { ReceiptImport } from "@/components/receipt-import";
+import { VerifyProofForm } from "@/components/verify-proof-form";
 import { transactionExplorerUrl } from "@/lib/explorer";
 import { normalizeClientError } from "@/lib/errors";
-import { formatBytes, hashFileSha256 } from "@/lib/hash";
-import { isContractConfigured, openProofChain, openProofContractAddress } from "@/lib/contracts";
+import { openProofChain, openProofContractAddress } from "@/lib/contracts";
 import { addProofHistoryItem } from "@/lib/history";
 import { proofPath } from "@/lib/proof-url";
 import { findProofTransactionHash, isBytes32Hash, readOnchainProof } from "@/lib/proofs";
@@ -31,31 +29,8 @@ type VResult =
   | { status: "error"; message: string };
 
 export default function VerifyProofPage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [hash, setHash] = useState<`0x${string}` | null>(null);
-  const [result, setResult] = useState<VResult>({ status: "idle", message: "Select a file to verify." });
   const [receiptResult, setReceiptResult] = useState<VResult>({ status: "idle", message: "Import a receipt to validate it onchain." });
   const pc = usePublicClient({ chainId: openProofChain.id });
-  const configured = isContractConfigured();
-
-  useEffect(() => {
-    if (!file) return;
-    startTransition(() => { setHash(null); setResult({ status: "loading", message: "Hashing locally..." }); });
-    hashFileSha256(file).then((v) => { setHash(v); setResult({ status: "idle", message: "Hash ready. Query the registry." }); }).catch(() => setResult({ status: "error", message: "Could not hash file." }));
-  }, [file]);
-
-  async function verify() {
-    if (!hash || !openProofContractAddress || !pc) return;
-    setResult({ status: "loading", message: "Checking Base Sepolia..." });
-    try {
-      const p = await readOnchainProof(pc, hash);
-      if (!p) { setResult({ status: "not-found", message: "No matching proof found." }); return; }
-      const r: VResult = { status: "verified", creator: p.creator, timestamp: p.timestamp, proofId: hash, transactionHash: p.transactionHash };
-      setResult(r);
-      hydrateTx(pc, hash, setResult);
-      addProofHistoryItem({ proofType: "verified", fileName: file?.name || "Verified file", fileHash: hash, txHash: p.transactionHash, chainName: openProofChain.name, chainId: openProofChain.id, timestamp: p.timestamp, verificationUrl: `${window.location.origin}${proofPath(hash)}`, baseScanUrl: p.transactionHash ? transactionExplorerUrl(p.transactionHash) : undefined });
-    } catch (e) { setResult({ status: "error", message: normalizeClientError(e, "Verification failed.") }); }
-  }
 
   async function verifyReceipt(receipt: ProofReceipt) {
     if (!pc) return;
@@ -88,71 +63,9 @@ export default function VerifyProofPage() {
         </p>
       </section>
 
-      {/* ── Scanner ───────────────────────────────────────
-           Single column. File at top, result is the hero.
-           ──────────────────────────────────────────────── */}
+      {/* ── Scanner ─────────────────────────────────────── */}
       <section className="mx-auto max-w-3xl px-6 pb-24 sm:pb-32">
-        <FileDrop file={file} onFile={setFile} onError={(m) => setResult({ status: "error", message: m })} />
-
-        {file ? (
-          <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm">
-            <span><span className="text-text-muted">Name</span> <strong>{file.name}</strong></span>
-            <span><span className="text-text-muted">Size</span> <strong>{formatBytes(file.size)}</strong></span>
-            <span><span className="text-text-muted">Type</span> <strong>{file.type || "unknown"}</strong></span>
-          </div>
-        ) : null}
-
-        {hash ? (
-          <div className="mt-6 space-y-6">
-            <HashDisplay value={hash} />
-            <ActionPill disabled={!configured || result.status === "loading"} onClick={verify}>
-              {result.status === "loading" ? <Loader2 className="size-4 animate-spin" /> : <SearchCheck className="size-4" />}
-              Verify on Base Sepolia
-            </ActionPill>
-          </div>
-        ) : null}
-
-        {/* ── Result (hero of the page) ──────────────── */}
-        {result.status === "verified" ? (
-          <div aria-live="polite" className="mt-12 border-t border-border-default pt-10">
-            <div className="flex items-center gap-6">
-              <CheckCircle2 className="size-14 text-accent shrink-0" />
-              <div>
-                <p className="text-3xl font-black text-accent sm:text-4xl">Proof found</p>
-                <p className="mt-2 text-base text-text-secondary">Matching fingerprint registered on Base Sepolia.</p>
-              </div>
-            </div>
-            <ProofTimeline className="mt-8" steps={[
-              { title: "Local fingerprint matched", text: "The selected file produced the displayed hash.", complete: true },
-              { title: "Registry entry found", text: "Hash exists in OpenProofRegistry.", complete: true },
-              { title: "Timestamp confirmed", text: formatLocalTimestamp(result.timestamp), complete: true },
-            ]} />
-            <dl className="mt-8 grid gap-3 text-sm">
-              <DataRow label="Creator wallet" value={result.creator} />
-              <DataRow label="Timestamp" value={formatLocalTimestamp(result.timestamp)} />
-              <DataRow label="Proof ID" value={result.proofId} />
-            </dl>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#0099ee]" href={proofPath(result.proofId)}>Open proof page</Link>
-              <CopyButton label="Copy hash" value={result.proofId} />
-              <CopyButton label="Copy creator" value={result.creator} />
-              {result.transactionHash ? <><ExplorerLink href={transactionExplorerUrl(result.transactionHash)}>View on BaseScan</ExplorerLink><CopyButton label="Copy tx hash" value={result.transactionHash} /></> : null}
-            </div>
-            {!result.transactionHash ? <p className="mt-6 text-sm text-text-muted">Transaction link unavailable from public RPC.</p> : null}
-          </div>
-        ) : result.status === "not-found" || result.status === "error" ? (
-          <div aria-live="polite" className="mt-12">
-            <div className="flex items-center gap-6">
-              <CircleX className="size-14 text-error shrink-0" />
-              <div>
-                <p className="text-3xl font-black text-error sm:text-4xl">{result.status === "not-found" ? "Not found" : "Error"}</p>
-                <p className="mt-2 text-base text-text-secondary">{result.message}</p>
-              </div>
-            </div>
-          </div>
-        ) : result.status === "loading" ? (
-          <p aria-live="polite" className="mt-6 text-sm text-accent font-medium">Checking the registry...</p>
-        ) : null}
+        <VerifyProofForm />
       </section>
 
       {/* ── Receipt import — secondary flow ─────────── */}
@@ -200,10 +113,6 @@ export default function VerifyProofPage() {
             <p className="mt-6 text-sm text-accent">Checking...</p>
           ) : null}
         </div>
-      </section>
-
-      <section className="mx-auto max-w-3xl px-6 pb-24 sm:pb-32">
-        <ProofHistory title="Recent Verifications" type="verified" />
       </section>
     </main>
   );
