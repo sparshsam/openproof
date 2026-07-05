@@ -261,7 +261,7 @@ export default function CreateProofPage() {
                   </div>
                 ))}
               </dl>
-              <p className="mt-6 text-center text-xs text-text-muted">&mdash; OpenProof v0.9.0 &mdash;</p>
+              <p className="mt-6 text-center text-xs text-text-muted">&mdash; OpenProof v0.9.2 &mdash;</p>
             </div>
           </div>
         ) : null}
