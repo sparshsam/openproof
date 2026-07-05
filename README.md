@@ -85,6 +85,7 @@ OpenProof is part of a broader direction: software that helps people prove thing
 | v0.9.4 | 2026-07-05 | PWA Shell Polish & Tab Restructure — desktop shell, header nav, landing page, wallet fix, hydrate guard |
 | v0.9.5 | 2026-07-05 | Release Candidate — accessibility, PWA hardening, codebase cleanup, dependency audit |
 | v0.9.6 | 2026-07-05 | Release Freeze — zero lint errors, zero TS errors, zero build warnings, lock audit |
+| **v1.0.0** | **2026-07-05** | **Stable Release — first stable version of privacy-first proof-of-existence on Base Sepolia** |
 
 ## Quick Links
 

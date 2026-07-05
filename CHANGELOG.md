@@ -2,6 +2,35 @@
 
 All notable changes to OpenProof are documented here.
 
+## 1.0.0 — Stable (Website + PWA)
+
+### Version Finalization
+- Version bumped to v1.0.0
+- Service worker v1.0.0
+- GitHub release created
+- Production deployment verified at proof.kovina.org
+- All documentation finalized
+
+### Release Notes
+
+OpenProof v1.0.0 is the first stable release of a privacy-first, open-source proof-of-existence tool for files on Base Sepolia.
+
+**Core loop:** Hash a file locally with SHA-256 → Register only the fingerprint onchain → Receive a verification receipt → Verify against the registry anytime. The file never leaves your browser.
+
+**What's included:**
+- Web app (Next.js 16, static export) + PWA (installable, offline-capable)
+- Desktop PWA shell with header navigation and landing page
+- Mobile PWA with bottom tab navigation (Create, Verify, History, More)
+- Onchain registry contract (Solidity, Base Sepolia)
+- Bundle proofs via Merkle tree manifests
+- Receipt generation, import, and full verification pipeline
+- Public proof pages and bundle explorer
+- Light/dark theme, wallet connection (RainbowKit + wagmi)
+- Zero backend, zero uploads, zero accounts, zero tracking
+- AGPL-3.0 licensed
+
+**v1.0.0 Freeze Wall:** No new product features until real users validate the current loop. Allowed work: UX polish, security hardening, testing, platform packaging.
+
 ## 0.9.6 — Release Freeze
 
 ### Zero Warnings

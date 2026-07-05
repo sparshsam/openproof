@@ -37,7 +37,7 @@ Principles:
 
 OpenProof proves narrow claims well. It should never imply broader claims it cannot support.
 
-## 3. Current State (v0.9.6)
+## 3. Current State (v1.0.0)
 
 OpenProof currently supports:
 
@@ -59,7 +59,7 @@ OpenProof currently supports:
 - Dark/light themed header icon with `[data-theme="dark"]` CSS rules and 0.3s transition.
 - Error boundary with graceful reload prompt.
 - Offline detection with banner notification.
-- Service worker v0.9.6 with PWA app routes pre-cached and update flow.
+- Service worker v1.0.0 with PWA app routes pre-cached and update flow.
 - Capacitor configuration for Android native packaging.
 - MSIX packaging manifest for Windows Store.
 - Release validation checklist (regression, cross-browser, mobile, accessibility, Lighthouse 100).
@@ -336,7 +336,7 @@ Documentation:
 
 PWA and assets:
 - `public/manifest.json` — PWA web manifest.
-- `public/sw.js` — service worker (v0.9.6, cache-first + network-first).
+- `public/sw.js` — service worker (v1.0.0, cache-first + network-first).
 - `public/icon-source.png` — canonical icon master (1024x1024, light).
 - `public/icon.svg` — vector icon source.
 - `public/icon.png` — generated single-size PNG.
@@ -421,6 +421,14 @@ Never commit: `.env`, `.env.local`, private keys, RPC secrets, WalletConnect/Reo
 |- License: AGPL-3.0-only (https://github.com/sparshsam/openproof/blob/main/LICENSE).
 |
 |## 17. Session History
+
+### 2026-07-05 — v1.0.0
+
+**Stable Release**
+- Version finalized to v1.0.0
+- GitHub release created — proof.kovina.org deployed
+- All docs updated for stable release
+- CI verified — build, tests, lint all passing
 
 ### 2026-07-05 — v0.9.6
 

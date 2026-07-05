@@ -6,7 +6,7 @@ OpenProof is a privacy-first, open-source cryptographic proof-of-existence tool 
 
 ## Current Version
 
-v0.9.6 — Release Freeze
+v1.0.0 — Stable (Website + PWA)
 
 Deployed at **https://proof.kovina.org** (also at openproof.vercel.app).
 
@@ -89,6 +89,14 @@ Kovina
 - "OpenProof" remains the application name in code, metadata, SEO, and docs.
 
 ## Session Log
+
+### 2026-07-05 — v1.0.0
+
+**Stable Release**
+- Version finalized to v1.0.0
+- GitHub release created
+- Production deployment verified
+- All documentation updated
 
 ### 2026-07-05 — v0.9.6
 
